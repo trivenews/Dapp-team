@@ -1,26 +1,31 @@
 pragma solidity ^0.4.24;
-// this is going to be exchanged for the RBAC in openzeppelin
-import './User.sol';
 
-contract RBAC is User {
+contract RBAC {
+
   mapping(address => mapping(string => bool)) roles;
   
-  function assignRole(address entity, string role) hasRole('superadmin') {
-    roles[entity][role] = true;
+  address[] curators;
+  address[] researchers;
+  address[] verifiers;
+  address[] witnesses;
+  
+  function assignRole(address _user, string _role) hasReputation {
+    roles[_user][_role] = true;
+    // this just assigns any role right now
+    // we need to check reputation and assign correct role and then add them
+    // to the appropriate array
   }
   
-  function unassignRole(address entity, string role) hasRole('superadmin') {
-    roles[entity][role] = false;
+  function unassignRole(address _user, string _role) hasReputation {
+    roles[_user][_role] = false;
   }
   
-  function isAssignedRole(address entity, string role) returns (bool) {
-    return roles[entity][role];
+  function isAssignedRole(address _user, string _role) view returns (bool) {
+    return roles[_user][_role];
   }
   
-  modifier hasRole(string role) {
-    if (!roles[msg.sender][role] && msg.sender != creator) {
-      throw;
-    }
+  modifier hasReputation() {
+    // check the reputation score that the person has and assign role
     _;
   }
 }
