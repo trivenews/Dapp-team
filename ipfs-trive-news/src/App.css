@@ -1,6 +1,6 @@
 .App {
   text-align: center;
- 
+
 }
 
 .App-logo {
@@ -9,15 +9,40 @@
 }
 
 .App-header {
-  background-color: #222;
-  height: 120px;
+  background-image: url(https://trive.news/wp-content/uploads/2018/01/hive-bgd-3.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: auto;
   padding: 20px;
   color: white;
-  border-bottom: 10px solid #F9921D;
 }
 
 .App-title {
   font-size: 1.5em;
+}
+.buzz {
+  background-image: url(https://trive.news/wp-content/uploads/2018/01/hive-bgd-3.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: auto;
+  margin: 0;
+}
+.buzz > h1 {
+  padding: 1em 0;
+  color: #fff;
+  margin: 0;
+}
+
+.footer {
+  background: linear-gradient(to right, red,orange,red);
+  height: auto;
+}
+.footer > p {
+  margin: 0;
+  padding: 1em;
+  color: #fff;
 }
 
 .App-intro {

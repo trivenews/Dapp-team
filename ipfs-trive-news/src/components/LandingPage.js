@@ -18,6 +18,13 @@ class landingPage extends Component {
           <h3>Got Questions? You Can Talk To Us Via These Channels</h3>
 
         </div>
+
+        <div className="buzz">
+          <h1>
+            <img src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png" alt="logo"/>
+            Join Our Newsletter
+          </h1>
+        </div>
       </div>
     )
   }
