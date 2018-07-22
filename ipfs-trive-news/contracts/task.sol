@@ -1,6 +1,8 @@
+// not deployed
+
 pragma solidity ^0.4.19;
 
-import "./Untitled.sol";
+import "./user.sol";
 
 contract Reputation is UserCreation {
 
