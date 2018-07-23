@@ -4,8 +4,8 @@
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 0px;
+  /* animation: App-logo-spin infinite 20s linear; */
+  height: 30px;
 }
 
 .App-header {
@@ -14,8 +14,26 @@
   background-position: center;
   background-size: cover;
   height: auto;
-  padding: 20px;
+  padding: 8em;
   color: white;
+}
+.dashboard-div{
+  background-image: url(https://trive.news/wp-content/uploads/2018/01/hive-bgd-3.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: auto;
+  padding: 2em;
+  color: white;
+}
+.seen-on {
+  width: 100%;
+}
+.show-grid {
+  padding-bottom: 5em;
+}
+.nav-div {
+  margin-bottom: 3em;
 }
 
 .App-title {

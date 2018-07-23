@@ -9,11 +9,11 @@ class Header extends Component {
   render() {
 
     return (
-      <div>
-        <Navbar inverse collapseOnSelect>
+      <div className="nav-div">
+        <Navbar fixedTop collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="#brand">TRIVE-News</a>
+              <Link to="/"><img src="https://trive.news/wp-content/uploads/2018/01/trive-logo-web.png" className="App-logo" alt="logo" /></Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -21,7 +21,7 @@ class Header extends Component {
 
             <Nav pullRight>
               <NavItem eventKey={1} href="#">
-                Dashboard
+                <Link to="/dashboard" >Dashboard</Link>
               </NavItem>
               <NavItem eventKey={2} href="#">
                   <NavDropdown eventKey={3} title="Info" id="basic-nav-dropdown">

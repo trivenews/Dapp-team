@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import Header from "./components/navbar";
 import Footer from "./components/footer";
 import LandingPage from "./components/LandingPage";
-// import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/Dashboard";
 import './App.css';
 
 class App extends Component {
@@ -14,6 +14,8 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={(props) => (<LandingPage /> )} />
 
+          <Route exact path='/dashboard' component={(props) => (<Dashboard /> )} />
+
         </Switch>
         <Footer />
       </div>
@@ -22,6 +24,3 @@ class App extends Component {
 }
 
 export default App;
-
-
-  // <Route exact path='/dashboard' component={(props) => (<Dashboard /> )} />
