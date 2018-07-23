@@ -10,6 +10,10 @@
   /* animation: App-logo-spin infinite 20s linear; */
   height: 30px;
 }
+.App-logo-d {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
 
 .App-header {
   background-image: url(https://trive.news/wp-content/uploads/2018/01/hive-bgd-3.jpg);

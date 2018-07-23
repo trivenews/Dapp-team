@@ -7,11 +7,11 @@ import News from "./D-Components/VerifiedNews";
 
 class Dashboard extends Component {
   render() {
-    const greeting = "HI, Team!"
+
     return (
       <div>
       <div className="dashboard-div">
-        <h1>{greeting}</h1>
+        <img src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png" className="App-logo-d" alt="logo" />
       </div>
       <div>
         <Grid className="dash-row">
@@ -19,15 +19,15 @@ class Dashboard extends Component {
           <Row className="show-grid">
 
             <Col sm={2}>
-              <ButtonGroup vertical block>
-                <Link to="/dashboard/news" ><Button>Verified News</Button></Link>
-                <Link to="/dashboard/verify" ><Button>Submit Article</Button></Link>
+              <ButtonGroup vertical block >
+                <Button><Link to="/dashboard/news" >Verified News</Link></Button>
+                <Button><Link to="/dashboard/verify" >Submit Article</Link></Button>
                 <DropdownButton title="News Status" id="bg-vertical-dropdown-1">
-                  <Link to="" ><MenuItem eventKey="1">Open</MenuItem></Link>
-                  <Link to="" ><MenuItem eventKey="2">Verify</MenuItem></Link>
-                  <Link to="" ><MenuItem eventKey="3">Witness</MenuItem></Link>
-                  <Link to="" ><MenuItem eventKey="4">Expired</MenuItem></Link>
-                  <Link to="" ><MenuItem eventKey="5">Cancelled</MenuItem></Link>
+                  <MenuItem eventKey="1"><Link to="" >Open</Link></MenuItem>
+                  <MenuItem eventKey="2"><Link to="" >Verify</Link></MenuItem>
+                  <MenuItem eventKey="3"><Link to="" >Witness</Link></MenuItem>
+                  <MenuItem eventKey="4"><Link to="" >Expired</Link></MenuItem>
+                  <MenuItem eventKey="5"><Link to="" >Cancelled</Link></MenuItem>
                 </DropdownButton>
 
               </ButtonGroup>

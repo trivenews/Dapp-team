@@ -11,7 +11,11 @@ class Verify extends Component {
       ethAddress:'',
       transactionHash:'',
       txReceipt: '',
-      myData: ''
+      myData: {
+        url: "",
+        title: "",
+        description: ""
+      }
     };
 
    //handle capture file event if we want to add a file upload to the page
@@ -26,7 +30,14 @@ class Verify extends Component {
       };
 
       handleMyData = (e) => {
-        this.setState({ myData: e.target.value });
+        const { name, value } = e.target;
+        this.setState((prevState) => ({
+          myData: {
+            ...prevState.myData,
+            [name]: value
+          }
+        }));
+        console.log(this.state.myData)
     }
 
 
@@ -71,28 +82,59 @@ class Verify extends Component {
     }; //onSubmit
 
     render() {
-
+      const { title, url, description} = this.state.myData
       return (
         <div >
 
 
         <Grid className="verify-container">
-          <h3> Choose URL to verify and send to IPFS </h3>
+          <h3> Give Article information to verify and send to IPFS </h3>
           <br />
           <Form onSubmit={this.onSubmit} >
 
-            <input
-              type = "url"
-              value={this.state.myData}
-              onChange={this.handleMyData}
-              style={{width: '70%', height: '3em', marginRight: '5px'}}
-               />
+              URL
+              <br />
+              <input
+                type = "url"
+                value={url}
+                name="url"
+                onChange={this.handleMyData}
+                style={{width: '70%', height: '3em', marginRight: '5px'}}
+                 />
 
-             <Button
-             bsStyle="primary"
-             type="submit">
-             Send it
-             </Button>
+              <br />
+
+
+              Title
+              <br />
+              <input
+                type = "text"
+                value={title}
+                name="title"
+                onChange={this.handleMyData}
+                style={{width: '70%', height: '3em', marginRight: '5px'}}
+                 />
+
+              <br />
+
+              Description
+              <br />
+              <input
+                type = "text"
+                value={description}
+                name="description"
+                onChange={this.handleMyData}
+                style={{width: '70%', height: '3em', marginRight: '5px'}}
+                 />
+              <br />
+              <Button
+               bsStyle="primary"
+               type="submit">
+               Send it
+              </Button>
+
+              <br />
+
           </Form>
 
           <hr/>
