@@ -7,7 +7,7 @@ import News from "./D-Components/VerifiedNews";
 
 class Dashboard extends Component {
   render() {
-    const greeting = "HI, CHnace < 3."
+    const greeting = "HI, Team!"
     return (
       <div>
       <div className="dashboard-div">
