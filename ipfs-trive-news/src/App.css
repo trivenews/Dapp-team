@@ -1,6 +1,9 @@
 .App {
   text-align: center;
+}
 
+.verify-container {
+  max-width: 100%;
 }
 
 .App-logo {
@@ -61,6 +64,15 @@
   margin: 0;
   padding: 1em;
   color: #fff;
+}
+.dash-row {
+  margin-left: 0;
+  margin-top: 2em;
+}
+.dash-content {
+  border-left: 0.5px solid #000;
+  background-color: #ccc;
+  min-height: 40em;
 }
 
 .App-intro {

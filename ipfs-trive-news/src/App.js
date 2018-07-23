@@ -12,9 +12,12 @@ class App extends Component {
       <div className="App">
         <Header />
         <Switch>
-          <Route exact path='/' component={(props) => (<LandingPage /> )} />
+
+          <Route exact path='/dashboard/:sel' component={(props) => (<Dashboard /> )} />
 
           <Route exact path='/dashboard' component={(props) => (<Dashboard /> )} />
+
+          <Route exact path='/' component={(props) => (<LandingPage /> )} />
 
         </Switch>
         <Footer />

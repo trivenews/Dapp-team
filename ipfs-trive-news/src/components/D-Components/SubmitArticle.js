@@ -1,8 +1,8 @@
 import {Table, Grid, Button, Form } from 'react-bootstrap';
 import React, { Component } from 'react';
-import web3 from '../web3';
-import { setJSON, getJSON } from '../util/IPFS.js'
-import storehash from '../storehash';
+import web3 from '../../web3';
+import { setJSON, getJSON } from '../../util/IPFS.js'
+import storehash from '../../storehash';
 
 class Verify extends Component {
     state = {
@@ -73,17 +73,13 @@ class Verify extends Component {
     render() {
 
       return (
-        <div className="App">
-          <header className="App-header">
-            <h1>trive.news verify</h1>
-          </header>
+        <div >
 
-          <hr />
 
-        <Grid>
+        <Grid className="verify-container">
           <h3> Choose URL to verify and send to IPFS </h3>
           <br />
-          <Form onSubmit={this.onSubmit}>
+          <Form onSubmit={this.onSubmit} >
 
             <input
               type = "url"
