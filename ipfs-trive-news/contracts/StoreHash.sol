@@ -1,6 +1,7 @@
 
 //0x66863d08547012dc267d2f871b20f68110262f66  contract address on rinkeby
 //deployed using remix 
+pragma solidity ^0.4.24;
 
 contract Contract {
  string ipfsHash;

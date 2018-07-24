@@ -2,14 +2,14 @@
 
 pragma solidity ^0.4.19;
 
-import "./user.sol";
+import "./UserCrud.sol";
 
-contract Reputation is UserCreation {
+contract UserTask is UserCrud {
 
 
     struct Task {
         string	IPFShash;
-		    uint    reward;
+		uint    reward;
     }
 
     Task[] public tasks;
@@ -19,10 +19,7 @@ contract Reputation is UserCreation {
 
 
     function _createTask(string _ipfsHash, uint _reward) public {
-        uint taskId = tasks.push(Task(_ipfsHash, _reward))
+        uint taskId = tasks.push(Task(_ipfsHash, _reward));
     }
-
-
-
 
 }
