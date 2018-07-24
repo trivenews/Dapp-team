@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormControl} from "react-bootstrap";
 
-import contract_artifacts from '../../build/contracts/Vote.json'
+import contract_artifacts from '../../build/contracts/Vote.json';
 
 // TODO: button will call function on contract artifacts
 class Register extends Component {

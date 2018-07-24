@@ -1,9 +1,9 @@
 pragma solidity ^0.4.24;
 // pragma experimental ABIEncoderV2;
 
-import './Reputation.sol';
+import './User.sol';
 
-contract Vote is Reputation {
+contract Vote is User {
     event conflictOpened(uint conflictId, address claimant, address offender, string description, string evidence);
     event conflictResolved(uint conflictId, address claimant, address offender, bool upheld);
 

@@ -1,7 +1,8 @@
 pragma solidity ^0.4.19;
 
-contract User {
+import './Reputation.sol';
 
+contract User is Reputation {
 
 // 	event NewUser();
 
