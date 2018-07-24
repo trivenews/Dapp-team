@@ -5,10 +5,12 @@ import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormCon
 
 
 class Register extends Component {
+
   render () {
     const gridHeight = {
         height: "100vh"
       };
+    const curAddr = this.props.curAddr;
     return (
       <div>
       <div className="dashboard-div">
@@ -19,10 +21,11 @@ class Register extends Component {
         <Row className="show-grid">
         <br/>
         <h1 className="text-center">Welcome to trive.news</h1>
+        <h3 className="text-center">Current ethereum addres: {curAddr}</h3>
         <h3 className="text-center">Please enter a username to get started</h3>
         <br/>
         <Col md={2}>
-        
+
          </Col>
         <Col md={8} className="text-center">
         <Form inline>
@@ -34,7 +37,7 @@ class Register extends Component {
         </Form>
          </Col>
         <Col md={2}>
-         
+
           </Col>
          </Row>
 

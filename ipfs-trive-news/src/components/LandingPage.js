@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Grid, Row, Col} from "react-bootstrap";
+import {Grid, Row, Col, Image} from "react-bootstrap";
 import {Link} from "react-router-dom";
 
 class landingPage extends Component {
@@ -10,12 +10,48 @@ class landingPage extends Component {
       <div>
         <div className="App-header">
 
-          <img src="https://trive.news/wp-content/uploads/2018/01/discover-banner-4.png" alt="description" />
+          <img src="https://trive.news/wp-content/uploads/2018/01/discover-banner-4.png" alt="description" className="landing-pic"/>
           <br /><br />
         </div>
 
-        <div className="join">
+        <div className="buzz-news">
           <img src="https://trive.news/wp-content/uploads/2018/01/AsSeenOn-Img.png" alt="Seen On" className="seen-on"/>
+          <h1>
+            <img src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png" alt="logo"/>
+            &nbsp;  Trive Buzz
+          </h1>
+          <Grid>
+            <Row>
+              <Col xs={6} md={3}>
+                <Image src="https://trive.news/wp-content/uploads/2018/05/carousel-8-btc-investing-news.png" thumbnail />
+                <br /><br />
+                <p>This is the description erea.<br /><small className="buzz-news-small">the date</small></p>
+
+              </Col>
+              <Col xs={6} md={3}>
+                <Image src="https://trive.news/wp-content/uploads/2018/03/carousel-bitcoin-investing-news.jpg" thumbnail />
+                <br /><br />
+                <p>This is the description erea.<br /><small className="buzz-news-small">the date</small></p>
+
+              </Col>
+              <Col xs={6} md={3}>
+                <Image src="https://trive.news/wp-content/uploads/2018/03/carousel-1-1.jpg" thumbnail />
+                <br /><br />
+                <p>This is the description erea.<br /><small className="buzz-news-small">the date</small></p>
+
+              </Col>
+              <Col xs={6} md={3}>
+                <Image src="https://trive.news/wp-content/uploads/2018/05/carousel-8-techco.png" thumbnail />
+                <br /><br />
+                <p>This is the description erea.<br /><small className="buzz-news-small">the date</small></p>
+
+              </Col>
+            </Row>
+          </Grid>
+        </div>
+
+        <div className="join">
+
           <h1>JOIN US ONLINE</h1>
           <h3>Got Questions? You Can Talk To Us Via These Channels</h3>
           <br />
@@ -51,7 +87,7 @@ class landingPage extends Component {
         <div className="buzz">
           <h1>
             <img src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png" alt="logo"/>
-            Join Our Newsletter
+            &nbsp; Join Our Newsletter
           </h1>
         </div>
       </div>
