@@ -7,7 +7,10 @@ class Header extends Component {
 
 
   render() {
-
+    const signUpStyle = {
+      color: '#F25E02',
+      fontWeight: 'bold'
+    };
     return (
       <div className="nav-div">
         <Navbar fixedTop collapseOnSelect>
@@ -20,14 +23,17 @@ class Header extends Component {
           <Navbar.Collapse>
 
             <Nav pullRight>
-              <NavItem eventKey={1} href="#">
-                <Link to="/dashboard" >Dashboard</Link>
+            <NavItem eventKey={1} href="#">
+                <Link to="/register" style={signUpStyle}>Sign Up</Link>
               </NavItem>
               <NavItem eventKey={2} href="#">
-                  <NavDropdown eventKey={3} title="Info" id="basic-nav-dropdown">
-                    <MenuItem eventKey={3.1}>Presentation</MenuItem>
-                    <MenuItem eventKey={3.2}>Team</MenuItem>
-                    <MenuItem eventKey={3.3}>Blog</MenuItem>
+                <Link to="/dashboard" >Dashboard</Link>
+              </NavItem>
+              <NavItem eventKey={3} href="#">
+                  <NavDropdown eventKey={4} title="Info" id="basic-nav-dropdown">
+                    <MenuItem eventKey={4.1}>Presentation</MenuItem>
+                    <MenuItem eventKey={4.2}>Team</MenuItem>
+                    <MenuItem eventKey={4.3}>Blog</MenuItem>
                   </NavDropdown>
               </NavItem>
             </Nav>
