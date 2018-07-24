@@ -24,20 +24,26 @@
   padding: 8em;
   color: white;
 }
+.landing-pic {
+  max-width: 97%;
+}
 .dashboard-div{
   background-image: url(https://trive.news/wp-content/uploads/2018/01/hive-bgd-3.jpg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   height: auto;
+
   padding: 2em;
   color: white;
 }
 .seen-on {
   width: 100%;
+  margin-right: 0;
 }
 .show-grid {
   padding-bottom: 5em;
+  width: 100%;
 }
 .nav-div {
   margin-bottom: 3em;
@@ -60,6 +66,22 @@
   margin: 0;
 }
 
+.buzz-news {
+  background-color: #eee;
+  min-height: 20em;
+  height: auto;
+  margin: 0;
+  padding-bottom: 2em;
+}
+.buzz-news > h1 {
+  padding: 1em 0;
+  color: #000;
+  margin: 0;
+}
+.buzz-news-small {
+  color: #966;
+}
+
 .footer {
   background: linear-gradient(to right, red,orange,red);
   height: auto;
@@ -70,8 +92,9 @@
   color: #fff;
 }
 .dash-row {
-  margin-left: 0;
+  width: 100%;
   margin-top: 2em;
+
 }
 .dash-content {
   border-left: 0.5px solid #000;

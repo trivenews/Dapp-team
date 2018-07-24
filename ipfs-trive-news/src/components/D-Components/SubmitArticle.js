@@ -37,7 +37,6 @@ class Verify extends Component {
             [name]: value
           }
         }));
-        console.log(this.state.myData)
     }
 
 
@@ -126,6 +125,7 @@ class Verify extends Component {
                 onChange={this.handleMyData}
                 style={{width: '70%', height: '3em', marginRight: '5px'}}
                  />
+              <br />
               <br />
               <Button
                bsStyle="primary"

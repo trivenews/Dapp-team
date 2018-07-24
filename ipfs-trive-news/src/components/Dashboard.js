@@ -33,7 +33,7 @@ class Dashboard extends Component {
               </ButtonGroup>
             </Col>
 
-            <Col sm={10} className="dash-content">
+            <Col sm={10}  className="dash-content">
 
               <Switch>
                 <Route exact path="/dashboard/verify" render={(props) => (<Verify />)} />
