@@ -1,8 +1,6 @@
-var TriveDapp = artifacts.require("Voting");
-import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
+var TriveDapp = artifacts.require('Voting');
 
 module.exports = function(deployer) {
-  deployer.link(SafeMath, Voting);
-  deployer.deploy(Voting);
+  deployer.deploy(TriveDapp);
 };
 

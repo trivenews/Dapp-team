@@ -3,7 +3,7 @@ pragma experimental ABIEncoderV2;
 
 import './UserTask.sol';
 
-contract Vote is UserTask {
+contract Voting is UserTask {
     event conflictOpened(uint conflictId, address claimant, address offender, string description, string evidence);
     event conflictResolved(uint conflictId, address claimant, address offender, bool upheld);
 
@@ -26,7 +26,7 @@ contract Vote is UserTask {
     Conflict[] conflicts;
     
     modifier onlyMembers(address _member) {
-        require(userToId[_member] != 0); // from User contract
+        require(findUserId[_member] != 0); // from User contract
         _;
     }
     

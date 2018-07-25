@@ -2,7 +2,7 @@ pragma solidity ^0.4.19;
 
 import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 
-contract UserCreation {
+contract UserCrud {
 
   using SafeMath for uint256;
 
