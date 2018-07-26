@@ -29,7 +29,7 @@ contract UserCrud {
 	//check address if it's a researcher
 	mapping (address => bool) public isResearcher;
 
-	function _createUser(string _name) public {
+	function createUser(string _name) public {
 	    //check if owner already has an account
 	    require(ownerUserCount[msg.sender] == 0);
 
@@ -50,7 +50,7 @@ contract UserCrud {
 	    emit NewUser(msg.sender, id, _name);
 	}
 
-	function _findUserInfo() public view returns(string, uint, uint, uint, uint, bool){
+	function findUserInfo() public view returns(string, uint, uint, uint, uint, bool){
 	    // So you can only request you own info
 	    require(ownerUserCount[msg.sender] == 1);
 	    //look up id
@@ -59,7 +59,7 @@ contract UserCrud {
 	    return (users[id].name, users[id].reputation, users[id].articleCount, users[id].panaltyCount, users[id].readyTime, users[id].busyResearcher);
 	}
 
-	function _getToatalUserCount() public view returns(uint) {
+	function getToatalUserCount() public view returns(uint) {
 	    return totalUserCount;
 	}
 

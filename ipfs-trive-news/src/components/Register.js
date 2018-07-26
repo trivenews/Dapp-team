@@ -2,10 +2,47 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormControl} from "react-bootstrap";
 
-import contract_artifacts from '../../build/contracts/Vote.json';
+import contract from 'truffle-contract';
+import web3 from '../web3';
+import VotingContract from '../../build/contracts/Voting.json';
+
+const TriveDapp = contract(VotingContract);
+TriveDapp.setProvider(web3.currentProvider);
 
 // TODO: button will call function on contract artifacts
 class Register extends Component {
+  constructor() {
+    super();
+    this.state = {
+      username: ''
+    };
+    
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.setState({ username: e.target.value });
+  }
+
+  handleSubmit() {
+    var TriveDappInstance;
+
+    // TODO: I should move getAccounts out of this function
+    web3.eth.getAccounts((error, accounts) => {
+      var account = accounts[0];
+      TriveDapp.deployed().then((instance) => {
+        TriveDappInstance = instance;
+
+        return TriveDappInstance.createUser(this.state.username, {from: account})
+      }).then((result) => {
+        console.log(result);
+        // return TriveDappInstance.findUserInfo.call(account)
+      }).then((result) => {
+        // return this.setState({ username: result.c[0] })
+      })
+    })
+  }
 
   render () {
     const gridHeight = {
@@ -31,10 +68,15 @@ class Register extends Component {
         <Col md={8} className="text-center">
         <Form inline>
             <FormGroup controlId="formInlineName">
-                {' '}
-                <FormControl type="text" placeholder="Username" />
+            {' '}
+            <FormControl
+              type="text"
+              value={this.state.username}
+              placeholder="Enter text"
+              onChange={this.handleChange}
+            />
             </FormGroup>{' '} {' '}
-            <Button type="submit">Register</Button>
+            <Button type="button" onClick={this.handleSubmit}>Register</Button>
         </Form>
          </Col>
         <Col md={2}>
