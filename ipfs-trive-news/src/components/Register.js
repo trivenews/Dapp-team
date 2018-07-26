@@ -33,8 +33,7 @@ class Register extends Component {
       var account = accounts[0];
       TriveDapp.deployed().then((instance) => {
         TriveDappInstance = instance;
-
-        return TriveDappInstance.createUser(this.state.username, {from: account})
+        return TriveDappInstance.createUser(this.state.username, {from: account, gas: 6654755})
       }).then((result) => {
         console.log(result);
         // return TriveDappInstance.findUserInfo.call(account)
