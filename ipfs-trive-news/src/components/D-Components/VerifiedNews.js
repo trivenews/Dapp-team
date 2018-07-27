@@ -11,6 +11,7 @@ class News extends Component {
     this.getTaskCount = this.getTaskCount.bind(this);
   }
   getTaskCount() {
+    console.log(this.props.myContract, "contractcode")
     const TriveDapp = this.props.myContract;
     var TriveDappInstance;
 

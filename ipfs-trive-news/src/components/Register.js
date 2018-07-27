@@ -18,7 +18,7 @@ class Register extends Component {
     this.state = {
       username: ''
     };
-
+    this.getTaskByOwner = this.getTaskByOwner.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -47,6 +47,36 @@ class Register extends Component {
         // return this.setState({ username: result.c[0] })
       })
     })
+  }
+  findArticleInfo(arr) {
+    let res = [];
+    arr.map(t => {
+      res.push("article nr: ", t.c[0])
+    })
+    console.log(res)
+  }
+
+  getTaskByOwner() {
+    const TriveDapp = this.props.myContract;
+    var TriveDappInstance;
+
+    // TODO: I should move getAccounts out of this function
+    web3.eth.getAccounts((error, accounts) => {
+      var account = accounts[0];
+      TriveDapp.deployed().then((instance) => {
+        TriveDappInstance = instance;
+        return TriveDappInstance._getTasksByOwner(accounts[0])
+      }).then((result) => {
+        console.log(result);
+        this.findArticleInfo(result);
+      }).catch((error) => {
+        console.log(error)
+      })
+    })
+  }
+
+  componentDidMount() {
+    this.getTaskByOwner()
   }
 
   render () {
@@ -80,7 +110,10 @@ class Register extends Component {
     <h3>reputation: {reputation}</h3>
     <h3>article count: {articleCount}</h3>
     <h3>penalty count: {penaltyCount}</h3>
-    <h3>ready time: {readyTime}</h3></div>
+    <h3>ready time: {readyTime}</h3>
+    <hr />
+    <h3>My articles:</h3>
+    </div>
     );
     return (
       <div>

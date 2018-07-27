@@ -7,6 +7,8 @@ import ResearcherForm from "./D-Components/ResearcherForm";
 
 
 class Dashboard extends Component {
+
+
   render() {
 
     return (
@@ -44,12 +46,12 @@ class Dashboard extends Component {
                  />)} />
 
                 <Route exact path="/dashboard/news" render={(props) => (<News
-                myContract={this.props.myContract}
-               />)} />
+                  myContract={this.props.myContract}
+                />)} />
 
                 <Route exact path="/dashboard/" render={(props) => (<News
-                myContract={this.props.myContract}
-               />)} />
+                  myContract={this.props.myContract}
+                />)} />
 
               </Switch>
             </Col>

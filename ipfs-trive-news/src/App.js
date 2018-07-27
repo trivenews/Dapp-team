@@ -45,7 +45,7 @@ class App extends Component {
     // check if the account is a user
     var TriveDappInstance;
     TriveDapp.deployed().then((instance) => {
-      console.log("Func started")
+
       TriveDappInstance = instance;
       return TriveDappInstance.findUserInfo.call({from: accounts[0]})
     }).then((result) => {
@@ -88,7 +88,7 @@ class App extends Component {
            /> )} />
 
           <Route exact path='/dashboard' component={(props) => (<Dashboard
-
+            myContract={this.state.myContract}
            /> )} />
 
           <Route exact path='/register' component={(props) => (
