@@ -1,11 +1,14 @@
 import {Table, Grid, Button, Form } from 'react-bootstrap';
 import React, { Component } from 'react';
+import contract from 'truffle-contract';
 import web3 from '../../web3';
 import { setJSON, getJSON } from '../../util/IPFS.js'
-import storehash from '../../storehash';
+// import storehash from '../../storehash';
 
 class Verify extends Component {
-    state = {
+  constructor(props) {
+    super(props)
+    this.state = {
       ipfsHash:null,
       buffer:'',
       ethAddress:'',
@@ -17,6 +20,8 @@ class Verify extends Component {
         description: ""
       }
     };
+  }
+
 
    //handle capture file event if we want to add a file upload to the page
 
@@ -51,13 +56,17 @@ class Verify extends Component {
 
     onSubmit = async (event) => {
       event.preventDefault();
+      const TriveDapp = this.props.myContract;
+      this.setState({ethAddress: TriveDapp});
+      var TriveDappInstance;
       //bring in user's metamask account address
+      //we will have to change this to props
       const accounts = await web3.eth.getAccounts();
 
       console.log('Sending from Metamask account: ' + accounts[0]);
       //obtain contract address from storehash.js
-      const ethAddress= await storehash.options.address;
-      this.setState({ethAddress});
+      // const ethAddress= await storehash.options.address;
+      // this.setState({ethAddress}); !important I don't think we need this here
 
       const hash = await setJSON({ myData: this.state.myData });
       console.log('this is my hash', hash);
@@ -70,13 +79,21 @@ class Verify extends Component {
         // call Ethereum contract method "sendHash" and .send IPFS hash to etheruem contract
         //return the transaction hash from the ethereum contract
         //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
-
-        storehash.methods.sendHash(this.state.ipfsHash).send({
-          from: accounts[0]
-        }, (error, transactionHash) => {
-          console.log(transactionHash);
-          this.setState({transactionHash});
-        }); //storehash
+        TriveDapp.deployed().then((instance) => {
+          TriveDappInstance = instance;
+          return TriveDappInstance._createTask(this.state.ipfsHash, 666, {from: accounts[0], gas: 6654755})
+        }).then((result) => {
+          console.log(result.tx);
+          this.setState({transactionHash: result.tx})
+        }).catch((error) => {
+          console.log(error);
+        })
+        // storehash.methods.sendHash(this.state.ipfsHash).send({
+        //   from: accounts[0]
+        // }, (error, transactionHash) => {
+        //   console.log(transactionHash);
+        //   this.setState({transactionHash});
+        // }); //storehash
 
     }; //onSubmit
 
