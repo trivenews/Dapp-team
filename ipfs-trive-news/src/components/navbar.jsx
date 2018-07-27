@@ -11,6 +11,7 @@ class Header extends Component {
       color: '#F25E02',
       fontWeight: 'bold'
     };
+    const checkForSignUp = this.props.curUserInfo.isUser ? (<Link to="/register" style={signUpStyle}>{this.props.curUserInfo.name}'s info</Link>) : (<Link to="/register" style={signUpStyle}>Sign Up</Link>);
     return (
       <div className="nav-div">
         <Navbar fixedTop collapseOnSelect>
@@ -24,7 +25,7 @@ class Header extends Component {
 
             <Nav pullRight>
             <NavItem eventKey={1} href="#">
-                <Link to="/register" style={signUpStyle}>Sign Up</Link>
+                {checkForSignUp}
               </NavItem>
               <NavItem eventKey={2} href="#">
                 <Link to="/dashboard" >Dashboard</Link>
