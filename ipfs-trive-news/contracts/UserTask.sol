@@ -1,11 +1,8 @@
-// not deployed
-
-
 pragma solidity ^0.4.24;
 
 import "./UserCrud.sol";
 
-contract TaskAndReputation is UserCreation {
+contract UserTask is UserCreation {
     using SafeMath for uint256;
     event  NewTask(address creator, uint reward);
 
@@ -40,7 +37,7 @@ contract TaskAndReputation is UserCreation {
     function _createTask(string _ipfsHash, uint _reward) public payable {
         /// later we will have to add a minimum value from the msger.
         //create new task id and push to tasks array and taskToOwner
-        uint taskId = tasks.push(Task(_ipfsHash, "", _reward, false, State.Open)).sub(1);
+        uint taskId = tasks.push(Task(_ipfsHash, "", _reward, State.Open)).sub(1);
         taskToOwner[taskId] = msg.sender;
 
 	    //add task to ownerTaskCount

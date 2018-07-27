@@ -3,7 +3,9 @@
 pragma solidity ^0.4.24;
 
 import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
-contract UserCreation {
+import './Reputation.sol';
+
+contract UserCreation is Reputation {
 
     using SafeMath for uint256;
 
@@ -26,7 +28,7 @@ contract UserCreation {
 	mapping (address => uint) public findUserId;
 	mapping (address => bool) public isResearcher;
 
-	function _createUser(string _name) public {
+	function createUser(string _name) public {
 	    //check if owner already has an account
 	    require(ownerUserCount[msg.sender] == 0);
 
@@ -48,12 +50,12 @@ contract UserCreation {
 	}
 
 	// test function to create a researcher
-	function _createResearcher() public {
+	function createResearcher() public {
 	    isResearcher[msg.sender] = true;
 	}
 	// end test funtion
 
-	function _findUserInfo() public view returns(string, uint, uint, uint, uint, bool){
+	function findUserInfo() public view returns(string, uint, uint, uint, uint, bool){
 	    // So you can only request you own info
 	    require(ownerUserCount[msg.sender] == 1);
 	    //look up id
@@ -62,7 +64,7 @@ contract UserCreation {
 	    return (users[id].name, users[id].reputation, users[id].articleCount, users[id].penaltyCount, users[id].readyTime, users[id].busyResearcher);
 	}
 
-	function _getToatalUserCount() public view returns(uint) {
+	function _etToatalUserCount() public view returns(uint) {
 	    return totalUserCount;
 	}
 

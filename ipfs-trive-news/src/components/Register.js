@@ -25,7 +25,8 @@ class Register extends Component {
     this.setState({ username: e.target.value });
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     var TriveDappInstance;
 
     // TODO: I should move getAccounts out of this function
@@ -36,6 +37,7 @@ class Register extends Component {
         return TriveDappInstance.createUser(this.state.username, {from: account, gas: 6654755})
       }).then((result) => {
         console.log(result);
+        // TODO: I need to route from here
         // return TriveDappInstance.findUserInfo.call(account)
       }).then((result) => {
         // return this.setState({ username: result.c[0] })
@@ -75,7 +77,7 @@ class Register extends Component {
               onChange={this.handleChange}
             />
             </FormGroup>{' '} {' '}
-            <Button type="button" onClick={this.handleSubmit}>Register</Button>
+            <Button onClick={this.handleSubmit}>Register</Button>
         </Form>
          </Col>
         <Col md={2}>
