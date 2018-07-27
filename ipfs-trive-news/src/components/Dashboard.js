@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import {Grid, Row, Col, Button, ButtonGroup, DropdownButton, MenuItem} from "react-bootstrap";
 import Verify from "./D-Components/SubmitArticle";
 import News from "./D-Components/VerifiedNews";
+import ResearcherForm from "./D-Components/ResearcherForm";
 
 
 class Dashboard extends Component {
@@ -22,6 +23,7 @@ class Dashboard extends Component {
               <ButtonGroup vertical block >
                 <Button><Link to="/dashboard/news" >Verified News</Link></Button>
                 <Button><Link to="/dashboard/verify" >Submit Article</Link></Button>
+                <Button><Link to="/dashboard/researcher">Researcher Portal</Link></Button>
                 <DropdownButton title="News Status" id="bg-vertical-dropdown-1">
                   <MenuItem eventKey="1"><Link to="" >Open</Link></MenuItem>
                   <MenuItem eventKey="2"><Link to="" >Verify</Link></MenuItem>
@@ -36,6 +38,7 @@ class Dashboard extends Component {
             <Col sm={10}  className="dash-content">
 
               <Switch>
+              <Route exact path="/dashboard/researcher" render={(props) => (<ResearcherForm />)} />
                 <Route exact path="/dashboard/verify" render={(props) => (<Verify />)} />
 
                 <Route exact path="/dashboard/news" render={(props) => (<News />)} />
