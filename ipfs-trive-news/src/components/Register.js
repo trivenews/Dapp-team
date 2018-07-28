@@ -4,6 +4,8 @@ import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormCon
 
 import contract from 'truffle-contract';
 import web3 from '../web3';
+
+import ShowArticleInfo from "./showComponents/showArticleInfo";
 // import VotingContract from '../../build/contracts/Voting.json';
 //
 // const TriveDapp = contract(VotingContract);
@@ -16,11 +18,14 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: ''
+      username: '',
+      articleIdLoaded: false,
+      articleId: []
     };
     this.getTaskByOwner = this.getTaskByOwner.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.getTaskInfo = this.getTaskInfo.bind(this);
   }
 
 
@@ -51,9 +56,30 @@ class Register extends Component {
   findArticleInfo(arr) {
     let res = [];
     arr.map(t => {
-      res.push("article nr: ", t.c[0])
+      res.push(t.c[0])
     })
-    console.log(res)
+    this.setState({
+      articleId: res,
+      articleIdLoaded: true
+    });
+  }
+
+
+  getTaskInfo(articleId) {
+    const TriveDapp = this.props.myContract;
+    var TriveDappInstance;
+
+    TriveDapp.deployed().then((instance) => {
+      console.log(articleId)
+      TriveDappInstance = instance;
+      return TriveDappInstance._getTaskInfo(articleId)
+    }).then((result) => {
+      console.log(result)
+      return <ShowArticleInfo articleIdLoaded={this.state.articleIdLoaded} result={result}/>
+
+    }).catch((error) => {
+      console.log(error)
+    })
   }
 
   getTaskByOwner() {
@@ -67,7 +93,6 @@ class Register extends Component {
         TriveDappInstance = instance;
         return TriveDappInstance._getTasksByOwner(accounts[0])
       }).then((result) => {
-        console.log(result);
         this.findArticleInfo(result);
       }).catch((error) => {
         console.log(error)
@@ -102,9 +127,10 @@ class Register extends Component {
         </FormGroup>{' '} {' '}
         <Button onClick={this.handleSubmit}>Register</Button>
     </Form>);
+    const checkLengtArticles = (this.state.articleId).length > 0 ? true : false;
+    const showArticles = checkLengtArticles ? (this.state.articleId).map(t => {this.getTaskInfo(t)}) : (<h3>no articles yet...</h3>);
     const userInfo = (<div><h1>{name}' info</h1>
     <hr />
-    <h3>is this a user? {isUser}</h3>
     <h3>Name of user: {name}</h3>
     <h3>address: {address}</h3>
     <h3>reputation: {reputation}</h3>
@@ -112,7 +138,7 @@ class Register extends Component {
     <h3>penalty count: {penaltyCount}</h3>
     <h3>ready time: {readyTime}</h3>
     <hr />
-    <h3>My articles:</h3>
+    {this.state.articleIdLoaded && showArticles}
     </div>
     );
     return (
@@ -120,6 +146,7 @@ class Register extends Component {
       <div className="dashboard-div">
         <img src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png" className="App-logo-d" alt="logo" />
       </div>
+
       <div>
         <Grid style={gridHeight}>
         <Row className="show-grid">

@@ -20,7 +20,7 @@ contract UserTask is UserCreation {
     uint cooldownTime = 2 hours;
     uint totalTasksCount = 0;
 
-    //NEW mapping for alltasks 
+    //NEW mapping for alltasks
     mapping(address => Task) public allTasks;
     // mapping (uint => uint) public lookupTasksByGenre;
 
@@ -52,8 +52,8 @@ contract UserTask is UserCreation {
 	    _changeUserInfo(me);
 
 	    totalTasksCount = totalTasksCount.add(1);
-	    
-	      
+
+
           tasksAccts.push(msg.sender) - 1;
          var task = allTasks[msg.sender];
          task.IPFShash = _ipfsHash;
@@ -110,6 +110,10 @@ contract UserTask is UserCreation {
           }
         }
         return result;
+    }
+
+    function _getTaskInfo(uint _taskId) external view returns(string, string, uint, State) {
+     return (tasks[_taskId].IPFShash, tasks[_taskId].IPFShashResearch, tasks[_taskId].reward, tasks[_taskId].state);
     }
 
 
