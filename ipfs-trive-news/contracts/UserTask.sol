@@ -14,11 +14,14 @@ contract UserTask is UserCreation {
     		uint	   reward;
     		State    state;
     }
-
+    //NEW - karen update
+    address[] public tasksAccts;
     Task[] public tasks;
     uint cooldownTime = 2 hours;
     uint totalTasksCount = 0;
 
+    //NEW mapping for alltasks 
+    mapping(address => Task) public allTasks;
     // mapping (uint => uint) public lookupTasksByGenre;
 
     // from creator address to taskid find article count from user.articleCount
@@ -34,7 +37,7 @@ contract UserTask is UserCreation {
         _user.reputation = (_user.articleCount.add(_user.researchedArticlesCount)).sub(_user.penaltyCount);
     }
     // maybe add an "is user" modifier
-    function _createTask(string _ipfsHash, uint _reward) public payable {
+   function _createTask(string _ipfsHash, uint _reward) public payable {
         /// later we will have to add a minimum value from the msger.
         //create new task id and push to tasks array and taskToOwner
         uint taskId = tasks.push(Task(_ipfsHash, "", _reward, State.Open)).sub(1);
@@ -49,9 +52,26 @@ contract UserTask is UserCreation {
 	    _changeUserInfo(me);
 
 	    totalTasksCount = totalTasksCount.add(1);
+	    
+	      
+          tasksAccts.push(msg.sender) - 1;
+         var task = allTasks[msg.sender];
+         task.IPFShash = _ipfsHash;
+         task.reward = _reward;
 
 	    // fire event
-	    emit NewTask(msg.sender, _reward);
+	  // emit NewTask(msg.sender,_ipfsHash, _reward);
+    }
+
+
+    //function gettasks by address list
+    function getTasks() view public returns(address[]){
+        return tasksAccts;
+    }
+
+    //get individual task by address
+    function getIndividualTask(address _address) view public returns(string, uint) {
+        return (allTasks[_address].IPFShash, allTasks[_address].reward );
     }
 
     //researcher accepts
