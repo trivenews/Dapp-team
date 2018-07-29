@@ -1,19 +1,15 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormControl} from "react-bootstrap";
-
 import contract from 'truffle-contract';
 import web3 from '../web3';
-
 import ShowArticleInfo from "./showComponents/showArticleInfo";
 // import VotingContract from '../../build/contracts/Voting.json';
 //
 // const TriveDapp = contract(VotingContract);
 // TriveDapp.setProvider(web3.currentProvider);
 // TODO: testing if I can give these vars as props
-
 // TODO: button will call function on contract artifacts
-
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -27,17 +23,13 @@ class Register extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.getTaskInfo = this.getTaskInfo.bind(this);
   }
-
-
   handleChange(e) {
     this.setState({ username: e.target.value });
   }
-
   handleSubmit(e) {
     e.preventDefault();
     const TriveDapp = this.props.myContract;
     var TriveDappInstance;
-
     // TODO: I should move getAccounts out of this function
     web3.eth.getAccounts((error, accounts) => {
       var account = accounts[0];
@@ -63,12 +55,9 @@ class Register extends Component {
       articleIdLoaded: true
     });
   }
-
-
   getTaskInfo(articleId) {
     const TriveDapp = this.props.myContract;
     var TriveDappInstance;
-
     TriveDapp.deployed().then((instance) => {
       console.log(articleId)
       TriveDappInstance = instance;
@@ -76,16 +65,13 @@ class Register extends Component {
     }).then((result) => {
       console.log(result)
       return <ShowArticleInfo articleIdLoaded={this.state.articleIdLoaded} result={result}/>
-
     }).catch((error) => {
       console.log(error)
     })
   }
-
   getTaskByOwner() {
     const TriveDapp = this.props.myContract;
     var TriveDappInstance;
-
     // TODO: I should move getAccounts out of this function
     web3.eth.getAccounts((error, accounts) => {
       var account = accounts[0];
@@ -99,16 +85,13 @@ class Register extends Component {
       })
     })
   }
-
   componentDidMount() {
     this.getTaskByOwner()
   }
-
   render () {
     const gridHeight = {
         height: "100vh"
       };
-    // const curAddr = this.props.curAddr;
     const { isUser, name, address, reputation, articleCount, penaltyCount, readyTime} = this.props.curUserInfo;
     const registerForm = (<Form inline>
         <FormGroup controlId="formInlineName">
@@ -128,7 +111,7 @@ class Register extends Component {
         <Button onClick={this.handleSubmit}>Register</Button>
     </Form>);
     const checkLengtArticles = (this.state.articleId).length > 0 ? true : false;
-    const showArticles = checkLengtArticles ? (this.state.articleId).map(t => {this.getTaskInfo(t)}) : (<h3>no articles yet...</h3>);
+    const showArticles = checkLengtArticles ?  (this.state.articleId).map(t => {this.getTaskInfo(t)}) : (<h3>no articles yet...</h3>);
     const userInfo = (<div><h1>{name}' info</h1>
     <hr />
     <h3>Name of user: {name}</h3>
@@ -138,7 +121,6 @@ class Register extends Component {
     <h3>penalty count: {penaltyCount}</h3>
     <h3>ready time: {readyTime}</h3>
     <hr />
-    {this.state.articleIdLoaded && showArticles}
     </div>
     );
     return (
@@ -146,27 +128,24 @@ class Register extends Component {
       <div className="dashboard-div">
         <img src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png" className="App-logo-d" alt="logo" />
       </div>
-
       <div>
         <Grid style={gridHeight}>
         <Row className="show-grid">
         <Col md={2}>
-
          </Col>
         <Col md={8} className="text-center">
           {!isUser && registerForm}
           {isUser && userInfo}
+          {showArticles}
          </Col>
         <Col md={2}>
-
           </Col>
          </Row>
-
         </Grid>
       </div>
+      <ShowArticleInfo articleIdLoaded={this.state.articleIdLoaded} />
       </div>
     )
   }
 }
-
 export default Register;
