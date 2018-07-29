@@ -103,9 +103,10 @@ class Register extends Component {
 
   render () {
     const gridHeight = {
-      height: "100vh"
+      'min-height': "100vh",
+      'heigt': "auto"
     };
-  
+
     const { isUser, name, address, reputation, articleCount, penaltyCount, readyTime} = this.props.curUserInfo;
     const { username, articles, articleIds } = this.state;
 
