@@ -15,13 +15,15 @@ contract UserTask is UserCreation {
     		State    state;
     }
     //NEW - karen update
-    address[] public tasksAccts;
+    // address[] public tasksAccts;
     Task[] public tasks;
     uint cooldownTime = 2 hours;
     uint totalTasksCount = 0;
+    ///mapping to check state
+    mapping (uint => uint) public checkState;
 
     //NEW mapping for alltasks
-    mapping(address => Task) public allTasks;
+    // mapping(address => Task) public allTasks;
     // mapping (uint => uint) public lookupTasksByGenre;
 
     // from creator address to taskid find article count from user.articleCount
@@ -53,11 +55,11 @@ contract UserTask is UserCreation {
 
 	    totalTasksCount = totalTasksCount.add(1);
 
-
-          tasksAccts.push(msg.sender) - 1;
-         var task = allTasks[msg.sender];
-         task.IPFShash = _ipfsHash;
-         task.reward = _reward;
+        checkState[0] = checkState[0].add(1);
+        //  tasksAccts.push(msg.sender) - 1;
+        //  var task = allTasks[msg.sender];
+        //  task.IPFShash = _ipfsHash;
+        //  task.reward = _reward;
 
 	    // fire event
 	  // emit NewTask(msg.sender,_ipfsHash, _reward);
@@ -65,14 +67,14 @@ contract UserTask is UserCreation {
 
 
     //function gettasks by address list
-    function getTasks() view public returns(address[]){
-        return tasksAccts;
-    }
+    // function getTasks() view public returns(address[]){
+    //     return tasksAccts;
+    // }
 
-    //get individual task by address
-    function getIndividualTask(address _address) view public returns(string, uint) {
-        return (allTasks[_address].IPFShash, allTasks[_address].reward );
-    }
+    // //get individual task by address
+    // function getIndividualTask(address _address) view public returns(string, uint) {
+    //     return (allTasks[_address].IPFShash, allTasks[_address].reward );
+    // }
 
     //researcher accepts
     function _acceptTask(uint _taskId) public {
@@ -81,6 +83,8 @@ contract UserTask is UserCreation {
         // set mapping taskId to researcher
         taskToResearcher[_taskId] = msg.sender;
         // change state of the task to InProgress
+        checkState[0] = checkState[0].sub(1);
+        checkState[1] = checkState[1].add(1);
         Task storage t = tasks[_taskId];
         t.state = State.InProgress;
     }
@@ -89,6 +93,8 @@ contract UserTask is UserCreation {
         //check if submitter is the researcher linked to the task
         require(taskToResearcher[_taskId] == msg.sender);
         // change state of the task to solved and add ipfs hash
+        checkState[1] = checkState[1].sub(1);
+        checkState[2] = checkState[2].add(1);
         Task storage t = tasks[_taskId];
         t.state = State.Solved;
         t.IPFShashResearch = _IPFShashResearch;
@@ -101,10 +107,22 @@ contract UserTask is UserCreation {
     // so a user can easaly see the answers to the tasks he/she/it created
     function _getTasksByOwner(address _owner) external view returns(uint[]) {
         //declaration of short term array
-        uint[] memory result = new uint[](ownerTaskCount[_owner]);
+        uint[] memory result = new uint[](ownerTaskCount[msg.sender]);
         uint counter = 0;
         for (uint i = 0; i < tasks.length; i++) {
           if (taskToOwner[i] == _owner) {
+            result[counter] = i;
+            counter++;
+          }
+        }
+        return result;
+    }
+    function _getTasksByState(State _state, uint _num) external view returns(uint[]) {
+        //declaration of short term array
+        uint[] memory result = new uint[](checkState[_num]);
+        uint counter = 0;
+        for (uint i = 0; i < tasks.length; i++) {
+          if (tasks[i].state == _state) {
             result[counter] = i;
             counter++;
           }
@@ -115,6 +133,7 @@ contract UserTask is UserCreation {
     function _getTaskInfo(uint _taskId) external view returns(string, string, uint, State) {
      return (tasks[_taskId].IPFShash, tasks[_taskId].IPFShashResearch, tasks[_taskId].reward, tasks[_taskId].state);
     }
+    
 
 
 }

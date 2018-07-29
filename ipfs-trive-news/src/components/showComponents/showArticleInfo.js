@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import {Jumbotron, Label, Media, Button} from "react-bootstrap";
+
 
 class ShowArticleInfo extends Component {
   constructor(props) {
@@ -40,14 +42,16 @@ class ShowArticleInfo extends Component {
 
     return (
       <div>
-        <p>researcherHash: {data[0]}</p>
-        <p>researcherHash: {data[1]}</p>
-        <p>reward: {data[2].c[0]}</p>
-        <p>status: {data[3].c[0]}</p>
-        <hr />
-        <p>Description: {this.state.myData.desc}</p>
-        <p>Title: {this.state.myData.title}</p>
-        <p>URL: {this.state.myData.url}</p>
+        <Jumbotron>
+          <h1>{this.state.myData.title}</h1>
+          <p><small>Status: {data[3].c[0]} | Reward: {data[2].c[0]}TRV | Hash: {data[0]}</small></p>
+          <p>
+            Description of the problem: <br />
+            {this.state.myData.desc}
+          </p>
+          <Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
+          <p><small> ResearcherHash: {data[1]}</small></p>
+        </Jumbotron>
       </div>
     );
   }

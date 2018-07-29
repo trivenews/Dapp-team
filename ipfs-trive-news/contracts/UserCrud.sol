@@ -64,7 +64,7 @@ contract UserCreation is Reputation {
 	    return (users[id].name, users[id].reputation, users[id].articleCount, users[id].penaltyCount, users[id].readyTime, users[id].busyResearcher);
 	}
 
-	function _etToatalUserCount() public view returns(uint) {
+	function _getToatalUserCount() public view returns(uint) {
 	    return totalUserCount;
 	}
 

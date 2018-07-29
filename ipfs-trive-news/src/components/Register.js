@@ -70,7 +70,7 @@ class Register extends Component {
     }).then((result) => {
       console.log(result)
       var articles = [...this.state.articles];
-      articles.push(<ShowArticleInfo key={result[0]} data={result}/>);
+      articles.push(<ShowArticleInfo key={articleId} data={result}/>);
 
       this.setState({
         articles
@@ -104,7 +104,8 @@ class Register extends Component {
   render () {
     const gridHeight = {
       'min-height': "100vh",
-      'heigt': "auto"
+      'heigt': "auto",
+      "min-width": "100%"
     };
 
     const { isUser, name, address, reputation, articleCount, penaltyCount, readyTime} = this.props.curUserInfo;
@@ -132,7 +133,7 @@ class Register extends Component {
 
     const userInfo = (
       <div>
-        <h1>{name}' info</h1>
+        <h1>{name}'s info</h1>
         <hr />
         <h3>Name of user: {name}</h3>
         <h3>address: {address}</h3>
