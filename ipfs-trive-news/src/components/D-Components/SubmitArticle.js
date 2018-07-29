@@ -2,7 +2,8 @@ import {Table, Grid, Button, Form } from 'react-bootstrap';
 import React, { Component } from 'react';
 import contract from 'truffle-contract';
 import web3 from '../../web3';
-import { setJSON, getJSON } from '../../util/IPFS.js'
+import { setJSON, getJSON } from '../../util/IPFS.js';
+import Loader from './Loader';
 // import storehash from '../../storehash';
 
 class Verify extends Component {
@@ -14,6 +15,7 @@ class Verify extends Component {
       ethAddress:'',
       transactionHash:'',
       txReceipt: '',
+      loading: false,
       myData: {
         url: "",
         title: "",
@@ -56,6 +58,7 @@ class Verify extends Component {
 
     onSubmit = async (event) => {
       event.preventDefault();
+      this.setState({loading: true});
       const TriveDapp = this.props.myContract;
       this.setState({ethAddress: TriveDapp});
       var TriveDappInstance;
@@ -86,6 +89,7 @@ class Verify extends Component {
           console.log(result.tx);
           this.setState({transactionHash: result.tx})
         }).catch((error) => {
+          this.setState({loading: false})
           console.log(error);
         })
         // storehash.methods.sendHash(this.state.ipfsHash).send({
@@ -101,7 +105,9 @@ class Verify extends Component {
       const { title, url, description} = this.state.myData
       return (
         <div >
-
+        {this.state.loading &&
+                    <Loader />
+                }
 
         <Grid className="verify-container">
           <h3> Give Article information to verify and send to IPFS </h3>
@@ -119,8 +125,6 @@ class Verify extends Component {
                  />
 
               <br />
-
-
               Title
               <br />
               <input
