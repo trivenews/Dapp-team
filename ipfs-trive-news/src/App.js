@@ -56,10 +56,10 @@ class App extends Component {
           isUser: true,
           name: result[0],
           address: accounts[0],
-          reputation: result[1].c[0],
-          articleCount: result[2].c[0],
-          penaltyCount: result[3].c[0],
-          readyTime: result[4].c[0]
+          reputation: result[1].toString(),
+          articleCount: result[2].toString(),
+          penaltyCount: result[3].toString(),
+          readyTime: result[4].toString()
         }
       })
       // TODO: I need to route from here
