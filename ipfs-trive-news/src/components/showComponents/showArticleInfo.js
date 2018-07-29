@@ -17,17 +17,14 @@ class ShowArticleInfo extends Component {
   //     .catch(err => console.log(`error: ${err}`))
   // };
   render() {
-    const check = this.props.articleIdLoaded ? (
+    const { data } = this.props;
+
+    return (
       <div>
-        <p>hash: </p>
+        <p>hash: {data[0]}</p>
         <p>researcherHash:</p>
         <p>reward:</p>
         <p>status</p>
-      </div>
-    ) : (<h1>shit happens</h1>);
-    return (
-      <div>
-        { check }
       </div>
     );
   }

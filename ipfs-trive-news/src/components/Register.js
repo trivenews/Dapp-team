@@ -15,8 +15,8 @@ class Register extends Component {
     super(props);
     this.state = {
       username: '',
-      articleIdLoaded: false,
-      articleId: []
+      articleIds: [],
+      articles: []
     };
     this.getTaskByOwner = this.getTaskByOwner.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,33 +46,44 @@ class Register extends Component {
     })
   }
   findArticleInfo(arr) {
+    console.log(arr);
     let res = [];
-    arr.map(t => {
-      res.push(t.c[0])
-    })
+    arr.map(num => {
+      res.push(parseInt(num.toString()))
+    });
+    console.log(res);
     this.setState({
-      articleId: res,
-      articleIdLoaded: true
+      articleIds: res
+    });
+
+    res.forEach((num) => {
+      this.getTaskInfo(num);
     });
   }
+
   getTaskInfo(articleId) {
     const TriveDapp = this.props.myContract;
     var TriveDappInstance;
     TriveDapp.deployed().then((instance) => {
-      console.log(articleId)
       TriveDappInstance = instance;
       return TriveDappInstance._getTaskInfo(articleId)
     }).then((result) => {
       console.log(result)
-      return <ShowArticleInfo articleIdLoaded={this.state.articleIdLoaded} result={result}/>
+      var articles = [...this.state.articles];
+      articles.push(<ShowArticleInfo key={result[0]} data={result}/>);
+
+      this.setState({
+        articles
+      });
     }).catch((error) => {
       console.log(error)
     })
   }
+
   getTaskByOwner() {
     const TriveDapp = this.props.myContract;
     var TriveDappInstance;
-    // TODO: I should move getAccounts out of this function
+
     web3.eth.getAccounts((error, accounts) => {
       var account = accounts[0];
       TriveDapp.deployed().then((instance) => {
@@ -85,15 +96,21 @@ class Register extends Component {
       })
     })
   }
+
   componentDidMount() {
     this.getTaskByOwner()
   }
+
   render () {
     const gridHeight = {
-        height: "100vh"
-      };
+      height: "100vh"
+    };
+  
     const { isUser, name, address, reputation, articleCount, penaltyCount, readyTime} = this.props.curUserInfo;
-    const registerForm = (<Form inline>
+    const { username, articles, articleIds } = this.state;
+
+    const registerForm = (
+      <Form inline>
         <FormGroup controlId="formInlineName">
         {' '}
         <br/>
@@ -103,49 +120,51 @@ class Register extends Component {
         <br/>
         <FormControl
           type="text"
-          value={this.state.username}
+          value={username}
           placeholder="Enter text"
           onChange={this.handleChange}
         />
         </FormGroup>{' '} {' '}
         <Button onClick={this.handleSubmit}>Register</Button>
-    </Form>);
-    const checkLengtArticles = (this.state.articleId).length > 0 ? true : false;
-    const showArticles = checkLengtArticles ?  (this.state.articleId).map(t => {this.getTaskInfo(t)}) : (<h3>no articles yet...</h3>);
-    const userInfo = (<div><h1>{name}' info</h1>
-    <hr />
-    <h3>Name of user: {name}</h3>
-    <h3>address: {address}</h3>
-    <h3>reputation: {reputation}</h3>
-    <h3>article count: {articleCount}</h3>
-    <h3>penalty count: {penaltyCount}</h3>
-    <h3>ready time: {readyTime}</h3>
-    <hr />
-    </div>
+      </Form>
     );
+
+    const userInfo = (
+      <div>
+        <h1>{name}' info</h1>
+        <hr />
+        <h3>Name of user: {name}</h3>
+        <h3>address: {address}</h3>
+        <h3>reputation: {reputation}</h3>
+        <h3>article count: {articleCount}</h3>
+        <h3>penalty count: {penaltyCount}</h3>
+        <h3>ready time: {readyTime}</h3>
+        <hr />
+      </div>
+    );
+
     return (
       <div>
-      <div className="dashboard-div">
-        <img src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png" className="App-logo-d" alt="logo" />
-      </div>
-      <div>
-        <Grid style={gridHeight}>
-        <Row className="show-grid">
-        <Col md={2}>
-         </Col>
-        <Col md={8} className="text-center">
-          {!isUser && registerForm}
-          {isUser && userInfo}
-          {showArticles}
-         </Col>
-        <Col md={2}>
+        <div className="dashboard-div">
+          <img src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png" className="App-logo-d" alt="logo" />
+        </div>
+        <div>
+          <Grid style={gridHeight}>
+          <Row className="show-grid">
+          <Col md={2}>
           </Col>
-         </Row>
-        </Grid>
+          <Col md={8} className="text-center">
+            {!isUser && registerForm}
+            {isUser && userInfo}
+            {articles}
+          </Col>
+          <Col md={2}>
+            </Col>
+          </Row>
+          </Grid>
+        </div>
       </div>
-      <ShowArticleInfo articleIdLoaded={this.state.articleIdLoaded} />
-      </div>
-    )
+    );
   }
 }
 export default Register;
