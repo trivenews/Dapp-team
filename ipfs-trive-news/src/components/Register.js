@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route, Link, withRouter} from 'react-r
 import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormControl} from "react-bootstrap";
 import contract from 'truffle-contract';
 import web3 from '../web3';
+import VotingContract from '../../build/contracts/Voting.json';
+
 import ShowArticleInfo from "./showComponents/showArticleInfo";
 // import VotingContract from '../../build/contracts/Voting.json';
 //
@@ -10,6 +12,10 @@ import ShowArticleInfo from "./showComponents/showArticleInfo";
 // TriveDapp.setProvider(web3.currentProvider);
 // TODO: testing if I can give these vars as props
 // TODO: button will call function on contract artifacts
+
+const TriveDapp = contract(VotingContract);
+TriveDapp.setProvider(web3.currentProvider);
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -22,13 +28,13 @@ class Register extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.getTaskInfo = this.getTaskInfo.bind(this);
+    this.becomeResearcher = this.becomeResearcher.bind(this);
   }
   handleChange(e) {
     this.setState({ username: e.target.value });
   }
   handleSubmit(e) {
     e.preventDefault();
-    const TriveDapp = this.props.myContract;
     var TriveDappInstance;
     // TODO: I should move getAccounts out of this function
     web3.eth.getAccounts((error, accounts) => {
@@ -63,7 +69,6 @@ class Register extends Component {
   }
 
   getTaskInfo(articleId) {
-    const TriveDapp = this.props.myContract;
     var TriveDappInstance;
     TriveDapp.deployed().then((instance) => {
       TriveDappInstance = instance;
@@ -71,7 +76,7 @@ class Register extends Component {
     }).then((result) => {
       console.log(result)
       var articles = [...this.state.articles];
-      articles.push(<ShowArticleInfo key={articleId} data={result}/>);
+      articles.push(<ShowArticleInfo key={articleId} data={result} curAddr={this.props.curUserInfo.address}/>);
 
       this.setState({
         articles
@@ -97,6 +102,20 @@ class Register extends Component {
       })
     })
   }
+  //become researcher function
+  becomeResearcher(e) {
+    e.preventDefault();
+    var TriveDappInstance;
+    TriveDapp.deployed().then((instance) => {
+      TriveDappInstance = instance;
+      return TriveDappInstance.createResearcher({from: this.props.curUserInfo.address})
+    }).then((result) => {
+      console.log(result)
+
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
 
   componentDidMount() {
     this.getTaskByOwner()
@@ -111,6 +130,7 @@ class Register extends Component {
 
     const { isUser, name, address, reputation, articleCount, penaltyCount, readyTime} = this.props.curUserInfo;
     const { username, articles, articleIds } = this.state;
+    const checkForResearcher = (<Button bsStyle="warning" onClick={this.becomeResearcher}>Become A Researcher!</Button>);
 
     const registerForm = (
       <Form inline>
@@ -134,7 +154,7 @@ class Register extends Component {
 
     const userInfo = (
       <div>
-        <h1>{name}'s info</h1>
+        <h1>{name}'s info {!this.props.isResearcher && checkForResearcher}</h1>
         <hr />
         <h3>Name of user: {name}</h3>
         <h3>address: {address}</h3>
@@ -157,6 +177,7 @@ class Register extends Component {
           <Col md={2}>
           </Col>
           <Col md={8} className="text-center">
+
             {!isUser && registerForm}
             {isUser && userInfo}
             {articles}

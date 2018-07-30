@@ -52,6 +52,7 @@ class Dashboard extends Component {
 
                 <Route exact path="/dashboard/opennews" render={(props) => (<OpenNews
                   myContract={this.props.myContract}
+                  curAddr={this.props.curAddr}
                 />)} />
 
                 <Route exact path="/dashboard/" render={(props) => (<News

@@ -31,11 +31,25 @@ class App extends Component {
         readyTime: ""
       },
       noUserAddr: "",
-      myContract: TriveDapp
+      myContract: TriveDapp,
+      isResearcher: false
     }
+    this.checkIfUserIsResearcher = this.checkIfUserIsResearcher.bind(this);
   }
 
-
+  checkIfUserIsResearcher() {
+    var TriveDappInstance;
+    TriveDapp.deployed().then((instance) => {
+      TriveDappInstance = instance;
+      return TriveDappInstance.isResearcher(this.state.curUserInfo.address)
+    }).then((result) => {
+      this.setState({
+        isResearcher: result
+      })
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
 
   grepEthAccount = async () => {
     const accounts = await web3.eth.getAccounts();
@@ -64,6 +78,8 @@ class App extends Component {
       })
       // TODO: I need to route from here
       // return TriveDappInstance.findUserInfo.call(account)
+    }).then(() => {
+      this.checkIfUserIsResearcher();
     }).catch((error) => {
       console.log(error);
       this.setState({noUserAddr: accounts[0]})
@@ -85,6 +101,7 @@ class App extends Component {
 
           <Route exact path='/dashboard/:sel' component={(props) => (<Dashboard
             myContract={this.state.myContract}
+            curAddr={this.state.curUserInfo.address}
            /> )} />
 
           <Route exact path='/dashboard' component={(props) => (<Dashboard
@@ -96,6 +113,7 @@ class App extends Component {
               curUserInfo={this.state.curUserInfo}
               myContract={this.state.myContract}
               noUserAddr={this.state.noUserAddr}
+              isResearcher={this.state.isResearcher}
             /> )} />
 
           <Route exact path='/' component={(props) => (<LandingPage /> )} />

@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import {Jumbotron, Label, Media, Button} from "react-bootstrap";
+import contract from 'truffle-contract';
+import web3 from '../../web3';
+import VotingContract from '../../../build/contracts/Voting.json';
 
+const TriveDapp = contract(VotingContract);
+TriveDapp.setProvider(web3.currentProvider);
 
 class ShowArticleInfo extends Component {
   constructor(props) {
@@ -10,7 +15,8 @@ class ShowArticleInfo extends Component {
         desc: "",
         title: "",
         url: ""
-      }
+      },
+      isresearcher: false
     }
     this.fetchIPFS = this.fetchIPFS.bind(this);
   }
@@ -34,11 +40,27 @@ class ShowArticleInfo extends Component {
       })
       .catch(err => console.log(`error: ${err}`))
   };
+
+  checkIfUserIsResearcher() {
+    var TriveDappInstance;
+    TriveDapp.deployed().then((instance) => {
+      TriveDappInstance = instance;
+      return TriveDappInstance.isResearcher(this.props.curAddr)
+    }).then((result) => {
+      console.log(result)
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
   componentDidMount(){
     this.fetchIPFS();
+    this.checkIfUserIsResearcher();
   }
   render() {
     const { data } = this.props;
+    // const checkResearcher = checkIfUserIsResearcher()
+    // const researchButton = (<Button bsStyle="primary">Reseach this article</Button>);
 
     return (
       <div>
