@@ -24,7 +24,7 @@ class OpenNews extends Component {
     }).then((result) => {
       console.log(result)
       var articles = [...this.state.articles];
-      articles.push(<ShowArticleInfo myContract={this.props.myContract} key={articleId} data={result} curAddr={this.props.curAddr}/>);
+      articles.push(<ShowArticleInfo myContract={this.props.myContract} articleId={articleId} key={articleId} data={result} curAddr={this.props.curAddr}/>);
 
       this.setState({
         articles

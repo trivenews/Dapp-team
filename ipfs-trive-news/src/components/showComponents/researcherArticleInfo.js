@@ -7,7 +7,7 @@ import VotingContract from '../../../build/contracts/Voting.json';
 const TriveDapp = contract(VotingContract);
 TriveDapp.setProvider(web3.currentProvider);
 
-class ShowArticleInfo extends Component {
+class ResearcherArticleInfo extends Component {
   constructor(props) {
     super(props);
     this.state ={
@@ -16,13 +16,16 @@ class ShowArticleInfo extends Component {
         title: "",
         url: ""
       },
-      isresearcher: false
+      taskInfo: {
+        ipfsHash: "",
+        reward: ""
+      }
     }
     this.fetchIPFS = this.fetchIPFS.bind(this);
-    this.researchArticle = this.researchArticle.bind(this);
+    this.getTaskInfo = this.getTaskInfo.bind(this);
   }
   fetchIPFS() {
-    fetch(`https://gateway.ipfs.io/ipfs/${this.props.data[0]}`)
+    fetch(`https://gateway.ipfs.io/ipfs/${this.state.taskInfo.ipfsHash}`)
       .then(resp => {
         if (!resp.ok) {
           throw Error('oops: ', resp.message);
@@ -42,35 +45,30 @@ class ShowArticleInfo extends Component {
       .catch(err => console.log(`error: ${err}`))
   };
 
-  checkIfUserIsResearcher() {
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance.isResearcher(this.props.curAddr)
-    }).then((result) => {
-      console.log(result)
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
-  researchArticle(e) {
-    e.preventDefault();
+  getTaskInfo() {
     console.log(this.props.articleId)
+    const TriveDapp = this.props.myContract;
     var TriveDappInstance;
     TriveDapp.deployed().then((instance) => {
       TriveDappInstance = instance;
-      return TriveDappInstance._acceptTask(this.props.articleId, {from: this.props.curAddr})
+      return TriveDappInstance._getTaskInfo(this.props.articleId)
     }).then((result) => {
       console.log(result)
-
+      this.setState({
+        taskInfo: {
+          ipfsHash: result[0],
+          reward: result[2].c[0]
+        }
+      })
+      this.fetchIPFS();
     }).catch((error) => {
       console.log(error)
     })
   }
 
   componentDidMount(){
-    this.fetchIPFS();
-    this.checkIfUserIsResearcher();
+    this.getTaskInfo();
+
   }
   render() {
     const { data } = this.props;
@@ -81,16 +79,17 @@ class ShowArticleInfo extends Component {
       <div>
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
-          <p><small>Status: {data[3].c[0]} | Reward: {data[2].c[0]}TRV | Hash: {data[0]}</small></p>
+          <p><small>Reward: {this.state.taskInfo.reward}TRV</small></p>
           <p>
             Description of the problem: <br />
             {this.state.myData.desc}
           </p>
-          <Button bsStyle="warning" onClick={this.researchArticle}>Research This Article!</Button><Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
-          <p><small> ResearcherHash: {data[1]}</small></p>
+          <p>Source: <br /> {this.props.researcherData.source}</p>
+          <p>Comments: <br /> {this.props.researcherData.comments}</p>
+          <p>Score: <br /> {this.props.researcherData.score}%</p>
         </Jumbotron>
       </div>
     );
   }
 }
-export default ShowArticleInfo;
+export default ResearcherArticleInfo;

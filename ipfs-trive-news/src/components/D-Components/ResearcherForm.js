@@ -1,11 +1,14 @@
-import {Table, Grid, Button, Form, Checkbox } from 'react-bootstrap';
+import {Table, Grid, Button, Form, Radio, FormGroup } from 'react-bootstrap';
 import React, { Component } from 'react';
 import web3 from '../../web3';
 import { setJSON, getJSON } from '../../util/IPFS.js'
 import storehash from '../../storehash';
+import ResearcherArticleInfo from "../showComponents/researcherArticleInfo";
 
 class ResearcherForm extends Component {
-    state = {
+  constructor(props) {
+    super(props);
+    this.state = {
       ipfsHash:null,
       buffer:'',
       ethAddress:'',
@@ -13,11 +16,16 @@ class ResearcherForm extends Component {
       txReceipt: '',
       researcherData: {
         taskID: "",
-        evidence: "",
-        description: ""
-      }
-    };
-
+        source: "",
+        comments: "",
+        score: ""
+      },
+      hasTask: false,
+      curTaskId: ""
+    }
+    this.checkIfResearcherHasATask = this.checkIfResearcherHasATask.bind(this);
+    this.getCurrentTask = this.getCurrentTask.bind(this);
+  }
    //handle capture file event if we want to add a file upload to the page
 
     captureFile =(event) => {
@@ -30,13 +38,13 @@ class ResearcherForm extends Component {
       };
 
       handleMyData = (e) => {
-        const { name, value } = e.target;
-        this.setState((prevState) => ({
-            researcherData: {
-            ...prevState.researcherData,
-            [name]: value
-          }
-        }));
+      const { name, value } = e.target;
+      this.setState((prevState) => ({
+          researcherData: {
+          ...prevState.researcherData,
+          [name]: value
+        }
+      }));
     }
 
 
@@ -51,13 +59,17 @@ class ResearcherForm extends Component {
 
     onSubmit = async (event) => {
       event.preventDefault();
+      this.setState({loading: true});
+      const TriveDapp = this.props.myContract;
+      this.setState({ethAddress: TriveDapp});
+      var TriveDappInstance;
       //bring in user's metamask account address
       const accounts = await web3.eth.getAccounts();
 
       console.log('Sending from Metamask account: ' + accounts[0]);
       //obtain contract address from storehash.js
-      const ethAddress= await storehash.options.address;
-      this.setState({ethAddress});
+      // const ethAddress= await storehash.options.address;
+      // this.setState({ethAddress});
 
       const hash = await setJSON({ researcherData: this.state.researcherData });
       console.log('this is my hash', hash);
@@ -71,17 +83,62 @@ class ResearcherForm extends Component {
         //return the transaction hash from the ethereum contract
         //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
 
-        storehash.methods.sendHash(this.state.ipfsHash).send({
-          from: accounts[0]
-        }, (error, transactionHash) => {
-          console.log(transactionHash);
-          this.setState({transactionHash});
-        }); //storehash
-
+        TriveDapp.deployed().then((instance) => {
+          TriveDappInstance = instance;
+          return TriveDappInstance._submitTask(this.state.curTaskId, this.state.ipfsHash, this.state.researcherData.score, {from: accounts[0], gas: 554755})
+        }).then((result) => {
+          console.log(result.tx);
+          this.setState({transactionHash: result.tx, loading: false})
+        }).catch((error) => {
+          this.setState({loading: false})
+          console.log(error);
+        })
     }; //onSubmit
 
+    getCurrentTask() {
+      const TriveDapp = this.props.myContract;
+      var TriveDappInstance;
+      TriveDapp.deployed().then((instance) => {
+        TriveDappInstance = instance;
+        return TriveDappInstance.researcherToTask(this.props.curAddr)
+      }).then((result) => {
+        // console.log(result.c[0]);
+        this.setState({
+          curTaskId: result.c[0],
+          researcherData: {
+            taskID: result.c[0]
+          }
+        })
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+    checkIfResearcherHasATask() {
+      const TriveDapp = this.props.myContract;
+      var TriveDappInstance;
+      TriveDapp.deployed().then((instance) => {
+        TriveDappInstance = instance;
+        return TriveDappInstance.researcherBusy(this.props.curAddr)
+      }).then((result) => {
+        if (result === true) {
+          this.setState({hasTask: true})
+          this.getCurrentTask();
+        } else {
+          console.log("GET A JOB!")
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+
+    componentDidMount() {
+      this.checkIfResearcherHasATask();
+    }
+
     render() {
-      const { taskID, evidence, description} = this.state.researcherData
+      const { score, source, comments} = this.state.researcherData
+      // curTaskId
+
       return (
         <div >
 
@@ -89,50 +146,56 @@ class ResearcherForm extends Component {
         <Grid className="verify-container">
           <h3>Welcome Researcher, please submit your story facts for review </h3>
           <br />
+          <ResearcherArticleInfo
+            articleId={this.state.curTaskId}
+            myContract={this.props.myContract}
+            score={this.state.score}
+            researcherData={this.state.researcherData}
+          />
           <Form onSubmit={this.onSubmit} >
 
-              Task ID
+
+            {/* <FormGroup controlId="formControlsTextarea">
+              <ControlLabel>Textarea</ControlLabel>
+              <FormControl componentClass="textarea" placeholder="textarea" />
+            </FormGroup> */}
+
+              Source
               <br />
-              <input
+              <textarea
                 type = "text"
-                value={taskID}
-                name="taskID"
+                value={source}
+                name="source"
                 onChange={this.handleMyData}
-                style={{width: '70%', height: '3em', marginRight: '5px'}}
-                 />
+                style={{width: '100%', minHeight: '6em', height: 'auto', marginRight: '5px'}}
+              ></textarea>
 
               <br />
 
-
-              Evidence
-              <br />
-
-              
-              <input
-                type = "textarea"
-                rows = "4"
-                value={evidence}
-                name="evidence"
-                onChange={this.handleMyData}
-                style={{width: '70%', height: '3em', marginRight: '5px'}}
-                 />
-
-              <br />
 
               Comments
               <br />
-              <input
-                type = "text"
-                value={description}
-                name="description"
+
+
+              <textarea
+                type = "textarea"
+                rows = "4"
+                value={comments}
+                name="comments"
                 onChange={this.handleMyData}
-                style={{width: '70%', height: '3em', marginRight: '5px'}}
-                 />
+                style={{width: '100%', minHeight: '6em', height: 'auto', marginRight: '5px'}}
+                 ></textarea>
+
+
               <br />
               <br />
-              <Checkbox readOnly style={{color: '#e2662b', fontSize: '17px', paddingBottom: '20px'}}>
-              By selecting this checkbox you agree to be registered  as a researcher for this task.
-              </Checkbox>
+              How true is this article in percentage
+              <FormGroup>
+                <Radio inline value={25} name="score" onChange={this.handleMyData}>25%</Radio>
+                <Radio inline value={50} name="score" onChange={this.handleMyData}>50%</Radio>
+                <Radio inline value={75} name="score" onChange={this.handleMyData}>75%</Radio>
+                <Radio inline value={100} name="score" onChange={this.handleMyData}>100%</Radio>
+              </FormGroup>
               <Button
                bsStyle="primary"
                type="submit">

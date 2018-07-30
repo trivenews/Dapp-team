@@ -41,7 +41,10 @@ class Dashboard extends Component {
             <Col sm={10}  className="dash-content">
 
               <Switch>
-              <Route exact path="/dashboard/researcher" render={(props) => (<ResearcherForm />)} />
+                <Route exact path="/dashboard/researcher" render={(props) => (<ResearcherForm
+                  curAddr={this.props.curAddr}
+                  myContract={this.props.myContract}
+                 />)} />
                 <Route exact path="/dashboard/verify" render={(props) => (<Verify
                   myContract={this.props.myContract}
                  />)} />
