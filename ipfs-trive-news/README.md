@@ -1,7 +1,7 @@
 ![trive.news](https://trive.news/wp-content/uploads/2018/01/discover-banner-4.png)
 
 # trive.news Demo DApp Summary
-This is a DApp (Decentralized Application) that shows a lean version of a global decentralized truth discovery network based on trive.news whitepaper. The goal is to find out how reliable the sources of a news story maybe. Here a user can sign up create a profile that is automatically connected to their metamask ethereum accounts, they can submit a story to be veried that story gets stored on IPFS (a peer-to-peer method of storing and sharing hypermedia in a distributed file system). Then the user's profile is created here a list of of submitted stories and information about their task is displayed. The researcher can take on the job of verifying and presenting supporting facts of the validity of the story. 
+This is a DApp (Decentralized Application) that shows a lean version of a global decentralized truth discovery network based on trive.news whitepaper. The goal is to find out how reliable the sources of a news story maybe. Here a user can sign up by creating a username their profile is automatically connected to their metamask ethereum accounts, they can submit a story to be veried by a researcher that tasks data will live on IPFS (a peer-to-peer method of storing and sharing hypermedia in a distributed file system). On the user's profile a list of of submitted stories and information about their submitted tasks are displayed. The researcher can take on the job of verifying and presenting supporting facts of the validity of the story. 
 
 
 To learn more about trive.news and read the whitepaper, please check out [https://trive.news/whitepaper/](https://trive.news/whitepaper/).
@@ -34,6 +34,7 @@ In a new tab:
 ```
 git clone https://github.com/trivenews/Dapp-team Dapp-team && cd ipfs-trive-news
 npm install
+truffle compile
 truffle migrate
 npm run start
 ```
@@ -53,7 +54,7 @@ A browser will open to http://localhost:3000. If you don't have the MetaMask ext
 
 
 
-### 5 Try it!
+### 5. Try it!
 Create a listing and post it to IPFS and Ethereum.
 
 
