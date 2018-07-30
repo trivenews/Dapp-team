@@ -69,7 +69,7 @@ contract UserTask is UserCreation {
         //check if accepter is a researcher
         require(isResearcher[msg.sender] == true);
         require(researcherBusy[msg.sender] == false);
-        require(taskToOwner[taskId] == !msg.sender);
+        require(taskToOwner[_taskId] == !msg.sender);
 
         // set mapping taskId to researcher
         taskToResearcher[_taskId] = msg.sender;
