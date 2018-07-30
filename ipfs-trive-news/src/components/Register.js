@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, withRouter} from 'react-router-dom';
 import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormControl} from "react-bootstrap";
 import contract from 'truffle-contract';
 import web3 from '../web3';
@@ -44,6 +44,7 @@ class Register extends Component {
         // return this.setState({ username: result.c[0] })
       })
     })
+    this.props.history.push('/dashboard/verify');
   }
   findArticleInfo(arr) {
     console.log(arr);
@@ -169,4 +170,4 @@ class Register extends Component {
     );
   }
 }
-export default Register;
+export default withRouter(Register);
