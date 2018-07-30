@@ -1,7 +1,7 @@
 ![trive.news](https://trive.news/wp-content/uploads/2018/01/discover-banner-4.png)
 
 # trive.news Demo DApp Summary
-This is a DApp (Decentralized Application) that shows a lean version of a global decentralized truth discovery network based on trive.news whitepaper. The goal is to find out how reliable the sources of a news story maybe. Here a user can sign up by creating a username their profile is automatically connected to their metamask ethereum accounts, they can submit a story to be veried by a researcher that tasks data will live on IPFS (a peer-to-peer method of storing and sharing hypermedia in a distributed file system). On the user's profile a list of of submitted stories and information about their submitted tasks are displayed. The researcher can take on the job of verifying and presenting supporting facts of the validity of the story. 
+This is a DApp (Decentralized Application) that shows a lean version of a global decentralized truth discovery network based on trive.news whitepaper. The goal is to find out how reliable the sources of a news story maybe. Here a user can sign up by creating a username, their profile is automatically connected to their metamask ethereum accounts, they can then submit a story to be veried by a researcher. The tasks information is stored on IPFS (a peer-to-peer method of storing and sharing hypermedia in a distributed file system). On the user's profile a list of of submitted stories and information about their tasks is displayed. The researcher can take on the job of verifying and presenting supporting facts of the validity of the story. 
 
 
 To learn more about trive.news and read the whitepaper, please check out [https://trive.news/whitepaper/](https://trive.news/whitepaper/).
