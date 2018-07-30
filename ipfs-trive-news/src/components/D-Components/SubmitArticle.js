@@ -87,7 +87,7 @@ class Verify extends Component {
           return TriveDappInstance._createTask(this.state.ipfsHash, 666, {from: accounts[0], gas: 6654755})
         }).then((result) => {
           console.log(result.tx);
-          this.setState({transactionHash: result.tx})
+          this.setState({transactionHash: result.tx, loading: false})
         }).catch((error) => {
           this.setState({loading: false})
           console.log(error);
