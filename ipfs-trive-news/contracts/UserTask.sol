@@ -3,15 +3,15 @@ pragma solidity ^0.4.24;
 import "./UserCrud.sol";
 
 contract UserTask is UserCreation {
-  using SafeMath for uint256;
+    using SafeMath for uint256;
     event  NewTask(address creator, uint reward);
 
     enum State { Open, InProgress, Solved, Verified }
 
     struct Task {
-        string	 IPFShash;
-        string   IPFShashResearch;
-    	uint	 reward;
+      string	 IPFShash;
+      string   IPFShashResearch;
+    	uint	   reward;
     	State    state;
     	uint     score;
     }
@@ -35,6 +35,11 @@ contract UserTask is UserCreation {
     function _changeUserInfo(User storage _user) private {
         _user.articleCount = _user.articleCount.add(1);
         _user.reputation = (_user.articleCount.add(_user.researchedArticlesCount)).sub(_user.penaltyCount);
+    }
+
+    function _changeResearcherInfo(User storage _researcher) private {
+        _researcher.researchedArticlesCount = _researcher.researchedArticlesCount.add(2);
+        _researcher.reputation = (_researcher.articleCount.add(_researcher.researchedArticlesCount)).sub(_researcher.penaltyCount);
     }
     // maybe add an "is user" modifier
    function _createTask(string _ipfsHash, uint _reward) public payable {
@@ -86,6 +91,29 @@ contract UserTask is UserCreation {
         t.state = State.Solved;
         t.IPFShashResearch = _IPFShashResearch;
         t.score = _score;
+    }
+
+    //task creator(user) verifies later this will change to be
+    // done by people with the verifier job
+    function _verifyTask(uint _taskId) public{
+        // add articleCount to user and
+        //change user reputation
+        uint userId = findUserId[msg.sender];
+        User storage me = users[userId];
+        _changeUserInfo(me);
+
+        // add researchedArticlesCount to researcher and
+        //  change user reputation
+        address researcherAddress = taskToResearcher[_taskId];
+        uint researcherId = findUserId[researcherAddress];
+        User storage res = users[researcherId];
+        _changeResearcherInfo(res);
+
+        //not sure yet
+        checkState[2] = checkState[2].sub(1);
+        checkState[3] = checkState[3].add(1);
+        Task storage t = tasks[_taskId];
+        t.state = State.Verified;
     }
 
     //get total amount of tasks

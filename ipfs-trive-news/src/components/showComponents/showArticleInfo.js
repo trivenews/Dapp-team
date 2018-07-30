@@ -19,6 +19,7 @@ class ShowArticleInfo extends Component {
       isresearcher: false
     }
     this.fetchIPFS = this.fetchIPFS.bind(this);
+    this.researcheArticle = this.researcheArticle.bind(this);
   }
   fetchIPFS() {
     fetch(`https://gateway.ipfs.io/ipfs/${this.props.data[0]}`)
@@ -52,6 +53,19 @@ class ShowArticleInfo extends Component {
       console.log(error)
     })
   }
+  researcheArticle(e) {
+    e.preventDefault();
+    var TriveDappInstance;
+    TriveDapp.deployed().then((instance) => {
+      TriveDappInstance = instance;
+      return TriveDappInstance.createResearcher({from: this.props.curUserInfo.address})
+    }).then((result) => {
+      console.log(result)
+
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
 
   componentDidMount(){
     this.fetchIPFS();
@@ -71,7 +85,7 @@ class ShowArticleInfo extends Component {
             Description of the problem: <br />
             {this.state.myData.desc}
           </p>
-          <Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
+          <Button bsStyle="warning" onClick={this.researcheArticle}>Researcher This Article!</Button><Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
           <p><small> ResearcherHash: {data[1]}</small></p>
         </Jumbotron>
       </div>
