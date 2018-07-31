@@ -94,7 +94,7 @@ class Register extends Component {
       var account = accounts[0];
       TriveDapp.deployed().then((instance) => {
         TriveDappInstance = instance;
-        return TriveDappInstance._getTasksByOwner(accounts[0])
+        return TriveDappInstance._getTasksByOwner(this.props.curUserInfo.address, ({from: this.props.curUserInfo.address}))
       }).then((result) => {
         this.findArticleInfo(result);
       }).catch((error) => {
