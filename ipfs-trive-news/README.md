@@ -57,5 +57,13 @@ A browser will open to http://localhost:3000. If you don't have the MetaMask ext
 ### 5. Try it!
 Create a listing and post it to IPFS and Ethereum.
 
+# Roadmap
+
+## Alpha Release
+
+## Beta Release
+
+## Version 1
+
 
 
