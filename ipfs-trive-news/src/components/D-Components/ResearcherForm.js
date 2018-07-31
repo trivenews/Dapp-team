@@ -125,6 +125,7 @@ class ResearcherForm extends Component {
           this.getCurrentTask();
         } else {
           console.log("GET A JOB!")
+
         }
       }).catch((error) => {
         console.log(error)
@@ -137,102 +138,104 @@ class ResearcherForm extends Component {
 
     render() {
       const { score, source, comments} = this.state.researcherData
-      // curTaskId
+      const formPage = (<Grid className="verify-container">
+        <h3>Welcome Researcher, please submit your story facts for review </h3>
+        <br />
+        <ResearcherArticleInfo
+          articleId={this.state.curTaskId}
+          myContract={this.props.myContract}
+          score={this.state.score}
+          researcherData={this.state.researcherData}
+        />
+        <Form onSubmit={this.onSubmit} >
+
+
+          {/* <FormGroup controlId="formControlsTextarea">
+            <ControlLabel>Textarea</ControlLabel>
+            <FormControl componentClass="textarea" placeholder="textarea" />
+          </FormGroup> */}
+
+            Source
+            <br />
+            <textarea
+              type = "text"
+              value={source}
+              name="source"
+              onChange={this.handleMyData}
+              style={{width: '100%', minHeight: '6em', height: 'auto', marginRight: '5px'}}
+            ></textarea>
+
+            <br />
+
+
+            Comments
+            <br />
+
+
+            <textarea
+              type = "textarea"
+              rows = "4"
+              value={comments}
+              name="comments"
+              onChange={this.handleMyData}
+              style={{width: '100%', minHeight: '6em', height: 'auto', marginRight: '5px'}}
+               ></textarea>
+
+
+            <br />
+            <br />
+            How true is this article in percentage
+            <FormGroup>
+              <Radio inline value={25} name="score" onChange={this.handleMyData}>25%</Radio>
+              <Radio inline value={50} name="score" onChange={this.handleMyData}>50%</Radio>
+              <Radio inline value={75} name="score" onChange={this.handleMyData}>75%</Radio>
+              <Radio inline value={100} name="score" onChange={this.handleMyData}>100%</Radio>
+            </FormGroup>
+            <Button
+             bsStyle="primary"
+             type="submit">
+             Send your documents for review
+            </Button>
+
+            <br />
+
+        </Form>
+
+        <hr/>
+
+            <Table bordered responsive>
+              <thead>
+                <tr>
+                  <th>Tx Receipt Category</th>
+                  <th>Values</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>IPFS Hash # stored on Eth Contract</td>
+                  <td>{this.state.ipfsHash}</td>
+                </tr>
+                <tr>
+                  <td>Ethereum Contract Address</td>
+                  <td>{this.state.ethAddress}</td>
+                </tr>
+
+                <tr>
+                  <td>Tx Hash # </td>
+                  <td>{this.state.transactionHash}</td>
+                </tr>
+              </tbody>
+          </Table>
+      </Grid>);
+      const findJob = (<h1>FIND A JOB</h1>);
 
       return (
         <div >
 
+          {this.state.hasTask && formPage}
+          {!this.state.hasTask && findJob}
 
-        <Grid className="verify-container">
-          <h3>Welcome Researcher, please submit your story facts for review </h3>
-          <br />
-          <ResearcherArticleInfo
-            articleId={this.state.curTaskId}
-            myContract={this.props.myContract}
-            score={this.state.score}
-            researcherData={this.state.researcherData}
-          />
-          <Form onSubmit={this.onSubmit} >
-
-
-            {/* <FormGroup controlId="formControlsTextarea">
-              <ControlLabel>Textarea</ControlLabel>
-              <FormControl componentClass="textarea" placeholder="textarea" />
-            </FormGroup> */}
-
-              Source
-              <br />
-              <textarea
-                type = "text"
-                value={source}
-                name="source"
-                onChange={this.handleMyData}
-                style={{width: '100%', minHeight: '6em', height: 'auto', marginRight: '5px'}}
-              ></textarea>
-
-              <br />
-
-
-              Comments
-              <br />
-
-
-              <textarea
-                type = "textarea"
-                rows = "4"
-                value={comments}
-                name="comments"
-                onChange={this.handleMyData}
-                style={{width: '100%', minHeight: '6em', height: 'auto', marginRight: '5px'}}
-                 ></textarea>
-
-
-              <br />
-              <br />
-              How true is this article in percentage
-              <FormGroup>
-                <Radio inline value={25} name="score" onChange={this.handleMyData}>25%</Radio>
-                <Radio inline value={50} name="score" onChange={this.handleMyData}>50%</Radio>
-                <Radio inline value={75} name="score" onChange={this.handleMyData}>75%</Radio>
-                <Radio inline value={100} name="score" onChange={this.handleMyData}>100%</Radio>
-              </FormGroup>
-              <Button
-               bsStyle="primary"
-               type="submit">
-               Send your documents for review
-              </Button>
-
-              <br />
-
-          </Form>
-
-          <hr/>
-
-              <Table bordered responsive>
-                <thead>
-                  <tr>
-                    <th>Tx Receipt Category</th>
-                    <th>Values</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <tr>
-                    <td>IPFS Hash # stored on Eth Contract</td>
-                    <td>{this.state.ipfsHash}</td>
-                  </tr>
-                  <tr>
-                    <td>Ethereum Contract Address</td>
-                    <td>{this.state.ethAddress}</td>
-                  </tr>
-
-                  <tr>
-                    <td>Tx Hash # </td>
-                    <td>{this.state.transactionHash}</td>
-                  </tr>
-                </tbody>
-            </Table>
-        </Grid>
      </div>
       );
     } //render
