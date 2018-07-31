@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link, withRouter} from 'react-router-dom';
-import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormControl} from "react-bootstrap";
+import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormControl, Table} from "react-bootstrap";
 import contract from 'truffle-contract';
 import web3 from '../web3';
 import VotingContract from '../../build/contracts/Voting.json';
@@ -155,14 +155,35 @@ class Register extends Component {
     const userInfo = (
       <div>
         <h1>{name}'s info {!this.props.isResearcher && checkForResearcher}</h1>
-        <hr />
-        <h3>Name of user: {name}</h3>
-        <h3>address: {address}</h3>
-        <h3>reputation: {reputation}</h3>
-        <h3>article count: {articleCount}</h3>
-        <h3>penalty count: {penaltyCount}</h3>
-        <h3>ready time: {readyTime}</h3>
-        <hr />
+        <Table bordered responsive>
+          <thead>
+            <tr>
+              <th>My address</th>
+              <th>{address}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Reputation</td>
+              <td>{reputation}</td>
+            </tr>
+            <tr>
+              <td>Submitted articles</td>
+              <td>{articleCount}</td>
+            </tr>
+
+            <tr>
+              <td>Penalties</td>
+              <td>{penaltyCount}</td>
+            </tr>
+
+            <tr>
+              <td>Ready time</td>
+              <td>{new Date(readyTime * 1000).toString()}</td>
+            </tr>
+          </tbody>
+      </Table>
       </div>
     );
 
