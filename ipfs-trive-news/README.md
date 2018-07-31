@@ -65,5 +65,5 @@ Create a listing and post it to IPFS and Ethereum.
 
 ## Version 1
 
-
+## Future...
 
