@@ -1,46 +1,76 @@
 import React, {Component} from "react";
 import contract from 'truffle-contract';
 import web3 from '../../web3';
+import ResearchedNewsInfo from "../showComponents/ResearchedNewsInfo";
+
 
 class News extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      totalArticlesCount: ""
+      articleIds: [],
+      articles: []
     }
-    this.getTaskCount = this.getTaskCount.bind(this);
+    this.getTaskByState = this.getTaskByState.bind(this);
+    this.findArticleInfo = this.findArticleInfo.bind(this);
   }
-  getTaskCount() {
-    console.log(this.props.myContract, "contractcode")
+
+  getTaskInfo(articleId) {
     const TriveDapp = this.props.myContract;
     var TriveDappInstance;
+    TriveDapp.deployed().then((instance) => {
+      TriveDappInstance = instance;
+      return TriveDappInstance._getTaskInfo(articleId)
+    }).then((result) => {
+      console.log(result)
+      var articles = [...this.state.articles];
+      articles.push(<ResearchedNewsInfo myContract={this.props.myContract} articleId={articleId} key={articleId} data={result} curAddr={this.props.curAddr}/>);
 
-    // TODO: I should move getAccounts out of this function
-    web3.eth.getAccounts((error, accounts) => {
-      var account = accounts[0];
-      TriveDapp.deployed().then((instance) => {
-        TriveDappInstance = instance;
-        return TriveDappInstance.getTotalTasksCount()
-      }).then((result) => {
-        console.log(result.c[0]);
-        this.setState({totalArticlesCount: result.c[0]})
-        // TODO: I need to route from here
-        // return TriveDappInstance.findUserInfo.call(account)
-      }).catch((error) => {
-        console.log(error);
-      })
+      this.setState({
+        articles
+      });
+    }).catch((error) => {
+      console.log(error)
     })
   }
-  componentDidMount() {
-    this.getTaskCount()
+
+  findArticleInfo(arr) {
+    let res = [];
+    arr.map(num => {
+      res.push(parseInt(num.toString()))
+    });
+    // console.log(res);
+    this.setState({
+      articleIds: res
+    });
+
+    res.forEach((num) => {
+      this.getTaskInfo(num);
+    });
   }
 
+  getTaskByState() {
+    const TriveDapp = this.props.myContract;
+    var TriveDappInstance;
+    TriveDapp.deployed().then((instance) => {
+      TriveDappInstance = instance;
+      return TriveDappInstance._getTasksByState(3, 3)
+    }).then((result) => {
+      this.findArticleInfo(result);
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
+  componentDidMount() {
+    this.getTaskByState();
+  }
   render() {
     return (
       <div>
-        <h1>NEWS</h1><h3>total: {this.state.totalArticlesCount}</h3>
+        <h1>All Verified NEWS</h1>
         <hr />
-        <h3>No news yet.</h3>
+        {this.state.articles}
       </div>
     )
   }

@@ -101,7 +101,7 @@ class ResearchedNewsInfo extends Component {
           <p>Source: <br /> {this.state.researcherData.source}</p>
           <p>Comments: <br /> {this.state.researcherData.comments}</p>
           <p>Score: <br /> {this.state.researcherData.score}%</p>
-          <Button bsStyle="success" onClick={this.verifyArticle}>Verify</Button>
+          {(data[3].c[0] === 2) && <Button bsStyle="success" onClick={this.verifyArticle}>Verify</Button>}
         </Jumbotron>
       </div>
     );
