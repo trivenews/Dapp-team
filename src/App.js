@@ -35,6 +35,7 @@ class App extends Component {
       isResearcher: false
     }
     this.checkIfUserIsResearcher = this.checkIfUserIsResearcher.bind(this);
+    this.reloadPage = this.reloadPage.bind(this);
   }
 
   checkIfUserIsResearcher() {
@@ -85,6 +86,9 @@ class App extends Component {
       this.setState({noUserAddr: accounts[0]})
     })
   };
+  reloadPage() {
+    this.grepEthAccount();
+  }
 
   componentDidMount() {
     this.grepEthAccount();
@@ -102,6 +106,7 @@ class App extends Component {
           <Route exact path='/dashboard/:sel' component={(props) => (<Dashboard
             myContract={this.state.myContract}
             curAddr={this.state.curUserInfo.address}
+            isResearcher={this.state.isResearcher}
            /> )} />
 
           <Route exact path='/dashboard' component={(props) => (<Dashboard
@@ -114,6 +119,7 @@ class App extends Component {
               myContract={this.state.myContract}
               noUserAddr={this.state.noUserAddr}
               isResearcher={this.state.isResearcher}
+              reloadFunc={() => {this.reloadPage()}}
             /> )} />
 
           <Route exact path='/' component={(props) => (<LandingPage /> )} />

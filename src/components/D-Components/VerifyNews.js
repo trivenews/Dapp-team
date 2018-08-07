@@ -3,7 +3,6 @@ import contract from 'truffle-contract';
 import web3 from '../../web3';
 import ResearchedNewsInfo from "../showComponents/ResearchedNewsInfo";
 
-
 class VerifyNews extends Component {
   constructor(props) {
     super(props)

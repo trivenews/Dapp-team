@@ -3,6 +3,8 @@ import {Jumbotron, Label, Media, Button} from "react-bootstrap";
 import contract from 'truffle-contract';
 import web3 from '../../web3';
 import VotingContract from '../../../build/contracts/Voting.json';
+import { Redirect } from 'react-router-dom';
+
 
 const TriveDapp = contract(VotingContract);
 TriveDapp.setProvider(web3.currentProvider);
@@ -20,11 +22,14 @@ class ResearchedNewsInfo extends Component {
         source: '',
         comments: '',
         score: ""
-      }
+      },
+      redirect: false
     }
     this.fetchIPFSOne = this.fetchIPFSOne.bind(this);
     this.fetchIPFSTwo = this.fetchIPFSTwo.bind(this);
     this.verifyArticle = this.verifyArticle.bind(this);
+    this.renderRedirect = this.renderRedirect.bind(this);
+
   }
   fetchIPFSOne() {
     fetch(`https://gateway.ipfs.io/ipfs/${this.props.data[0]}`)
@@ -76,10 +81,18 @@ class ResearchedNewsInfo extends Component {
       return TriveDappInstance._verifyTask(this.props.articleId, {from: this.props.curAddr})
     }).then((result) => {
       console.log(result)
-
+      this.setState({
+        redirect: true
+      })
     }).catch((error) => {
       console.log(error)
     })
+  }
+
+  renderRedirect() {
+    if (this.state.redirect) {
+      return <Redirect to='/dashboard/opennews' />
+    }
   }
 
   componentDidMount(){
@@ -91,6 +104,7 @@ class ResearchedNewsInfo extends Component {
 
     return (
       <div>
+        {this.renderRedirect()}
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
           <p><small>Status: {data[3].c[0]} | Reward: {data[2].c[0]}TRV </small></p>

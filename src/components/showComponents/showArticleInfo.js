@@ -3,6 +3,7 @@ import {Jumbotron, Label, Media, Button} from "react-bootstrap";
 import contract from 'truffle-contract';
 import web3 from '../../web3';
 import VotingContract from '../../../build/contracts/Voting.json';
+import { Redirect } from 'react-router-dom';
 
 const TriveDapp = contract(VotingContract);
 TriveDapp.setProvider(web3.currentProvider);
@@ -16,10 +17,12 @@ class ShowArticleInfo extends Component {
         title: "",
         url: ""
       },
-      isresearcher: false
+      isresearcher: false,
+      redirect: false
     }
     this.fetchIPFS = this.fetchIPFS.bind(this);
     this.researchArticle = this.researchArticle.bind(this);
+    this.renderRedirect = this.renderRedirect.bind(this);
   }
   fetchIPFS() {
     fetch(`https://gateway.ipfs.io/ipfs/${this.props.data[0]}`)
@@ -62,10 +65,19 @@ class ShowArticleInfo extends Component {
       return TriveDappInstance._acceptTask(this.props.articleId, {from: this.props.curAddr})
     }).then((result) => {
       console.log(result)
+      this.setState({
+        redirect: true
+      })
 
     }).catch((error) => {
       console.log(error)
     })
+  }
+
+  renderRedirect() {
+    if (this.state.redirect) {
+      return <Redirect to='/dashboard/researcher' />
+    }
   }
 
   componentDidMount(){
@@ -79,6 +91,7 @@ class ShowArticleInfo extends Component {
 
     return (
       <div>
+        {this.renderRedirect()}
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
           <p><small>Status: {data[3].c[0]} | Reward: {data[2].c[0]}TRV | Hash: {data[0]}</small></p>
@@ -86,8 +99,8 @@ class ShowArticleInfo extends Component {
             Description of the problem: <br />
             {this.state.myData.desc}
           </p>
-          <Button bsStyle="warning" onClick={this.researchArticle}>Research This Article!</Button><Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
-          <p><small> ResearcherHash: {data[1]}</small></p>
+          {this.props.isResearcher && <Button bsStyle="warning" onClick={this.researchArticle}>Research This Article!</Button>}<Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
+          {(data[1].length > 0)  && <p><small> ResearcherHash: {data[1]}</small></p>}
         </Jumbotron>
       </div>
     );

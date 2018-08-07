@@ -4,6 +4,8 @@ import web3 from '../../web3';
 import { setJSON, getJSON } from '../../util/IPFS.js'
 import storehash from '../../storehash';
 import ResearcherArticleInfo from "../showComponents/researcherArticleInfo";
+import Loader from './Loader';
+
 
 class ResearcherForm extends Component {
   constructor(props) {
@@ -21,7 +23,9 @@ class ResearcherForm extends Component {
         score: ""
       },
       hasTask: false,
-      curTaskId: ""
+      curTaskId: "",
+      done: false,
+      loading: false
     }
     this.checkIfResearcherHasATask = this.checkIfResearcherHasATask.bind(this);
     this.getCurrentTask = this.getCurrentTask.bind(this);
@@ -88,7 +92,7 @@ class ResearcherForm extends Component {
           return TriveDappInstance._submitTask(this.state.curTaskId, this.state.ipfsHash, this.state.researcherData.score, {from: accounts[0], gas: 554755})
         }).then((result) => {
           console.log(result.tx);
-          this.setState({transactionHash: result.tx, loading: false})
+          this.setState({transactionHash: result.tx, loading: false, done: true})
         }).catch((error) => {
           this.setState({loading: false})
           console.log(error);
@@ -141,12 +145,7 @@ class ResearcherForm extends Component {
       const formPage = (<Grid className="verify-container">
         <h3>Welcome Researcher, please submit your story facts for review </h3>
         <br />
-        <ResearcherArticleInfo
-          articleId={this.state.curTaskId}
-          myContract={this.props.myContract}
-          score={this.state.score}
-          researcherData={this.state.researcherData}
-        />
+
         <Form onSubmit={this.onSubmit} >
 
 
@@ -200,40 +199,43 @@ class ResearcherForm extends Component {
             <br />
 
         </Form>
-
+        <hr />
+        <ResearcherArticleInfo
+          articleId={this.state.curTaskId}
+          myContract={this.props.myContract}
+          score={this.state.score}
+          researcherData={this.state.researcherData}
+        />
         <hr/>
 
-            <Table bordered responsive>
-              <thead>
-                <tr>
-                  <th>Tx Receipt Category</th>
-                  <th>Values</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr>
-                  <td>IPFS Hash # stored on Eth Contract</td>
-                  <td>{this.state.ipfsHash}</td>
-                </tr>
-                <tr>
-                  <td>Ethereum Contract Address</td>
-                  <td>{this.state.ethAddress}</td>
-                </tr>
-
-                <tr>
-                  <td>Tx Hash # </td>
-                  <td>{this.state.transactionHash}</td>
-                </tr>
-              </tbody>
-          </Table>
       </Grid>);
+      const table = (<Table bordered responsive>
+        <thead>
+          <tr>
+            <th>Tx Receipt Category</th>
+            <th>Values</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>IPFS Hash # stored on Eth Contract</td>
+            <td>{this.state.ipfsHash}</td>
+          </tr>
+
+          <tr>
+            <td>Tx Hash # </td>
+            <td>{this.state.transactionHash}</td>
+          </tr>
+        </tbody>
+    </Table>);
       const findJob = (<h1>FIND A JOB</h1>);
 
       return (
         <div >
-
-          {this.state.hasTask && formPage}
+          {this.state.loading && <Loader />}
+          {this.state.hasTask && !this.state.done && formPage}
+          {this.state.hasTask && table}
           {!this.state.hasTask && findJob}
 
      </div>

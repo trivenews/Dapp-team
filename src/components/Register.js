@@ -44,13 +44,14 @@ class Register extends Component {
         return TriveDappInstance.createUser(this.state.username, {from: account, gas: 6654755})
       }).then((result) => {
         console.log(result);
+        this.props.reloadFunc()
         // TODO: I need to route from here
         // return TriveDappInstance.findUserInfo.call(account)
       }).then((result) => {
         // return this.setState({ username: result.c[0] })
       })
     })
-    this.props.history.push('/dashboard/verify');
+    this.props.history.push('/dashboard/news');
   }
   findArticleInfo(arr) {
     console.log(arr);
@@ -94,7 +95,8 @@ class Register extends Component {
       var account = accounts[0];
       TriveDapp.deployed().then((instance) => {
         TriveDappInstance = instance;
-        return TriveDappInstance._getTasksByOwner(this.props.curUserInfo.address, ({from: this.props.curUserInfo.address}))
+        console.log(this.props.curUserInfo.addres)
+        return TriveDappInstance._getTasksByOwner(this.props.noUserAddr || this.props.curUserInfo.address, ({from: this.props.noUserAddr || this.props.curUserInfo.address}))
       }).then((result) => {
         this.findArticleInfo(result);
       }).catch((error) => {
@@ -111,7 +113,7 @@ class Register extends Component {
       return TriveDappInstance.createResearcher({from: this.props.curUserInfo.address})
     }).then((result) => {
       console.log(result)
-
+      this.props.reloadFunc()
     }).catch((error) => {
       console.log(error)
     })
@@ -140,15 +142,16 @@ class Register extends Component {
         <h1 className="text-center">Welcome to trive.news</h1>
         <h3 className="text-center">Current ethereum addres: {this.props.noUserAddr}</h3>
         <h3 className="text-center">Please enter a username to get started</h3>
-        <br/>
         <FormControl
           type="text"
           value={username}
           placeholder="Enter text"
           onChange={this.handleChange}
         />
-        </FormGroup>{' '} {' '}
-        <Button onClick={this.handleSubmit}>Register</Button>
+        </FormGroup>
+        <br />
+        <br />
+        <Button bsStyle="primary" onClick={this.handleSubmit}>Register</Button>
       </Form>
     );
 

@@ -37,6 +37,9 @@ class Verify extends Component {
       };
 
       handleMyData = (e) => {
+        if (e.key === 'Enter') {
+          console.log('do validate');
+        }
         const { name, value } = e.target;
         this.setState((prevState) => ({
           myData: {
@@ -60,7 +63,6 @@ class Verify extends Component {
       event.preventDefault();
       this.setState({loading: true});
       const TriveDapp = this.props.myContract;
-      this.setState({ethAddress: TriveDapp});
       var TriveDappInstance;
       //bring in user's metamask account address
       //we will have to change this to props
@@ -68,8 +70,8 @@ class Verify extends Component {
 
       console.log('Sending from Metamask account: ' + accounts[0]);
       //obtain contract address from storehash.js
-      // const ethAddress= await storehash.options.address;
-      // this.setState({ethAddress}); !important I don't think we need this here
+      // const ethAddress= await TriveDapp.options.address;
+      // this.setState({ethAddress});
 
       const hash = await setJSON({ myData: this.state.myData });
       console.log('this is my hash', hash);
@@ -139,13 +141,13 @@ class Verify extends Component {
 
               Description
               <br />
-              <input
-                type = "text"
+              <textarea
+                type = "textarea"
                 value={description}
                 name="description"
                 onChange={this.handleMyData}
-                style={{width: '70%', height: '3em', marginRight: '5px'}}
-                 />
+                style={{width: '70%', minHeight: '6em', height: 'auto', marginRight: '5px'}}
+                 ></textarea>
               <br />
               <br />
               <Button
@@ -173,10 +175,10 @@ class Verify extends Component {
                     <td>IPFS Hash # stored on Eth Contract</td>
                     <td>{this.state.ipfsHash}</td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>Ethereum Contract Address</td>
                     <td>{this.state.ethAddress}</td>
-                  </tr>
+                  </tr> */}
 
                   <tr>
                     <td>Tx Hash # </td>

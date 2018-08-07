@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import {Grid, Row, Col, Button, ButtonGroup, DropdownButton, MenuItem} from "react-bootstrap";
-import SubmitResearch from "./D-Components/SubmitArticle";
+import SubmitArticle from "./D-Components/SubmitArticle";
 import News from "./D-Components/VerifiedNews";
 import ResearcherForm from "./D-Components/ResearcherForm";
 import OpenNews from "./D-Components/OpenNews";
@@ -26,7 +26,7 @@ class Dashboard extends Component {
             <Col sm={2}>
               <ButtonGroup vertical block >
                 <Button><Link to="/dashboard/news" >Verified News</Link></Button>
-                <Button><Link to="/dashboard/submitresearch" >Submit Article</Link></Button>
+                <Button><Link to="/dashboard/submitarticle" >Submit Article</Link></Button>
                 <Button><Link to="/dashboard/researcher">Researcher Portal</Link></Button>
                 <DropdownButton title="News Status" id="bg-vertical-dropdown-1">
                   <MenuItem eventKey="1"><Button style={{width: '100%'}}><Link to="/dashboard/opennews" >Open</Link></Button></MenuItem>
@@ -46,7 +46,7 @@ class Dashboard extends Component {
                   curAddr={this.props.curAddr}
                   myContract={this.props.myContract}
                  />)} />
-                <Route exact path="/dashboard/submitresearch" render={(props) => (<SubmitResearch
+                <Route exact path="/dashboard/submitarticle" render={(props) => (<SubmitArticle
                   myContract={this.props.myContract}
                  />)} />
 
@@ -58,6 +58,7 @@ class Dashboard extends Component {
                 <Route exact path="/dashboard/opennews" render={(props) => (<OpenNews
                   myContract={this.props.myContract}
                   curAddr={this.props.curAddr}
+                  isResearcher={this.props.isResearcher}
                 />)} />
 
                 <Route exact path="/dashboard/verify" render={(props) => (<VerifyNews

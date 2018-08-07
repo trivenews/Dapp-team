@@ -96,6 +96,8 @@ contract UserTask is UserCreation {
   //task creator(user) verifies later this will change to be
   // done by people with the verifier job
   function _verifyTask(uint _taskId) public{
+      //temp till we have verifiers
+      require(taskToOwner[_taskId] == msg.sender);
       // add articleCount to user and
       //change user reputation
       uint userId = findUserId[msg.sender];
