@@ -63,14 +63,16 @@ Create a listing and post it to IPFS and Ethereum.
 
 ## Alpha Release
 
-* [] Users can submit content URLs into the system.
-* [] Content available for research can be displayed for researchers to see.
-* [] Researcher has the ability to select stories to research.
-* [] Researcher has the ability to upload research documents to be stored on IPFS.
-* [] Basic reputation system - users earn one point for 'good' actions, they lose 5 for 'bad' actions
-* [] Users can choose their role as long as they have the required minimum reputation for that role
-* [] Verifiers can be randomly assigned to verify stories
-* [] Witnesses can assign percentage values denoting the 'truthfullness' of a story
+* [ ] Users can submit content URLs into the system.
+* [ ] Content available for research can be displayed for researchers to see.
+* [ ] Researcher has the ability to select stories to research.
+* [ ] Researcher has the ability to upload research documents to be stored on IPFS.
+* [ ] Basic reputation system - users earn one point for 'good' actions, they lose 5 for 'bad' actions
+* [ ] Users can choose their role as long as they have the required minimum reputation for that role
+* [ ] Verifiers can be randomly assigned to verify stories
+* [ ] Verifiers are implemented as an extra layer to double check the validity of the research that was done
+* [ ] Witnesses can assign percentage values denoting the 'truthfullness' of a story
+* [ ] Verifiers and Witnesses should be randomly assigned to a story
 
 ## Beta Release
 
