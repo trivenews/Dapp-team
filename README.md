@@ -59,11 +59,26 @@ Create a listing and post it to IPFS and Ethereum.
 
 # Roadmap
 
+*This is a tentative list of coming features and is subject to change*
+
 ## Alpha Release
+
+* [] Users can submit content URLs into the system.
+* [] Content available for research can be displayed for researchers to see.
+* [] Researcher has the ability to select stories to research.
+* [] Researcher has the ability to upload research documents to be stored on IPFS.
+* [] Basic reputation system - users earn one point for 'good' actions, they lose 5 for 'bad' actions
+* [] Users can choose their role as long as they have the required minimum reputation for that role
+* [] Verifiers can be randomly assigned to verify stories
+* [] Witnesses can assign percentage values denoting the 'truthfullness' of a story
 
 ## Beta Release
 
+* [] Implement conflict resolution system with voting
+
 ## Version 1
+
+* [] More advanced reputation system - decide on, and implement, advanced and weighted reputation system
 
 ## Future...
 
