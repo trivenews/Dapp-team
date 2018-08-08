@@ -74,11 +74,11 @@ Create a listing and post it to IPFS and Ethereum.
 
 ## Beta Release
 
-* [] Implement conflict resolution system with voting
+* [ ] Implement conflict resolution system with voting
 
 ## Version 1
 
-* [] More advanced reputation system - decide on, and implement, advanced and weighted reputation system
+* [ ] More advanced reputation system - decide on, and implement, advanced and weighted reputation system
 
 ## Future...
 
