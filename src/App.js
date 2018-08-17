@@ -26,9 +26,8 @@ class App extends Component {
         name: "",
         address: "",
         reputation: "",
-        articleCount: "",
-        penaltyCount: "",
-        readyTime: ""
+        readyTime: "",
+        rank: ""
       },
       noUserAddr: "",
       myContract: TriveDapp,
@@ -42,7 +41,7 @@ class App extends Component {
     var TriveDappInstance;
     TriveDapp.deployed().then((instance) => {
       TriveDappInstance = instance;
-      return TriveDappInstance.isResearcher(this.state.curUserInfo.address)
+      return TriveDappInstance.checkIfUserIsVerifier(this.state.curUserInfo.address)
     }).then((result) => {
       this.setState({
         isResearcher: result
@@ -64,17 +63,15 @@ class App extends Component {
       TriveDappInstance = instance;
       return TriveDappInstance.findUserInfo.call({from: accounts[0]})
     }).then((result) => {
-      console.log("the result will come soon")
-      console.log(result);
+
       this.setState({
         curUserInfo: {
           isUser: true,
           name: result[0],
           address: accounts[0],
           reputation: result[1].toString(),
-          articleCount: result[2].toString(),
-          penaltyCount: result[3].toString(),
-          readyTime: result[4].toString()
+          readyTime: result[2].toString(),
+          rank: result[3].toString()
         }
       })
       // TODO: I need to route from here

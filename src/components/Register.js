@@ -119,6 +119,7 @@ class Register extends Component {
     })
   }
 
+
   componentDidMount() {
     this.getTaskByOwner()
   }
@@ -130,7 +131,7 @@ class Register extends Component {
       "min-width": "100%"
     };
 
-    const { isUser, name, address, reputation, articleCount, penaltyCount, readyTime} = this.props.curUserInfo;
+    const { isUser, name, address, reputation, rank, readyTime} = this.props.curUserInfo;
     const { username, articles, articleIds } = this.state;
     const checkForResearcher = (<Button bsStyle="warning" onClick={this.becomeResearcher}>Become A Researcher!</Button>);
 
@@ -159,27 +160,22 @@ class Register extends Component {
       <div>
         <h1>{name}'s info {!this.props.isResearcher && checkForResearcher}</h1>
         <Table bordered responsive>
-          <thead>
+
+          <tbody>
             <tr>
               <th>My address</th>
               <th>{address}</th>
             </tr>
-          </thead>
-
-          <tbody>
             <tr>
               <td>Reputation</td>
               <td>{reputation}</td>
             </tr>
             <tr>
-              <td>Submitted articles</td>
-              <td>{articleCount}</td>
+              <td>Rank</td>
+              <td>{rank}</td>
             </tr>
 
-            <tr>
-              <td>Penalties</td>
-              <td>{penaltyCount}</td>
-            </tr>
+
 
             <tr>
               <td>Ready time</td>
@@ -189,6 +185,7 @@ class Register extends Component {
       </Table>
       </div>
     );
+
 
     return (
       <div>
@@ -204,9 +201,14 @@ class Register extends Component {
 
             {!isUser && registerForm}
             {isUser && userInfo}
-            {articles}
+
           </Col>
           <Col md={2}>
+            </Col>
+          </Row>
+          <Row className="show-grid">
+            <Col md={12} className="text-center">
+              {articles}
             </Col>
           </Row>
           </Grid>
