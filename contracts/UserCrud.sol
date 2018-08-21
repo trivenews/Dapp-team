@@ -4,16 +4,17 @@ pragma solidity ^0.4.24;
 
 import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
 import './Reputation.sol';
+//token contract
 contract TokenInterface{
-    function totalSupply() public constant returns (uint);
-    function balanceOf(address tokenOwner) public constant returns (uint balance);
-    function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
-    function transfer(address to, uint tokens) public returns (bool success);
-    function approve(address spender, uint tokens) public returns (bool success);
-    function transferFrom(address from, address to, uint tokens) public returns (bool success);
+  function totalSupply() public constant returns (uint);
+  function balanceOf(address tokenOwner) public constant returns (uint balance);
+  function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
+  function transfer(address to, uint tokens) public returns (bool success);
+  function approve(address spender, uint tokens) public returns (bool success);
+  function transferFrom(address from, address to, uint tokens) public returns (bool success);
 
-    event Transfer(address indexed from, address indexed to, uint tokens);
-    event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
+  event Transfer(address indexed from, address indexed to, uint tokens);
+  event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 
 }
 contract UserCreation is Reputation {
@@ -41,11 +42,12 @@ contract UserCreation is Reputation {
 	mapping (address => bool) public checkIfUserIsResearcher;
 	mapping (address => bool) public checkIfUserIsVerifier;
 
-    TokenInterface public tokenContract;
+  TokenInterface public tokenContract;
 
-    function setTokenContractAddress(address _address) external {
-        tokenContract = TokenInterface(_address);
-    }
+  // please put your token address inside the braces while testing
+  constructor() {
+    tokenContract = TokenInterface();
+  }
 	function createUser(string _name) public {
 	    //check if owner already has an account
 	    require(ownerUserCount[msg.sender] == 0);
