@@ -46,7 +46,7 @@ contract UserCreation is Reputation {
 
   // please put your token address inside the braces while testing
   constructor() {
-    tokenContract = TokenInterface();
+    tokenContract = TokenInterface(0x288d6875ae8da04afc5943b7c19db62092a33389);
   }
 	function createUser(string _name) public {
 	    //check if owner already has an account

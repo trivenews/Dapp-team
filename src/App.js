@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import contract from 'truffle-contract';
 import web3 from './web3';
 import VotingContract from '../build/contracts/Voting.json';
+import CoinContract from '../build/contracts/TriveCoin.json';
 
 import Header from "./components/navbar";
 import Footer from "./components/footer";
@@ -15,6 +16,8 @@ import './App.css';
 
 const TriveDapp = contract(VotingContract);
 TriveDapp.setProvider(web3.currentProvider);
+const TriveCoin = contract(CoinContract);
+TriveCoin.setProvider(web3.currentProvider);
 
 
 class App extends Component {
@@ -35,6 +38,7 @@ class App extends Component {
     }
     this.checkIfUserIsResearcher = this.checkIfUserIsResearcher.bind(this);
     this.reloadPage = this.reloadPage.bind(this);
+    this.checkbalance = this. checkbalance.bind(this);
   }
 
   checkIfUserIsResearcher() {
@@ -51,9 +55,20 @@ class App extends Component {
     })
   }
 
+  checkbalance() {
+    var TriveCoinInstance;
+    TriveCoin.deployed().then((instance) => {
+      TriveCoinInstance = instance;
+      return TriveCoinInstance.balanceOf(`${this.state.noUserAddr}`)
+    }).then((result) => {
+      console.log(this.state.noUserAddr, "&", result)
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
   grepEthAccount = async () => {
     const accounts = await web3.eth.getAccounts();
-    this.setState({curAddr: accounts[0]})
+    this.setState({noUserAddr: accounts[0]})
     // console.log(accounts[0]);
 
     // check if the account is a user
@@ -78,7 +93,10 @@ class App extends Component {
       // return TriveDappInstance.findUserInfo.call(account)
     }).then(() => {
       this.checkIfUserIsResearcher();
-    }).catch((error) => {
+    }).then(() => {
+
+    })
+    .catch((error) => {
       console.log(error);
       this.setState({noUserAddr: accounts[0]})
     })
@@ -89,6 +107,8 @@ class App extends Component {
 
   componentDidMount() {
     this.grepEthAccount();
+    this.checkbalance();
+
   };
   render() {
 
