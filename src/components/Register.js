@@ -70,11 +70,8 @@ class Register extends Component {
   }
 
   getTaskInfo(articleId) {
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance._getTaskInfo(articleId)
-    }).then((result) => {
+    this.props.triveDappInstance._getTaskInfo(articleId)
+    .then((result) => {
       console.log(result)
       var articles = [...this.state.articles];
       articles.push(<ShowArticleInfo key={articleId} data={result} curAddr={this.props.curUserInfo.address}/>);
@@ -88,30 +85,18 @@ class Register extends Component {
   }
 
   getTaskByOwner() {
-    const TriveDapp = this.props.myContract;
-    var TriveDappInstance;
-
-    web3.eth.getAccounts((error, accounts) => {
-      var account = accounts[0];
-      TriveDapp.deployed().then((instance) => {
-        TriveDappInstance = instance;
-        console.log(this.props.curUserInfo.addres)
-        return TriveDappInstance._getTasksByOwner(this.props.noUserAddr || this.props.curUserInfo.address, ({from: this.props.noUserAddr || this.props.curUserInfo.address}))
-      }).then((result) => {
-        this.findArticleInfo(result);
-      }).catch((error) => {
-        console.log(error)
-      })
+    this.props.triveDappInstance._getTasksByOwner(this.props.noUserAddr || this.props.curUserInfo.address)
+    .then((result) => {
+      this.findArticleInfo(result);
+    }).catch((error) => {
+      console.log(error)
     })
   }
   //become researcher function
   becomeResearcher(e) {
     e.preventDefault();
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance.createResearcher({from: this.props.curUserInfo.address})
-    }).then((result) => {
+    this.props.triveDappInstance.createResearcher({from: this.props.curUserInfo.address})
+    .then((result) => {
       console.log(result)
       this.props.reloadFunc()
     }).catch((error) => {

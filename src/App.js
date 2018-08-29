@@ -33,19 +33,32 @@ class App extends Component {
       },
       noUserAddr: "",
       myContract: TriveDapp,
+      triveDappInstance: '',
+      triveCoinInstance: '',
       isResearcher: false
     }
     this.checkIfUserIsResearcher = this.checkIfUserIsResearcher.bind(this);
     this.reloadPage = this.reloadPage.bind(this);
     this.checkbalance = this. checkbalance.bind(this);
+    this.setInstance = this.setInstance.bind(this);
+  }
+
+  setInstance() {
+    TriveDapp.deployed().then((instance) => {
+      this.setState({
+        triveDappInstance: instance
+      })
+    });
+    TriveCoin.deployed().then((instance) => {
+      this.setState({
+        triveCoinInstance: instance
+      })
+    });
   }
 
   checkIfUserIsResearcher() {
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance.checkIfUserIsVerifier(this.state.curUserInfo.address)
-    }).then((result) => {
+    this.state.triveDappInstance.checkIfUserIsVerifier(this.state.curUserInfo.address)
+    .then((result) => {
       this.setState({
         isResearcher: result
       })
@@ -55,12 +68,9 @@ class App extends Component {
   }
 
   checkbalance() {
-    var TriveCoinInstance;
-    TriveCoin.deployed().then((instance) => {
-      TriveCoinInstance = instance;
-      return TriveCoinInstance.balanceOf(`${this.state.noUserAddr}`)
-    }).then((result) => {
-      console.log(this.state.noUserAddr, "&", result)
+    this.state.triveCoinInstance.balanceOf(this.state.noUserAddr || this.state.curUserInfo.addres, {from: this.state.noUserAddr || this.state.curUserInfo.addres})
+    .then((result) => {
+      console.log(this.state.noUserAddr, " has this much trive tokens: ", result)
     }).catch((error) => {
       console.log(error)
     })
@@ -68,16 +78,9 @@ class App extends Component {
   grepEthAccount = async () => {
     const accounts = await web3.eth.getAccounts();
     this.setState({noUserAddr: accounts[0]})
-    
-    // console.log(accounts[0]);
-
     // check if the account is a user
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-
-      TriveDappInstance = instance;
-      return TriveDappInstance.findUserInfo.call({from: accounts[0]})
-    }).then((result) => {
+    this.state.triveDappInstance.findUserInfo.call({from: accounts[0]})
+    .then((result) => {
 
       this.setState({
         curUserInfo: {
@@ -92,6 +95,7 @@ class App extends Component {
       // TODO: I need to route from here
       // return TriveDappInstance.findUserInfo.call(account)
     }).then(() => {
+      this.checkbalance();
       this.checkIfUserIsResearcher();
     }).then(() => {
 
@@ -101,14 +105,14 @@ class App extends Component {
       this.setState({noUserAddr: accounts[0]})
     })
   };
+
   reloadPage() {
     this.grepEthAccount();
   }
 
   componentDidMount() {
+    this.setInstance();
     this.grepEthAccount();
-    this.checkbalance();
-
   };
   render() {
 
@@ -137,6 +141,8 @@ class App extends Component {
               noUserAddr={this.state.noUserAddr}
               isResearcher={this.state.isResearcher}
               reloadFunc={() => {this.reloadPage()}}
+              triveDappInstance={this.state.triveDappInstance}
+              triveCoinInstance={this.state.triveCoinInstance}
             /> )} />
 
           <Route exact path='/' component={(props) => (<LandingPage /> )} />
