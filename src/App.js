@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import contract from 'truffle-contract';
 import web3 from './web3';
 import VotingContract from '../build/contracts/Voting.json';
-import CoinContract from '../build/contracts/TriveCoin.json';
+import CoinContract from '../build/contracts/TokenInterface.json';
 
 import Header from "./components/navbar";
 import Footer from "./components/footer";
@@ -18,7 +18,6 @@ const TriveDapp = contract(VotingContract);
 TriveDapp.setProvider(web3.currentProvider);
 const TriveCoin = contract(CoinContract);
 TriveCoin.setProvider(web3.currentProvider);
-
 
 class App extends Component {
   constructor() {
