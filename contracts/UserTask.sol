@@ -32,6 +32,8 @@ contract UserTask is UserCreation {
   mapping (address => bool) public verifierBusy;
   mapping (address => uint) public verifierToTask;
 
+  mapping (uint => uint) public urlToTask;
+
   //modifier
   modifier onlyTrive(uint _reward) {
       require(tokenContract.allowance(msg.sender, this) >= _reward, "Please allow Trive to spent more TRV");
@@ -48,7 +50,7 @@ contract UserTask is UserCreation {
       tokenContract.transfer(msg.sender, verifierReward);
   }
   // end token transfer functions
-  function _changeUserInfo(uint _userId) private {
+  function _changeUserInfo(uint _userId) internal {
       users[_userId].reputation = users[_userId].reputation.add(1);
   }
   function _changeResearcherInfo(uint _researcherId) private {
@@ -59,16 +61,20 @@ contract UserTask is UserCreation {
   }
 
   // maybe add an "is user" modifier
- function _createTask(string _ipfsHash, uint _reward) public {
+  function _createTask(string _ipfsHash, string _url, uint _reward) public {
       /// later we will have to add a minimum value from the msger.
       // Security check if th requester is a user
     require(ownerUserCount[msg.sender] == 1, "you are not a user");
     require(_reward % 2 == 0, "Even value required.");
     //transfer TRV tokens to this contract from the task creator
     require(tokenContract.transferFrom(msg.sender, this, _reward));
+
+    uint urlHash = uint(keccak256(_url));
+    require(urlToTask[urlHash] == 0);
     //create new task id and push to tasks array and taskToOwner
     uint taskId = tasks.push(Task(_ipfsHash, "", _reward, State.Open, 0)).sub(1);
     taskToOwner[taskId] = msg.sender;
+    urlToTask[urlHash] = taskId;
 
     //add task to ownerTaskCount
     ownerTaskCount[msg.sender] = ownerTaskCount[msg.sender].add(1);
