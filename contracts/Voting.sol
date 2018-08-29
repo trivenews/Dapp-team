@@ -1,9 +1,9 @@
 pragma solidity ^0.4.24;
 pragma experimental ABIEncoderV2;
 
-import './UserTask.sol';
+import './Challenge.sol';
 
-contract Voting is UserTask {
+contract Voting is ChallengeResearcher {
     event conflictOpened(uint conflictId, address claimant, address offender, string description, string evidence);
     event conflictResolved(uint conflictId, address claimant, address offender, bool upheld);
 
@@ -24,12 +24,12 @@ contract Voting is UserTask {
         bool upheld;
     }
     Conflict[] conflicts;
-    
+
     modifier onlyMembers(address _member) {
         require(findUserId[_member] != 0); // from User contract
         _;
     }
-    
+
     // modifier authorize(address _voter, string _type, uint _id) {
     //     bool authorized;
     //     if (_type == 'conflict') {
@@ -38,7 +38,7 @@ contract Voting is UserTask {
     //         require();
     //     }
     // }
-    
+
     function openConflict(address _accused, string _description, string _evidence) onlyMembers(msg.sender) {
         conflicts.push(Conflict({
             claimant: msg.sender,
@@ -52,7 +52,7 @@ contract Voting is UserTask {
             upheld: false
         }));
         emit conflictOpened(conflicts.length.sub(1), msg.sender, _accused, _description, _evidence);
-        
+
         uint conflictId = conflicts.length.sub(1);
         electVerifiers(conflictId);
     }
@@ -61,15 +61,15 @@ contract Voting is UserTask {
         // find verifiers
         // require that the participants role is verifier
     }
-    
+
     function startVoting() {
         // change the status to open the voting period
     }
-    
+
     function closeVote() {
         // end the voting period
     }
-    
+
     function resolveConflict() {
         // take actions to resolve conflict
         // there will need to be some kind of mediator elected
@@ -80,4 +80,3 @@ contract Voting is UserTask {
     }
 
 }
-

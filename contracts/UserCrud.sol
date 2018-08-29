@@ -3,7 +3,7 @@
 pragma solidity ^0.4.24;
 
 import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
-import './Reputation.sol';
+/* import './Reputation.sol'; */
 //token contract
 contract TokenInterface{
   function totalSupply() public constant returns (uint);
@@ -17,7 +17,7 @@ contract TokenInterface{
   event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 
 }
-contract UserCreation is Reputation {
+contract UserCreation {
 
   using SafeMath for uint256;
 
@@ -45,9 +45,9 @@ contract UserCreation is Reputation {
   TokenInterface public tokenContract;
 
   // please put your token address inside the braces while testing
-  constructor() {
-    tokenContract = TokenInterface(0x288d6875ae8da04afc5943b7c19db62092a33389);
-  }
+  /* constructor() {
+    tokenContract = TokenInterface(HERE YOUR TOKEN ADDRESS);
+  } */
 	function createUser(string _name) public {
 	    //check if owner already has an account
 	    require(ownerUserCount[msg.sender] == 0);

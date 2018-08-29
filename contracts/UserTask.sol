@@ -48,7 +48,7 @@ contract UserTask is UserCreation {
       tokenContract.transfer(msg.sender, verifierReward);
   }
   // end token transfer functions
-  function _changeUserInfo(uint _userId) private {
+  function _changeUserInfo(uint _userId) internal {
       users[_userId].reputation = users[_userId].reputation.add(1);
   }
   function _changeResearcherInfo(uint _researcherId) private {

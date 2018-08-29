@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import './Task.sol';
+import './UserTask.sol';
 
 contract ChallengeResearcher is UserTask {
 
