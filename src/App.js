@@ -69,6 +69,7 @@ class App extends Component {
   grepEthAccount = async () => {
     const accounts = await web3.eth.getAccounts();
     this.setState({noUserAddr: accounts[0]})
+    
     // console.log(accounts[0]);
 
     // check if the account is a user
