@@ -5,6 +5,7 @@ import contract from 'truffle-contract';
 import web3 from './web3';
 import VotingContract from '../build/contracts/Voting.json';
 import CoinContract from '../build/contracts/TokenInterface.json';
+import { connect } from 'react-redux'
 
 import Header from "./components/navbar";
 import Footer from "./components/footer";
@@ -12,8 +13,13 @@ import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/Dashboard";
 import Register from "./components/Register";
 
-import './App.css';
 
+import {web3connect, instantiateTriveContract} from   './actions';
+import getCurrentProvider from './util/getCurrentProvider'
+
+import './App.css';
+import { throws } from 'assert';
+  
 const TriveDapp = contract(VotingContract);
 TriveDapp.setProvider(web3.currentProvider);
 const TriveCoin = contract(CoinContract);
@@ -35,13 +41,16 @@ class App extends Component {
       myContract: TriveDapp,
       triveDappInstance: '',
       triveCoinInstance: '',
-      isResearcher: false
+      isResearcher: false,
+      currentProvider: getCurrentProvider
     }
     this.checkIfUserIsResearcher = this.checkIfUserIsResearcher.bind(this);
     this.reloadPage = this.reloadPage.bind(this);
     this.checkbalance = this. checkbalance.bind(this);
     this.setInstance = this.setInstance.bind(this);
   }
+  
+ 
 
   setInstance() {
     TriveDapp.deployed().then((instance) => {
@@ -113,7 +122,10 @@ class App extends Component {
   componentDidMount() {
     this.setInstance();
     this.grepEthAccount();
+    this.props.instantiateTriveContract()
   };
+
+ 
   render() {
 
     return (
@@ -154,4 +166,18 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = {
+  web3connect,
+  instantiateTriveContract,
+};
+
+const mapStateToProps = (state) => {
+	console.log(state)
+	return ({
+  web3: state.web3,
+  trive: state.trive,
+})};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
