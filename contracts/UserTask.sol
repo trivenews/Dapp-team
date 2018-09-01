@@ -61,9 +61,9 @@ contract UserTask is UserCreation {
   }
 
   // maybe add an "is user" modifier
-  function _createTask(string _ipfsHash, string _url, uint _reward) public {
-      /// later we will have to add a minimum value from the msger.
-      // Security check if th requester is a user
+  function createTask(string _ipfsHash, string _url, uint _reward) public {
+    // later we will have to add a minimum value from the msger.
+    // Security check if the requester is a user
     require(ownerUserCount[msg.sender] == 1, "you are not a user");
     require(_reward % 2 == 0, "Even value required.");
     //transfer TRV tokens to this contract from the task creator
@@ -79,7 +79,7 @@ contract UserTask is UserCreation {
     //add task to ownerTaskCount
     ownerTaskCount[msg.sender] = ownerTaskCount[msg.sender].add(1);
 
-      checkState[0] = checkState[0].add(1);
+    checkState[0] = checkState[0].add(1);
 
     // fire event
     emit NewTask(taskId, _reward);
