@@ -30,7 +30,7 @@ function initializeWeb3() {
 if (typeof window.web3 !== undefined) {
     web3 = new Web3(window.web3.currentProvider);
   } else {
-    const provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545'); // this will be ganache-cli
+    const provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545'); // this will be ganache-cli
     web3 = new Web3(provider);
   }
   return web3Provided;

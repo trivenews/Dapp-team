@@ -5,7 +5,9 @@ import contract from 'truffle-contract';
 import web3 from './web3';
 import VotingContract from '../build/contracts/Voting.json';
 import CoinContract from '../build/contracts/TokenInterface.json';
-import { connect } from 'react-redux'
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import {storeWeb3Account, instantiateTriveContract, currentUserInformation} from   './actions';
 
 import Header from "./components/navbar";
 import Footer from "./components/footer";
@@ -13,8 +15,7 @@ import LandingPage from "./components/LandingPage";
 import Dashboard from "./components/Dashboard";
 import Register from "./components/Register";
 
-
-import {web3connect, instantiateTriveContract} from   './actions';
+ 
 import getCurrentProvider from './util/getCurrentProvider'
 
 import './App.css';
@@ -42,7 +43,8 @@ class App extends Component {
       triveDappInstance: '',
       triveCoinInstance: '',
       isResearcher: false,
-      currentProvider: getCurrentProvider
+      currentProvider: getCurrentProvider,
+      
     }
     this.checkIfUserIsResearcher = this.checkIfUserIsResearcher.bind(this);
     this.reloadPage = this.reloadPage.bind(this);
@@ -51,7 +53,7 @@ class App extends Component {
   }
   
  
-
+  //Done in redux
   setInstance() {
     TriveDapp.deployed().then((instance) => {
       this.setState({
@@ -85,17 +87,18 @@ class App extends Component {
     })
   }
   grepEthAccount = async () => {
-    const accounts = await web3.eth.getAccounts();
-    this.setState({noUserAddr: accounts[0]})
+    const account = this.props.account;
+    //this.setState({noUserAddr: accounts[0]})
     // check if the account is a user
-    this.state.triveDappInstance.findUserInfo.call({from: accounts[0]})
+
+    this.props.trive.findUserInfo.call({from: account})
     .then((result) => {
 
       this.setState({
         curUserInfo: {
           isUser: true,
           name: result[0],
-          address: accounts[0],
+          address: account,
           reputation: result[1].toString(),
           readyTime: result[2].toString(),
           rank: result[3].toString()
@@ -111,7 +114,7 @@ class App extends Component {
     })
     .catch((error) => {
       console.log(error);
-      this.setState({noUserAddr: accounts[0]})
+      this.setState({noUserAddr: account})
     })
   };
 
@@ -120,14 +123,23 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setInstance();
-    this.grepEthAccount();
-    this.props.instantiateTriveContract()
+    // this.setInstance();
+    //this.grepEthAccount();
+
+    // this.props.instantiateTriveContract();
+    // this.props.storeWeb3Account();
+    //this.props.currentUserInformation();
+   
   };
+
+  componentWillMount(){
+    this.props.instantiateTriveContract();
+    this.props.storeWeb3Account();
+  }
 
  
   render() {
-
+    console.log('the props that we can see from the APP COMPONENT', this.props.account, this.props.trive,  this.props.trive.address,  this.props.trive.findUserInfo)
     return (
       <div className="App">
         <Header
@@ -166,17 +178,20 @@ class App extends Component {
   }
 }
 
-const mapDispatchToProps = {
-  web3connect,
+const mapDispatchToProps = (dispatch) => bindActionCreators({
   instantiateTriveContract,
-};
+  storeWeb3Account,
+  // currentUserInformation
+}, dispatch);
 
 const mapStateToProps = (state) => {
-	console.log(state)
 	return ({
-  web3: state.web3,
-  trive: state.trive,
-})};
+    // curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.triveContract
+  //activeAccount: state.web3.activeAccount
+})
+};
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
