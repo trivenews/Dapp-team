@@ -5,6 +5,10 @@ import contract from 'truffle-contract';
 import web3 from '../web3';
 import VotingContract from '../../build/contracts/Voting.json';
 
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+
+
 import ShowArticleInfo from "./showComponents/showArticleInfo";
 // import VotingContract from '../../build/contracts/Voting.json';
 //
@@ -24,89 +28,87 @@ class Register extends Component {
       articleIds: [],
       articles: []
     };
-    this.getTaskByOwner = this.getTaskByOwner.bind(this);
+    // this.getTaskByOwner = this.getTaskByOwner.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.getTaskInfo = this.getTaskInfo.bind(this);
-    this.becomeResearcher = this.becomeResearcher.bind(this);
+    // this.getTaskInfo = this.getTaskInfo.bind(this);
+    // this.becomeResearcher = this.becomeResearcher.bind(this);
   }
   handleChange(e) {
     this.setState({ username: e.target.value });
   }
   handleSubmit(e) {
     e.preventDefault();
-    var TriveDappInstance;
     // TODO: I should move getAccounts out of this function
-    web3.eth.getAccounts((error, accounts) => {
-      var account = accounts[0];
-      TriveDapp.deployed().then((instance) => {
-        TriveDappInstance = instance;
-        return TriveDappInstance.createUser(this.state.username, {from: account, gas: 6654755})
-      }).then((result) => {
-        console.log(result);
-        this.props.reloadFunc()
+    console.log(this.props.trive, "en de accounts", this.props.account)
+
+
+    this.props.trive.createUser(this.state.username, {from: this.props.account, gas: 6654755})
+    .then((result) => {
+      console.log(result);
+        // this.props.reloadFunc()
         // TODO: I need to route from here
         // return TriveDappInstance.findUserInfo.call(account)
-      }).then((result) => {
-        // return this.setState({ username: result.c[0] })
-      })
+      // }).then((result) => {
+      //   // return this.setState({ username: result.c[0] })
+      // })
     })
     this.props.history.push('/dashboard/news');
   }
-  findArticleInfo(arr) {
-    console.log(arr);
-    let res = [];
-    arr.map(num => {
-      res.push(parseInt(num.toString()))
-    });
-    console.log(res);
-    this.setState({
-      articleIds: res
-    });
+  // findArticleInfo(arr) {
+  //   console.log(arr);
+  //   let res = [];
+  //   arr.map(num => {
+  //     res.push(parseInt(num.toString()))
+  //   });
+  //   console.log(res);
+  //   this.setState({
+  //     articleIds: res
+  //   });
+  //
+  //   res.forEach((num) => {
+  //     this.getTaskInfo(num);
+  //   });
+  // }
 
-    res.forEach((num) => {
-      this.getTaskInfo(num);
-    });
-  }
+  // getTaskInfo(articleId) {
+  //   this.props.triveDappInstance._getTaskInfo(articleId)
+  //   .then((result) => {
+  //     console.log(result)
+  //     var articles = [...this.state.articles];
+  //     articles.push(<ShowArticleInfo key={articleId} data={result} curAddr={this.props.curUserInfo.address}/>);
+  //
+  //     this.setState({
+  //       articles
+  //     });
+  //   }).catch((error) => {
+  //     console.log(error)
+  //   })
+  // }
 
-  getTaskInfo(articleId) {
-    this.props.triveDappInstance._getTaskInfo(articleId)
-    .then((result) => {
-      console.log(result)
-      var articles = [...this.state.articles];
-      articles.push(<ShowArticleInfo key={articleId} data={result} curAddr={this.props.curUserInfo.address}/>);
-
-      this.setState({
-        articles
-      });
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
-
-  getTaskByOwner() {
-    this.props.triveDappInstance._getTasksByOwner(this.props.noUserAddr || this.props.curUserInfo.address)
-    .then((result) => {
-      this.findArticleInfo(result);
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
+  // getTaskByOwner() {
+  //   this.props.triveDappInstance._getTasksByOwner(this.props.noUserAddr || this.props.curUserInfo.address)
+  //   .then((result) => {
+  //     this.findArticleInfo(result);
+  //   }).catch((error) => {
+  //     console.log(error)
+  //   })
+  // }
   //become researcher function
-  becomeResearcher(e) {
-    e.preventDefault();
-    this.props.triveDappInstance.createResearcher({from: this.props.curUserInfo.address})
-    .then((result) => {
-      console.log(result)
-      this.props.reloadFunc()
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
+  // becomeResearcher(e) {
+  //   e.preventDefault();
+  //   this.props.triveDappInstance.createResearcher({from: this.props.curUserInfo.address})
+  //   .then((result) => {
+  //     console.log(result)
+  //     this.props.reloadFunc()
+  //   }).catch((error) => {
+  //     console.log(error)
+  //   })
+  // }
 
 
   componentDidMount() {
-    this.getTaskByOwner()
+    // this.getTaskByOwner()
   }
 
   render () {
@@ -202,4 +204,23 @@ class Register extends Component {
     );
   }
 }
-export default withRouter(Register);
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+
+  // instantiateTriveContract,
+  // storeWeb3Account,
+  // currentUserInformation
+}, dispatch);
+
+const mapStateToProps = (state) => {
+	return ({
+    curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.triveContract
+  //activeAccount: state.web3.activeAccount
+})
+};
+
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Register));
+// export default Register;

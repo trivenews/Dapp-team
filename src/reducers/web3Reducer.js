@@ -1,8 +1,8 @@
-import { 
-	WEB3_CONNECTED, 
+import {
+	WEB3_CONNECTED,
     TRIVE_CONTRACT_INSTANTIATED,
     WEB3_ACCOUNT,
-	//defaultState 
+	//defaultState
 } from '../actions';
 
 const defaultState = {
@@ -24,7 +24,7 @@ const trive = (state = defaultState, action) => {
     };
   case WEB3_ACCOUNT:
     return {
-        ...state, 
+        ...state,
         account: action.payload
     };
     default:
