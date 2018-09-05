@@ -27,13 +27,16 @@ class Register extends Component {
       username: '',
       articleIds: [],
       articles: [],
-      triveBalance: ''
+      triveBalance: '',
+      setAllowAmount: '',
+      AllowAmount: 0
     };
     // this.getTaskByOwner = this.getTaskByOwner.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.checkBalance = this.checkBalance.bind(this);
-
+    this.handleSubmitAllow = this.handleSubmitAllow.bind(this);
+    this.handleChangeAllow = this.handleChangeAllow.bind(this);
     // this.getTaskInfo = this.getTaskInfo.bind(this);
     // this.becomeResearcher = this.becomeResearcher.bind(this);
   }
@@ -101,16 +104,41 @@ class Register extends Component {
 
   checkBalance() {
     this.props.trive.coinContract.balanceOf(this.props.account, {from: this.props.account, gas: 6654755})
-   .then((result) => {
+    .then((result) => {
      console.log(result)
      let results = result.c[0].toString();
      let len = results.length;
      let res = results.substring(0, len-4) + "." + results.substring(len-4);
      this.setState({triveBalance: res})
-   }).catch((error) => {
+    }).catch((error) => {
      console.log(error);
-   })
+    })
 
+    this.props.trive.coinContract.allowance(this.props.account, this.props.trive.triveContract.address, {from: this.props.account, gas: 6654755})
+    .then((result) => {
+     console.log(result)
+     let results = result.c[0].toString();
+     let len = results.length;
+     let res = results.substring(0, len-4) + "." + results.substring(len-4);
+     this.setState({AllowAmount: res})
+    }).catch((error) => {
+     console.log(error);
+    })
+  }
+
+  handleChangeAllow(e) {
+    this.setState({ setAllowAmount: e.target.value });
+  }
+  handleSubmitAllow(e) {
+    e.preventDefault();
+
+    this.props.trive.coinContract.approve(this.props.trive.triveContract.address, this.state.setAllowAmount * 10 ** 18, {from: this.props.account, gas: 6654755})
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
 
@@ -128,7 +156,7 @@ class Register extends Component {
     };
 
     const { isUser, name, address, reputation, rank, readyTime} = this.props.curUserInfo;
-    const { username, articles, articleIds } = this.state;
+    const { username, articles, articleIds, AllowAmount, setAllowAmount } = this.state;
     const checkForResearcher = (<Button bsStyle="warning" onClick={this.becomeResearcher}>Become A Researcher!</Button>);
 
     const registerForm = (
@@ -143,12 +171,12 @@ class Register extends Component {
           type="text"
           value={username}
           placeholder="Enter text"
-          onChange={this.handleChange}
+          onChange={this.handleChangeAllow}
         />
         </FormGroup>
         <br />
         <br />
-        <Button bsStyle="primary" onClick={this.handleSubmit}>Register</Button>
+        <Button bsStyle="primary" onClick={this.handleSubmitAllow}>Submit</Button>
       </Form>
     );
 
@@ -174,15 +202,31 @@ class Register extends Component {
               <td>TRV Balance</td>
               <td>{this.state.triveBalance}</td>
             </tr>
-
-
-
+            <tr>
+              <td>Allowence Balance</td>
+              <td>{AllowAmount}</td>
+            </tr>
             <tr>
               <td>Ready time</td>
               <td>{new Date(readyTime * 1000).toString()}</td>
             </tr>
           </tbody>
       </Table>
+      <Form inline>
+        <FormGroup controlId="formInlineName">
+        <br/>
+        <h3 className="text-center">Please allow the contract to send trive</h3>
+        <FormControl
+          type="number"
+          value={setAllowAmount}
+          placeholder="enter amount"
+          onChange={this.handleChangeAllow}
+        />
+        </FormGroup>
+        <br />
+        <br />
+        <Button bsStyle="success" onClick={this.handleSubmitAllow}>Register</Button>
+      </Form>
       </div>
     );
 
