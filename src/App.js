@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, withRouter} from 'react-router-dom';
 
 import contract from 'truffle-contract';
 import web3 from './web3';
@@ -86,50 +86,15 @@ class App extends Component {
       console.log(error)
     })
   }
-  // grepEthAccount = async () => {
-  //   const account = this.props.account;
-  //   //this.setState({noUserAddr: accounts[0]})
-  //   // check if the account is a user
-  //
-  //   this.props.trive.findUserInfo.call({from: account})
-  //   .then((result) => {
-  //
-  //     this.setState({
-  //       curUserInfo: {
-  //         isUser: true,
-  //         name: result[0],
-  //         address: account,
-  //         reputation: result[1].toString(),
-  //         readyTime: result[2].toString(),
-  //         rank: result[3].toString()
-  //       }
-  //     })
-  //     // TODO: I need to route from here
-  //     // return TriveDappInstance.findUserInfo.call(account)
-  //   }).then(() => {
-  //     this.checkbalance();
-  //     this.checkIfUserIsResearcher();
-  //   }).then(() => {
-  //
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //     this.setState({noUserAddr: account})
-  //   })
-  // };
+
 
   reloadPage() {
-    this.grepEthAccount();
+    this.props.currentUserInformation();
+    this.props.instantiateTriveContract();
+    this.props.storeWeb3Account();
   }
 
   componentDidMount() {
-    // this.setInstance();
-    //this.grepEthAccount();
-
-    // this.props.instantiateTriveContract();
-    // this.props.storeWeb3Account();
-    //this.props.currentUserInformation();
-    // if (this.props.curUserInfo.isUser) {this.props.currentUserInformation()};
 
   };
 
@@ -197,4 +162,4 @@ const mapStateToProps = (state) => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

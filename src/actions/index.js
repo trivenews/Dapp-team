@@ -75,6 +75,9 @@ export function currentUserInformation() {
   				payload: curUserInfo
   			})
       })
+      .catch((error) => {
+        console.log(error);
+      })
     })
   };
 }

@@ -45,13 +45,7 @@ class Register extends Component {
 
     this.props.trive.createUser(this.state.username, {from: this.props.account, gas: 6654755})
     .then((result) => {
-      console.log(result);
-        // this.props.reloadFunc()
-        // TODO: I need to route from here
-        // return TriveDappInstance.findUserInfo.call(account)
-      // }).then((result) => {
-      //   // return this.setState({ username: result.c[0] })
-      // })
+      this.props.reloadFunc()
     })
     this.props.history.push('/dashboard/news');
   }
