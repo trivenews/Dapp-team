@@ -26,11 +26,14 @@ class Register extends Component {
     this.state = {
       username: '',
       articleIds: [],
-      articles: []
+      articles: [],
+      triveBalance: ''
     };
     // this.getTaskByOwner = this.getTaskByOwner.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.checkBalance = this.checkBalance.bind(this);
+
     // this.getTaskInfo = this.getTaskInfo.bind(this);
     // this.becomeResearcher = this.becomeResearcher.bind(this);
   }
@@ -39,11 +42,7 @@ class Register extends Component {
   }
   handleSubmit(e) {
     e.preventDefault();
-    // TODO: I should move getAccounts out of this function
-    console.log(this.props.trive, "en de accounts", this.props.account)
-
-
-    this.props.trive.createUser(this.state.username, {from: this.props.account, gas: 6654755})
+    this.props.trive.triveContract.createUser(this.state.username, {from: this.props.account, gas: 6654755})
     .then((result) => {
       this.props.reloadFunc()
     })
@@ -100,12 +99,28 @@ class Register extends Component {
   //   })
   // }
 
+  checkBalance() {
+    this.props.trive.coinContract.balanceOf(this.props.account, {from: this.props.account, gas: 6654755})
+   .then((result) => {
+     console.log(result)
+     let results = result.c[0].toString();
+     let len = results.length;
+     let res = results.substring(0, len-4) + "." + results.substring(len-4);
+     this.setState({triveBalance: res})
+   }).catch((error) => {
+     console.log(error);
+   })
+
+  }
+
 
   componentDidMount() {
     // this.getTaskByOwner()
+    if (this.props.trive.isloaded){this.checkBalance()};
   }
 
   render () {
+
     const gridHeight = {
       'min-height': "100vh",
       'heigt': "auto",
@@ -154,6 +169,10 @@ class Register extends Component {
             <tr>
               <td>Rank</td>
               <td>{rank}</td>
+            </tr>
+            <tr>
+              <td>TRV Balance</td>
+              <td>{this.state.triveBalance}</td>
             </tr>
 
 
@@ -210,7 +229,7 @@ const mapStateToProps = (state) => {
 	return ({
     curUserInfo: state.currentUserInfo.curUserInfo,
     account: state.trive.account,
-    trive: state.trive.triveContract
+    trive: state.trive.contracts
   //activeAccount: state.web3.activeAccount
 })
 };

@@ -12,28 +12,29 @@ export const TRIVE_CONTRACT_INSTANTIATED = 'TRIVE_CONTRACT_INSTANTIATED';
 //user
 export const CURRENT_USER_INFO  = 'CURRENT_USER_INFO ';
 
-// export const defaultState = {
-//   account: null
-// };
-
-
 //this works
 export function instantiateTriveContract() {
-  return (dispatch, getState) => {
 
-    // let trive = getState().triveContract
+  return async (dispatch, getState) => {
+    // TriveDappCOntracts part
     const trive = contract(VotingContract);
     trive.setProvider(Web3File.currentProvider);
-    return trive.deployed().then((triveContract) => {
-      dispatch({
-        type: TRIVE_CONTRACT_INSTANTIATED,
-        payload: triveContract
-      });
-      console.log('inside',triveContract)
-      triveContract = getState().triveContract
+    let triveContract = await trive.deployed().then((trivecontract) => { return trivecontract })
 
+    // TriveCoinContract part
+    const TriveCoin = contract(CoinContract);
+    TriveCoin.setProvider(Web3File.currentProvider);
+    let coinContract = await TriveCoin.deployed().then((trivecontract) => { return trivecontract })
+
+    // dispatch
+    dispatch({
+      type: TRIVE_CONTRACT_INSTANTIATED,
+      payload: {
+        isloaded: true,
+        triveContract: triveContract,
+    		coinContract: coinContract
+      }
     });
-    console.log('outside',this.triveContract)
   };
 
 }
@@ -41,15 +42,15 @@ export function instantiateTriveContract() {
 //this works
 export function storeWeb3Account() {
   return async (dispatch, getState) => {
-  let account = getState().account;
-  const accounts= await Web3File.eth.getAccounts();
-  account = accounts[0]
-  console.log('my account', account, 'my accounts',accounts)
- { dispatch({type: WEB3_ACCOUNT, payload: account })
-}
+  // let account = getState().account;
+  const accounts = await Web3File.eth.getAccounts();
+  // account = accounts[0]
+  console.log('my accounts',accounts)
+  dispatch({type: WEB3_ACCOUNT, payload: accounts[0] })
   }
 }
 
+//this works
 export function currentUserInformation() {
   return async (dispatch, getState) => {
     // let account = getState().account;

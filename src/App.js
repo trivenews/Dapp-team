@@ -48,7 +48,6 @@ class App extends Component {
     }
     // this.checkIfUserIsResearcher = this.checkIfUserIsResearcher.bind(this);
     this.reloadPage = this.reloadPage.bind(this);
-    this.checkbalance = this. checkbalance.bind(this);
     // this.setInstance = this.setInstance.bind(this);
   }
 
@@ -95,18 +94,19 @@ class App extends Component {
   }
 
   componentDidMount() {
-
-  };
-
-  componentWillMount(){
     this.props.currentUserInformation();
     this.props.instantiateTriveContract();
     this.props.storeWeb3Account();
+  };
+
+  componentWillMount(){
+    // this.props.currentUserInformation();
+    // this.props.instantiateTriveContract();
+    // this.props.storeWeb3Account();
   }
 
 
   render() {
-    console.log('the props that we can see from the APP COMPONENT', this.props.account, this.props.trive,  this.props.trive.address,  this.props.trive.findUserInfo)
     return (
       <div className="App">
         <Header
@@ -156,7 +156,7 @@ const mapStateToProps = (state) => {
 	return ({
     curUserInfo: state.currentUserInfo.curUserInfo,
     account: state.trive.account,
-    trive: state.trive.triveContract
+    contracts: state.trive.contracts,
   //activeAccount: state.web3.activeAccount
 })
 };

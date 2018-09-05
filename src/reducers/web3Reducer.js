@@ -7,7 +7,11 @@ import {
 
 const defaultState = {
   account: '',
-  triveContract: ''
+  contracts: {
+		isLoaded: false,
+		triveContract: '',
+		coinContract: ''
+	}
 }
 
 const trive = (state = defaultState, action) => {
@@ -20,7 +24,7 @@ const trive = (state = defaultState, action) => {
   case TRIVE_CONTRACT_INSTANTIATED:
     return {
       ...state,
-      triveContract: action.payload
+      contracts: action.payload
     };
   case WEB3_ACCOUNT:
     return {
