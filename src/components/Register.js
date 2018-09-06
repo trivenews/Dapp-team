@@ -215,11 +215,11 @@ class Register extends Component {
       <Form inline>
         <FormGroup controlId="formInlineName">
         <br/>
-        <h3 className="text-center">Please allow the contract to send trive</h3>
+        <h3 className="text-center">Allow the contract to send trive</h3>
         <FormControl
           type="number"
           value={setAllowAmount}
-          placeholder="enter amount"
+          placeholder="Enter amount"
           onChange={this.handleChangeAllow}
         />
         </FormGroup>

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import {Table, Grid, Button, Form } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
 // import contract from 'truffle-contract';
 
 import web3 from '../../web3';
@@ -21,7 +24,8 @@ class Verify extends Component {
         url: "",
         title: "",
         description: ""
-      }
+      },
+      reward: ''
     };
   }
 
@@ -55,6 +59,9 @@ class Verify extends Component {
     //set this buffer -using es6 syntax
     this.setState({buffer});
   };
+  handleMyDataReward = (e) => {
+    this.setState({ reward: e.target.value });
+  }
 
   onSubmit = async (event) => {
     event.preventDefault();
@@ -86,11 +93,12 @@ class Verify extends Component {
     TriveDapp.deployed().then((instance) => {
       TriveDappInstance = instance;
       console.log(url);
-      return TriveDappInstance.createTask(this.state.ipfsHash, url, 666, {from: accounts[0], gas: 6654755})
+      return TriveDappInstance.createTask(this.state.ipfsHash, url, this.state.reward * 10 ** 18, {from: accounts[0], gas: 6654755})
     }).then((result) => {
       console.log(result.tx);
       this.setState({transactionHash: result.tx, loading: false})
     }).catch((error) => {
+      // TODO: make an error screen if user didn't approve contract to send tokens
       this.setState({loading: false})
       console.log(error);
     })
@@ -148,6 +156,16 @@ class Verify extends Component {
               style={{width: '70%', minHeight: '6em', height: 'auto', marginRight: '5px'}}
                 ></textarea>
             <br />
+            Reward
+            <br />
+            <input
+              type = "number"
+              value={this.state.reward}
+              onChange={this.handleMyDataReward}
+              style={{width: '70%', height: '3em', marginRight: '5px'}}
+                />
+
+            <br />
             <br />
             <Button
               bsStyle="primary"
@@ -191,4 +209,13 @@ class Verify extends Component {
   }
 }
 
-export default Verify;
+const mapStateToProps = (state) => {
+	return ({
+    curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.contracts
+  //activeAccount: state.web3.activeAccount
+})
+};
+
+export default withRouter(connect(mapStateToProps)(Verify));
