@@ -17,8 +17,8 @@ import ShowArticleInfo from "./showComponents/showArticleInfo";
 // TODO: testing if I can give these vars as props
 // TODO: button will call function on contract artifacts
 
-const TriveDapp = contract(VotingContract);
-TriveDapp.setProvider(web3.currentProvider);
+// const TriveDapp = contract(VotingContract);
+// TriveDapp.setProvider(web3.currentProvider);
 
 class Register extends Component {
   constructor(props) {
