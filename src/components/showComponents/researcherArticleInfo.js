@@ -4,8 +4,9 @@ import contract from 'truffle-contract';
 import web3 from '../../web3';
 import VotingContract from '../../../build/contracts/Voting.json';
 
-const TriveDapp = contract(VotingContract);
-TriveDapp.setProvider(web3.currentProvider);
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 class ResearcherArticleInfo extends Component {
   constructor(props) {
@@ -46,13 +47,8 @@ class ResearcherArticleInfo extends Component {
   };
 
   getTaskInfo() {
-    console.log(this.props.articleId)
-    const TriveDapp = this.props.myContract;
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance._getTaskInfo(this.props.articleId)
-    }).then((result) => {
+    this.props.trive.triveContract.tasks(this.props.articleId)
+    .then((result) => {
       console.log(result)
       this.setState({
         taskInfo: {
@@ -92,4 +88,13 @@ class ResearcherArticleInfo extends Component {
     );
   }
 }
-export default ResearcherArticleInfo;
+
+const mapStateToProps = (state) => {
+	return ({
+    curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.contracts
+  //activeAccount: state.web3.activeAccount
+})
+};
+export default withRouter(connect(mapStateToProps)(ResearcherArticleInfo));

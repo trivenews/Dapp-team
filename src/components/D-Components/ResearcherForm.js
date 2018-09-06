@@ -6,6 +6,10 @@ import storehash from '../../storehash';
 import ResearcherArticleInfo from "../showComponents/researcherArticleInfo";
 import Loader from './Loader';
 
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
 
 class ResearcherForm extends Component {
   constructor(props) {
@@ -64,13 +68,13 @@ class ResearcherForm extends Component {
     onSubmit = async (event) => {
       event.preventDefault();
       this.setState({loading: true});
-      const TriveDapp = this.props.myContract;
-      this.setState({ethAddress: TriveDapp});
-      var TriveDappInstance;
+      // const TriveDapp = this.props.myContract;
+      // this.setState({ethAddress: TriveDapp});
+      // var TriveDappInstance;
       //bring in user's metamask account address
-      const accounts = await web3.eth.getAccounts();
+      // const accounts = await web3.eth.getAccounts();
 
-      console.log('Sending from Metamask account: ' + accounts[0]);
+      console.log('Sending from Metamask account: ' + this.props.account);
       //obtain contract address from storehash.js
       // const ethAddress= await storehash.options.address;
       // this.setState({ethAddress});
@@ -87,10 +91,8 @@ class ResearcherForm extends Component {
         //return the transaction hash from the ethereum contract
         //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
 
-        TriveDapp.deployed().then((instance) => {
-          TriveDappInstance = instance;
-          return TriveDappInstance._submitTask(this.state.curTaskId, this.state.ipfsHash, this.state.researcherData.score, {from: accounts[0], gas: 554755})
-        }).then((result) => {
+        this.props.trive.triveContract._submitTask(this.state.curTaskId, this.state.ipfsHash, this.state.researcherData.score, {from: this.props.account, gas: 554755})
+        .then((result) => {
           console.log(result.tx);
           this.setState({transactionHash: result.tx, loading: false, done: true})
         }).catch((error) => {
@@ -100,13 +102,9 @@ class ResearcherForm extends Component {
     }; //onSubmit
 
     getCurrentTask() {
-      const TriveDapp = this.props.myContract;
-      var TriveDappInstance;
-      TriveDapp.deployed().then((instance) => {
-        TriveDappInstance = instance;
-        return TriveDappInstance.researcherToTask(this.props.curAddr)
-      }).then((result) => {
-        // console.log(result.c[0]);
+      this.props.trive.triveContract.researcherToTask(this.props.account)
+      .then((result) => {
+        console.log(result.c[0]);
         this.setState({
           curTaskId: result.c[0],
           researcherData: {
@@ -118,12 +116,8 @@ class ResearcherForm extends Component {
       })
     }
     checkIfResearcherHasATask() {
-      const TriveDapp = this.props.myContract;
-      var TriveDappInstance;
-      TriveDapp.deployed().then((instance) => {
-        TriveDappInstance = instance;
-        return TriveDappInstance.researcherBusy(this.props.curAddr)
-      }).then((result) => {
+      this.props.trive.triveContract.researcherBusy(this.props.account)
+      .then((result) => {
         if (result === true) {
           this.setState({hasTask: true})
           this.getCurrentTask();
@@ -137,7 +131,7 @@ class ResearcherForm extends Component {
     }
 
     componentDidMount() {
-      this.checkIfResearcherHasATask();
+      if (this.props.trive.isloaded){this.checkIfResearcherHasATask()};
     }
 
     render() {
@@ -243,4 +237,20 @@ class ResearcherForm extends Component {
     } //render
 }
 
-export default ResearcherForm;
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+
+  // instantiateTriveContract,
+  // storeWeb3Account,
+  // currentUserInformation
+}, dispatch);
+
+const mapStateToProps = (state) => {
+	return ({
+    curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.contracts
+  //activeAccount: state.web3.activeAccount
+})
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResearcherForm));

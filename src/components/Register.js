@@ -41,7 +41,7 @@ class Register extends Component {
     // this.becomeResearcher = this.becomeResearcher.bind(this);
   }
   handleChange(e) {
-    this.setState({ username: e.target.value });
+    this.setState({username: e.target.value});
   }
   handleSubmit(e) {
     e.preventDefault();
@@ -90,17 +90,18 @@ class Register extends Component {
   //     console.log(error)
   //   })
   // }
+
   //become researcher function
-  // becomeResearcher(e) {
-  //   e.preventDefault();
-  //   this.props.triveDappInstance.createResearcher({from: this.props.curUserInfo.address})
-  //   .then((result) => {
-  //     console.log(result)
-  //     this.props.reloadFunc()
-  //   }).catch((error) => {
-  //     console.log(error)
-  //   })
-  // }
+  becomeResearcher = (e) => {
+    e.preventDefault();
+    this.props.trive.triveContract.createResearcher({from: this.props.account})
+    .then((result) => {
+      console.log(result)
+      this.props.reloadFunc()
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
 
   checkBalance() {
     this.props.trive.coinContract.balanceOf(this.props.account, {from: this.props.account, gas: 6654755})
@@ -171,18 +172,18 @@ class Register extends Component {
           type="text"
           value={username}
           placeholder="Enter text"
-          onChange={this.handleChangeAllow}
+          onChange={this.handleChange}
         />
         </FormGroup>
         <br />
         <br />
-        <Button bsStyle="primary" onClick={this.handleSubmitAllow}>Submit</Button>
+        <Button bsStyle="primary" onClick={this.handleSubmit}>Submit</Button>
       </Form>
     );
 
     const userInfo = (
       <div>
-        <h1>{name}'s info {!this.props.isResearcher && checkForResearcher}</h1>
+        <h1>{name} {this.props.curUserInfo.rank < 2 && checkForResearcher}</h1>
         <Table bordered responsive>
 
           <tbody>

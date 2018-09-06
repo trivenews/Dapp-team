@@ -17,7 +17,6 @@ class OpenNews extends Component {
       articles: []
     }
     this.getTaskByState = this.getTaskByState.bind(this);
-    // this.findArticleInfo = this.findArticleInfo.bind(this);
   }
 
   getTaskInfo(articleId) {

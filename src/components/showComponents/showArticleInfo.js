@@ -5,8 +5,10 @@ import web3 from '../../web3';
 import VotingContract from '../../../build/contracts/Voting.json';
 import { Redirect } from 'react-router-dom';
 
-const TriveDapp = contract(VotingContract);
-TriveDapp.setProvider(web3.currentProvider);
+import { withRouter } from 'react-router-dom';
+
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
 
 class ShowArticleInfo extends Component {
   constructor(props) {
@@ -44,26 +46,11 @@ class ShowArticleInfo extends Component {
       })
       .catch(err => console.log(`error: ${err}`))
   };
-
-  checkIfUserIsResearcher() {
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance.isResearcher(this.props.curAddr)
-    }).then((result) => {
-      console.log(result)
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
+  
   researchArticle(e) {
     e.preventDefault();
-    console.log(this.props.articleId)
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance._acceptTask(this.props.articleId, {from: this.props.curAddr})
-    }).then((result) => {
+    this.props.trive.triveContract._acceptTask(this.props.articleId, {from: this.props.account})
+    .then((result) => {
       console.log(result)
       this.setState({
         redirect: true
@@ -82,7 +69,6 @@ class ShowArticleInfo extends Component {
 
   componentDidMount(){
     this.fetchIPFS();
-    this.checkIfUserIsResearcher();
   }
   render() {
     const { data } = this.props;
@@ -99,11 +85,26 @@ class ShowArticleInfo extends Component {
             Description of the problem: <br />
             {this.state.myData.desc}
           </p>
-          {this.props.isResearcher && <Button bsStyle="warning" onClick={this.researchArticle}>Research This Article!</Button>}<Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
+          {this.props.curUserInfo.rank >= 2 && <Button bsStyle="warning" onClick={this.researchArticle}>Research This Article!</Button>}<Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
           {(data[1].length > 0)  && <p><small> ResearcherHash: {data[1]}</small></p>}
         </Jumbotron>
       </div>
     );
   }
 }
-export default ShowArticleInfo;
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+
+  // instantiateTriveContract,
+  // storeWeb3Account,
+  // currentUserInformation
+}, dispatch);
+
+const mapStateToProps = (state) => {
+	return ({
+    curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.contracts
+  //activeAccount: state.web3.activeAccount
+})
+};
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ShowArticleInfo));
