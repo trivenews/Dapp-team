@@ -103,6 +103,17 @@ class Register extends Component {
     })
   }
 
+  becomeVerifier = (e) => {
+    e.preventDefault();
+    this.props.trive.triveContract.createVerifier({from: this.props.account})
+    .then((result) => {
+      console.log(result)
+      this.props.reloadFunc()
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
   checkBalance() {
     this.props.trive.coinContract.balanceOf(this.props.account, {from: this.props.account, gas: 6654755})
     .then((result) => {
@@ -159,6 +170,7 @@ class Register extends Component {
     const { isUser, name, address, reputation, rank, readyTime} = this.props.curUserInfo;
     const { username, articles, articleIds, AllowAmount, setAllowAmount } = this.state;
     const checkForResearcher = (<Button bsStyle="warning" onClick={this.becomeResearcher}>Become A Researcher!</Button>);
+    const checkForVerifier = (<Button bsStyle="warning" onClick={this.becomeVerifier}>Become A Verifier!</Button>);
 
     const registerForm = (
       <Form inline>
@@ -183,7 +195,8 @@ class Register extends Component {
 
     const userInfo = (
       <div>
-        <h1>{name} {this.props.curUserInfo.rank < 2 && checkForResearcher}</h1>
+        <h1>{name}</h1>
+        {this.props.curUserInfo.rank < 2 && checkForResearcher} {this.props.curUserInfo.rank < 3 && checkForVerifier}
         <Table bordered responsive>
 
           <tbody>

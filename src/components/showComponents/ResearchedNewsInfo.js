@@ -5,9 +5,10 @@ import web3 from '../../web3';
 import VotingContract from '../../../build/contracts/Voting.json';
 import { Redirect } from 'react-router-dom';
 
+import { withRouter } from 'react-router-dom';
 
-const TriveDapp = contract(VotingContract);
-TriveDapp.setProvider(web3.currentProvider);
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
 
 class ResearchedNewsInfo extends Component {
   constructor(props) {
@@ -74,12 +75,8 @@ class ResearchedNewsInfo extends Component {
 
   verifyArticle(e) {
     e.preventDefault();
-    console.log(this.props.articleId)
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance._verifyTask(this.props.articleId, {from: this.props.curAddr})
-    }).then((result) => {
+    this.props.trive.triveContract._acceptVerifyTask(this.props.articleId, {from: this.props.account})
+    .then((result) => {
       console.log(result)
       this.setState({
         redirect: true
@@ -115,10 +112,27 @@ class ResearchedNewsInfo extends Component {
           <p>Source: <br /> {this.state.researcherData.source}</p>
           <p>Comments: <br /> {this.state.researcherData.comments}</p>
           <p>Score: <br /> {this.state.researcherData.score}%</p>
-          {(data[3].c[0] === 2) && <Button bsStyle="success" onClick={this.verifyArticle}>Verify</Button>}
+          {(data[3].c[0] === 2) && this.props.curUserInfo.rank >= 3 && <Button bsStyle="success" onClick={this.verifyArticle}>Accept verify</Button>}
         </Jumbotron>
       </div>
     );
   }
 }
-export default ResearchedNewsInfo;
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+
+  // instantiateTriveContract,
+  // storeWeb3Account,
+  // currentUserInformation
+}, dispatch);
+
+const mapStateToProps = (state) => {
+	return ({
+    curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.contracts
+  //activeAccount: state.web3.activeAccount
+})
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResearchedNewsInfo));
