@@ -4,6 +4,7 @@ import {Grid, Row, Col, Button, ButtonGroup, DropdownButton, MenuItem} from "rea
 import SubmitArticle from "./D-Components/SubmitArticle";
 import News from "./D-Components/VerifiedNews";
 import ResearcherForm from "./D-Components/ResearcherForm";
+import VerifierForm from "./D-Components/VerifierForm";
 import OpenNews from "./D-Components/OpenNews";
 import VerifyNews from "./D-Components/VerifyNews"
 
@@ -28,6 +29,7 @@ class Dashboard extends Component {
                 <Button><Link to="/dashboard/news" >Verified News</Link></Button>
                 <Button><Link to="/dashboard/submitarticle" >Submit Article</Link></Button>
                 <Button><Link to="/dashboard/researcher">Researcher Portal</Link></Button>
+                <Button><Link to="/dashboard/verifier">Verifier Portal</Link></Button>
                 <DropdownButton title="News Status" id="bg-vertical-dropdown-1">
                   <MenuItem eventKey="1"><Button style={{width: '100%'}}><Link to="/dashboard/opennews" >Open</Link></Button></MenuItem>
                   <MenuItem eventKey="2"><Button style={{width: '100%'}}><Link to="/dashboard/verify" >Verify</Link></Button></MenuItem>
@@ -46,6 +48,10 @@ class Dashboard extends Component {
                   curAddr={this.props.curAddr}
                   myContract={this.props.myContract}
                  />)} />
+                 <Route exact path="/dashboard/verifier" render={(props) => (<VerifierForm
+                   curAddr={this.props.curAddr}
+                   myContract={this.props.myContract}
+                  />)} />
                 <Route exact path="/dashboard/submitarticle" render={(props) => (<SubmitArticle
                   myContract={this.props.myContract}
                  />)} />

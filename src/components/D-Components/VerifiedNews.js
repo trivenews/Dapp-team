@@ -1,8 +1,11 @@
 import React, {Component} from "react";
 import contract from 'truffle-contract';
 import web3 from '../../web3';
-import ResearchedNewsInfo from "../showComponents/ResearchedNewsInfo";
+import VerifierArticleInfo from "../showComponents/VerifierArticleInfo";
 
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 class News extends Component {
   constructor(props) {
@@ -16,15 +19,11 @@ class News extends Component {
   }
 
   getTaskInfo(articleId) {
-    const TriveDapp = this.props.myContract;
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance._getTaskInfo(articleId)
-    }).then((result) => {
+    this.props.trive.triveContract.tasks(articleId)
+    .then((result) => {
       console.log(result)
       var articles = [...this.state.articles];
-      articles.push(<ResearchedNewsInfo myContract={this.props.myContract} articleId={articleId} key={articleId} data={result} curAddr={this.props.curAddr}/>);
+      articles.push(<VerifierArticleInfo articleId={articleId} key={articleId}/>);
 
       this.setState({
         articles
@@ -50,12 +49,9 @@ class News extends Component {
   }
 
   getTaskByState() {
-    const TriveDapp = this.props.myContract;
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance._getTasksByState(3, 3)
-    }).then((result) => {
+    this.props.trive.triveContract._getTasksByState(5, 5)
+    .then((result) => {
+      console.log(result)
       this.findArticleInfo(result);
     }).catch((error) => {
       console.log(error)
@@ -63,7 +59,7 @@ class News extends Component {
   }
 
   componentDidMount() {
-    this.getTaskByState();
+    if (this.props.trive.isloaded){this.getTaskByState()};
   }
   render() {
     return (
@@ -76,4 +72,20 @@ class News extends Component {
   }
 }
 
-export default News;
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+
+  // instantiateTriveContract,
+  // storeWeb3Account,
+  // currentUserInformation
+}, dispatch);
+
+const mapStateToProps = (state) => {
+	return ({
+    curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.contracts
+  //activeAccount: state.web3.activeAccount
+})
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(News));
