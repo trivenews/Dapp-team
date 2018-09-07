@@ -22,7 +22,7 @@ class VerifyNews extends Component {
   getTaskInfo(articleId) {
     this.props.trive.triveContract.tasks(articleId)
     .then((result) => {
-      console.log(result)
+      console.log(result, "HIHIHIHIHIHIHIHIHIHIHIHIIHIHIHIIHIHIHIHI")
       var articles = [...this.state.articles];
       articles.push(<ResearchedNewsInfo myContract={this.props.myContract} articleId={articleId} key={articleId} data={result} curAddr={this.props.curAddr}/>);
 

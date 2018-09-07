@@ -88,8 +88,15 @@ class ResearchedNewsInfo extends Component {
 
   renderRedirect() {
     if (this.state.redirect) {
-      return <Redirect to='/dashboard/opennews' />
+      return <Redirect to='/dashboard/verifier' />
     }
+  }
+  convertToTriveDeci = (num) => {
+    let result = num.toString()
+    let len = result.length;
+    let res = result.substring(0, len-4) + "." + result.substring(len-2);
+    console.log('hi')
+    return res
   }
 
   componentDidMount(){
@@ -104,7 +111,7 @@ class ResearchedNewsInfo extends Component {
         {this.renderRedirect()}
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
-          <p><small>Status: {data[3].c[0]} | Reward: {data[2].c[0]}TRV </small></p>
+          <p><small>Status: {data[3].c[0]} | Reward: {this.convertToTriveDeci(data[2].c[0])}TRV </small></p>
           <p>
             Description of the problem: <br />
             {this.state.myData.desc}

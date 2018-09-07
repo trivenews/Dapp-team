@@ -30,77 +30,38 @@ class VerifierForm extends Component {
       curTaskId: "",
       disagree: false,
       loading: false,
-
+      done: false
     }
     // this.checkIfResearcherHasATask = this.checkIfResearcherHasATask.bind(this);
     // this.getCurrentTask = this.getCurrentTask.bind(this);
   }
-   //handle capture file event if we want to add a file upload to the page
 
-    // captureFile =(event) => {
-    //     event.stopPropagation()
-    //     event.preventDefault()
-    //     const file = event.target.files[0]
-    //     let reader = new window.FileReader()
-    //     reader.readAsArrayBuffer(file)
-    //     reader.onloadend = () => this.convertToBuffer(reader)
-    //   };
-    //
-    //   handleMyData = (e) => {
-    //   const { name, value } = e.target;
-    //   this.setState((prevState) => ({
-    //       researcherData: {
-    //       ...prevState.researcherData,
-    //       [name]: value
-    //     }
-    //   }));
-    // }
+    handleMyData = (e) => {
+      const { name, value } = e.target;
+      this.setState((prevState) => ({
+          researcherData: {
+          ...prevState.researcherData,
+          [name]: value
+        }
+      }));
+    }
 
+    onSubmit = async (event) => {
+      event.preventDefault();
+      this.setState({loading: true});
 
-    // convertToBuffer = async(reader) => {
-    //   //file is converted to a buffer to prepare for uploading to IPFS
-    //     const buffer = await Buffer.from(reader.result);
-    //   //set this buffer -using es6 syntax
-    //     this.setState({buffer});
-    // };
+      const hash = await setJSON({ researcherData: this.state.researcherData });
 
+      this.setState({ ipfsHash: hash });
 
-
-    // onSubmit = async (event) => {
-    //   event.preventDefault();
-    //   this.setState({loading: true});
-    //   // const TriveDapp = this.props.myContract;
-    //   // this.setState({ethAddress: TriveDapp});
-    //   // var TriveDappInstance;
-    //   //bring in user's metamask account address
-    //   // const accounts = await web3.eth.getAccounts();
-    //
-    //   console.log('Sending from Metamask account: ' + this.props.account);
-    //   //obtain contract address from storehash.js
-    //   // const ethAddress= await storehash.options.address;
-    //   // this.setState({ethAddress});
-    //
-    //   const hash = await setJSON({ researcherData: this.state.researcherData });
-    //   console.log('this is my hash', hash);
-    //
-    //   //save document to IPFS,return its hash#, and set hash# to state
-    //   //https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#add
-    //
-    //     this.setState({ ipfsHash: hash });
-    //
-    //     // call Ethereum contract method "sendHash" and .send IPFS hash to etheruem contract
-    //     //return the transaction hash from the ethereum contract
-    //     //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
-    //
-    //     this.props.trive.triveContract._submitTask(this.state.curTaskId, this.state.ipfsHash, this.state.researcherData.score, {from: this.props.account, gas: 554755})
-    //     .then((result) => {
-    //       console.log(result.tx);
-    //       this.setState({transactionHash: result.tx, loading: false, done: true})
-    //     }).catch((error) => {
-    //       this.setState({loading: false})
-    //       console.log(error);
-    //     })
-    // }; //onSubmit
+      this.props.trive.triveContract.challengeResearcher(this.state.curTaskId, this.state.ipfsHash, {from: this.props.account, gas: 554755})
+      .then((result) => {
+        this.setState({transactionHash: result.tx, loading: false, done: true})
+      }).catch((error) => {
+        this.setState({loading: false})
+        console.log(error);
+      })
+    }; //onSubmit
 
     getCurrentTask = () => {
       this.props.trive.triveContract.verifierToTask(this.props.account)
@@ -148,6 +109,13 @@ class VerifierForm extends Component {
     disagreeResearch = (e) => {
       e.preventDefault();
       console.log("I DISAGREE!!!!")
+      this.setState({
+        disagree: !this.state.disagree
+      })
+    }
+    addToResearch = (e) => {
+      e.preventDefault();
+      console.log("I WANT TO ADD SOMETHING")
     }
 
     componentDidMount() {
@@ -158,8 +126,9 @@ class VerifierForm extends Component {
       const { score, source, comments} = this.state.researcherData;
       const verifyButton = (<Button bsStyle="warning" onClick={this.verifyResearch}>Verify!</Button>);
       const disagreeButton = (<Button bsStyle="warning" onClick={this.disagreeResearch}>Disagree!</Button>);
+      const addButton = (<Button bsStyle="warning" onClick={this.addToResearch}>Add info</Button>);
       const formPage = (<Grid className="verify-container">
-        <h3>Welcome Researcher, please submit your story facts for review </h3>
+        <h3>Welcome Verifier, please submit a better research </h3>
         <br />
 
         <Form onSubmit={this.onSubmit} >
@@ -235,10 +204,11 @@ class VerifierForm extends Component {
       return (
         <div >
           {this.state.loading && <Loader />}
-          {this.state.hasTask && this.state.disagree && formPage}
-          {this.state.hasTask && research}
-          {this.state.hasTask && !this.state.disagree && verifyButton}
-          {this.state.hasTask && !this.state.disagree && disagreeButton}
+          {this.state.hasTask && !this.state.done && research}
+          {this.state.hasTask && !this.state.done && this.state.disagree && formPage}
+          {this.state.hasTask && !this.state.done && !this.state.disagree && verifyButton}
+          {this.state.hasTask && !this.state.done && !this.state.disagree && addButton}
+          {this.state.hasTask && !this.state.done && disagreeButton}
           {this.state.hasTask && table}
           {!this.state.hasTask && findJob}
 
