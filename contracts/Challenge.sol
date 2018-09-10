@@ -31,6 +31,7 @@ contract ChallengeResearcher is UserTask {
     //called if researcher is winner
     function _researcherWins(uint _taskId) internal {
         address researcherAddress = taskToResearcher[_taskId];
+
         //token part
         uint researcherReward = (tasks[_taskId].reward);
         tokenContract.transfer(researcherAddress, researcherReward);
@@ -46,7 +47,9 @@ contract ChallengeResearcher is UserTask {
     }
     // called if challenger is winner
      function _challengerWins(uint _taskId) internal {
-        address challengerAddress = challengeToChallenger[taskIdToChallengeId[_taskId]];
+        uint challengeId = taskIdToChallengeId[_taskId];
+        address challengerAddress = challengeToChallenger[challengeId];
+        tasks[_taskId].IPFShashResearch = challenges[challengeId].challengerIPFShash;
         //token part
         uint challengerReward = (tasks[_taskId].reward);
         tokenContract.transfer(challengerAddress, challengerReward);
