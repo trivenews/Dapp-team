@@ -6,7 +6,10 @@ import News from "./D-Components/VerifiedNews";
 import ResearcherForm from "./D-Components/ResearcherForm";
 import VerifierForm from "./D-Components/VerifierForm";
 import OpenNews from "./D-Components/OpenNews";
-import VerifyNews from "./D-Components/VerifyNews"
+import WitnessNews from "./D-Components/WitnessNews";
+import VerifyNews from "./D-Components/VerifyNews";
+
+import WitnessArticle from './showComponents/WitnessArticleDisplay';
 
 
 class Dashboard extends Component {
@@ -33,6 +36,7 @@ class Dashboard extends Component {
                 <DropdownButton title="News Status" id="bg-vertical-dropdown-1">
                   <MenuItem eventKey="1"><Button style={{width: '100%'}}><Link to="/dashboard/opennews" >Open</Link></Button></MenuItem>
                   <MenuItem eventKey="2"><Button style={{width: '100%'}}><Link to="/dashboard/verify" >Verify</Link></Button></MenuItem>
+                  <MenuItem eventKey="2"><Button style={{width: '100%'}}><Link to="/dashboard/witness" >Witness</Link></Button></MenuItem>
                   {/* <MenuItem eventKey="3"><Link to="" >Witness</Link></MenuItem>
                   <MenuItem eventKey="4"><Link to="" >Expired</Link></MenuItem>
                   <MenuItem eventKey="5"><Link to="" >Cancelled</Link></MenuItem> */}
@@ -48,6 +52,14 @@ class Dashboard extends Component {
                   curAddr={this.props.curAddr}
                   myContract={this.props.myContract}
                  />)} />
+                 <Route exact path="/dashboard/witness/:id" render={(props) => (<WitnessArticle
+                   {...props}
+                   curAddr={this.props.curAddr}
+                   myContract={this.props.myContract}
+                  />)} />
+                 <Route exact path="/dashboard/witness" render={(props) => (<WitnessNews
+
+                  />)} />
                  <Route exact path="/dashboard/verifier" render={(props) => (<VerifierForm
                    curAddr={this.props.curAddr}
                    myContract={this.props.myContract}

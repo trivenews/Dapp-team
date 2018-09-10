@@ -115,6 +115,12 @@ class App extends Component {
         />
         <Switch>
 
+          <Route exact path='/dashboard/:sel/:id' component={(props) => (<Dashboard
+            myContract={this.state.myContract}
+            curAddr={this.state.curUserInfo.address}
+            isResearcher={this.state.isResearcher}
+           /> )} />
+
           <Route exact path='/dashboard/:sel' component={(props) => (<Dashboard
             myContract={this.state.myContract}
             curAddr={this.state.curUserInfo.address}
