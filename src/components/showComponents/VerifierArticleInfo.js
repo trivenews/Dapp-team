@@ -90,6 +90,14 @@ class VerifierArticleInfo extends Component {
     })
   };
 
+  convertToTriveDeci = (num) => {
+    let result = num.toString()
+    let len = result.length;
+    let res = result.substring(0, len-4) + "." + result.substring(len-2);
+
+    return res
+  }
+
   componentDidMount() {
     this.getTaskInfo();
   }
@@ -100,7 +108,7 @@ class VerifierArticleInfo extends Component {
       <div>
         <Jumbotron>
           <h1>{this.state.taskData.title}</h1>
-          <p><small>Reward: {this.state.taskInfo.reward}TRV</small></p>
+          <p><small>Reward: {this.convertToTriveDeci(this.state.taskInfo.reward)}TRV</small></p>
           <p>
             Description of the problem: <br />
             {this.state.taskData.desc}

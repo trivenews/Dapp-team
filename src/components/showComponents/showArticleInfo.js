@@ -17,7 +17,8 @@ class ShowArticleInfo extends Component {
       myData: {
         desc: "",
         title: "",
-        url: ""
+        url: "",
+        image: ''
       },
       isresearcher: false,
       redirect: false
@@ -36,11 +37,13 @@ class ShowArticleInfo extends Component {
 
       })
       .then(data => {
+        console.log(data.myData.image)
         this.setState({
           myData: {
             desc: data.myData.description,
             title: data.myData.title,
-            url: data.myData.url
+            url: data.myData.url,
+            image: data.myData.image
           }
         })
       })
@@ -87,6 +90,7 @@ class ShowArticleInfo extends Component {
         {this.renderRedirect()}
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
+          <img src={this.state.myData.image} alt=""/>
           <p><small>Status: {data[3].c[0]} | Reward: {this.convertToTriveDeci(data[2].c[0])}TRV | Hash: {data[0]}</small></p>
           <p>
             Description of the problem: <br />

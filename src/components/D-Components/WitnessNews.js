@@ -63,7 +63,7 @@ class WitnessNews extends Component {
   render() {
     return (
       <div>
-        <h1>Open NEWS</h1>
+        <h1>Witness NEWS</h1>
         <hr />
         {this.state.articles}
       </div>

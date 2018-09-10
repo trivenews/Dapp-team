@@ -23,7 +23,8 @@ class Verify extends Component {
       myData: {
         url: "",
         title: "",
-        description: ""
+        description: "",
+        image: null
       },
       reward: ''
     };
@@ -34,8 +35,8 @@ class Verify extends Component {
     if (e.key === 'Enter') {
       console.log('do validate');
     }
+    console.log(this.state.myData)
     const { name, value } = e.target;
-    console.log(name, value, this.state);
     this.setState((prevState) => ({
       myData: {
         ...prevState.myData,
@@ -46,6 +47,21 @@ class Verify extends Component {
 
   handleMyDataReward = (e) => {
     this.setState({ reward: e.target.value });
+  }
+
+  captureFile = (event) => {
+    event.preventDefault()
+    const file = event.target.files[0]
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onloadend = () => {
+      this.setState((prevState) => ({
+        myData: {
+          ...prevState.myData,
+          image: Buffer(reader.result)
+        }
+      }))
+    }
   }
 
   onSubmit = async (event) => {
@@ -63,6 +79,7 @@ class Verify extends Component {
     //https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#add
 
     this.setState({ ipfsHash: hash });
+    console.log(hash)
 
     // call Ethereum contract method "createTask" and send info to etheruem contract
     //return the transaction hash from the ethereum contract
@@ -110,6 +127,14 @@ class Verify extends Component {
               name="title"
               onChange={this.handleMyData}
               style={{width: '70%', height: '3em', marginRight: '5px'}}
+                />
+
+            <br />
+            Image
+            <br />
+            <input
+              type = "file"
+              onChange={this.captureFile}
                 />
 
             <br />
