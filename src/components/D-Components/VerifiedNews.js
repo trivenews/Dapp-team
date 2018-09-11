@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import contract from 'truffle-contract';
 import web3 from '../../web3';
-import VerifierArticleInfo from "../showComponents/VerifierArticleInfo";
+import VerifiedArticleDisplay from "../showComponents/VerifiedArticleDisplay";
 
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
@@ -23,7 +23,7 @@ class News extends Component {
     .then((result) => {
       console.log(result)
       var articles = [...this.state.articles];
-      articles.push(<VerifierArticleInfo articleId={articleId} key={articleId}/>);
+      articles.push(<VerifiedArticleDisplay articleId={articleId} key={articleId}/>);
 
       this.setState({
         articles

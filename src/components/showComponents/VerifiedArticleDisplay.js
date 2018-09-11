@@ -8,7 +8,7 @@ import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-class VerifierArticleInfo extends Component {
+class VerifiedArticleDisplay extends Component {
   constructor(props) {
     super(props);
     this.state ={
@@ -75,7 +75,7 @@ class VerifierArticleInfo extends Component {
   };
 
   getTaskInfo = () => {
-    this.props.trive.triveContract.tasks(this.props.articleId.id)
+    this.props.trive.triveContract.tasks(this.props.articleId)
     .then((result) => {
       // console.log(result)
       this.setState({
@@ -134,4 +134,4 @@ const mapStateToProps = (state) => {
   //activeAccount: state.web3.activeAccount
 })
 };
-export default withRouter(connect(mapStateToProps)(VerifierArticleInfo));
+export default withRouter(connect(mapStateToProps)(VerifiedArticleDisplay));

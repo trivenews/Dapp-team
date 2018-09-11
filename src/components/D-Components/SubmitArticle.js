@@ -64,7 +64,7 @@ class Verify extends Component {
       }))
     }
   }
-  
+
 
   onSubmit = async (event) => {
     event.preventDefault();
@@ -104,15 +104,15 @@ class Verify extends Component {
 
     //CHANCE this is the image base64
     console.log("I'mm I workimg", image)
-  
-    
+
+
     return (
       <div>
         {this.state.loading && <Loader />}
 
         <Grid className="verify-container">
-          <img src={`data:image/jpeg;base64,${image}`} />
           <h3> Give Article information to verify and send to IPFS </h3>
+          <img src={`data:image/jpeg;base64,${image}`}  className='showImage'/>
           <br />
           <Form onSubmit={this.onSubmit} >
 

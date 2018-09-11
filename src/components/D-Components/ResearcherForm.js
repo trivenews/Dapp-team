@@ -27,7 +27,10 @@ class ResearcherForm extends Component {
         score: ""
       },
       hasTask: false,
-      curTaskId: "",
+      curTaskId: {
+        id: '',
+        loaded: false
+      },
       done: false,
       loading: false
     }
@@ -91,7 +94,7 @@ class ResearcherForm extends Component {
         //return the transaction hash from the ethereum contract
         //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
 
-        this.props.trive.triveContract._submitTask(this.state.curTaskId, this.state.ipfsHash, this.state.researcherData.score, {from: this.props.account, gas: 554755})
+        this.props.trive.triveContract._submitTask(this.state.curTaskId.id, this.state.ipfsHash, this.state.researcherData.score, {from: this.props.account, gas: 254755})
         .then((result) => {
           console.log(result.tx);
           this.setState({transactionHash: result.tx, loading: false, done: true})
@@ -106,7 +109,10 @@ class ResearcherForm extends Component {
       .then((result) => {
         console.log(result.c[0]);
         this.setState({
-          curTaskId: result.c[0],
+          curTaskId: {
+            id: result.c[0],
+            loaded: true
+          },
           researcherData: {
             taskID: result.c[0]
           }
@@ -141,12 +147,6 @@ class ResearcherForm extends Component {
         <br />
 
         <Form onSubmit={this.onSubmit} >
-
-
-          {/* <FormGroup controlId="formControlsTextarea">
-            <ControlLabel>Textarea</ControlLabel>
-            <FormControl componentClass="textarea" placeholder="textarea" />
-          </FormGroup> */}
 
             Source
             <br />
@@ -228,7 +228,7 @@ class ResearcherForm extends Component {
       return (
         <div >
           {this.state.loading && <Loader />}
-          {this.state.hasTask && !this.state.done && formPage}
+          {this.state.hasTask && this.state.curTaskId.loaded && !this.state.done && formPage}
           {this.state.hasTask && table}
           {!this.state.hasTask && findJob}
 

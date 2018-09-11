@@ -15,7 +15,8 @@ class WitnessArticle extends Component {
       myData: {
         desc: '',
         title: '',
-        url: ''
+        url: '',
+        image: ''
       },
       researcherData: {
         sources: '',
@@ -48,7 +49,8 @@ class WitnessArticle extends Component {
           myData: {
             desc: data.myData.description,
             title: data.myData.title,
-            url: data.myData.url
+            url: data.myData.url,
+            image: data.myData.image
           }
         })
       })
@@ -152,6 +154,8 @@ class WitnessArticle extends Component {
               Original task
               <Jumbotron>
                 <h1>{title}</h1>
+                <img src={`data:image/jpeg;base64,${this.state.myData.image}`} className='showImage' alt=""/>
+
                 <p>
                   Description of the problem: <br />
                   {desc}

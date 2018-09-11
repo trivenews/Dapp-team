@@ -15,7 +15,8 @@ class ResearcherArticleInfo extends Component {
       myData: {
         desc: "",
         title: "",
-        url: ""
+        url: "",
+        image: ''
       },
       taskInfo: {
         ipfsHash: "",
@@ -35,11 +36,13 @@ class ResearcherArticleInfo extends Component {
 
       })
       .then(data => {
+        console.log(data)
         this.setState({
           myData: {
             desc: data.myData.description,
             title: data.myData.title,
-            url: data.myData.url
+            url: data.myData.url,
+            image: data.myData.image
           }
         })
       })
@@ -47,7 +50,9 @@ class ResearcherArticleInfo extends Component {
   };
 
   getTaskInfo() {
-    this.props.trive.triveContract.tasks(this.props.articleId)
+    console.log(this.props.articleId)
+    this.props.trive.triveContract.tasks(this.props.articleId.id)
+
     .then((result) => {
       console.log(result)
       this.setState({
@@ -61,10 +66,16 @@ class ResearcherArticleInfo extends Component {
       console.log(error)
     })
   }
+  convertToTriveDeci = (num) => {
+    let result = num.toString()
+    let len = result.length;
+    let res = result.substring(0, len-4) + "." + result.substring(len-2);
+    console.log('hi')
+    return res
+  }
 
   componentDidMount(){
-    this.getTaskInfo();
-
+    if (this.props.articleId.loaded){this.getTaskInfo()};
   }
   render() {
     const { data } = this.props;
@@ -75,7 +86,8 @@ class ResearcherArticleInfo extends Component {
       <div>
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
-          <p><small>Reward: {this.state.taskInfo.reward}TRV</small></p>
+          <img src={`data:image/jpeg;base64,${this.state.myData.image}`} className='showImage' alt=""/>
+          <p><small>Reward: {this.convertToTriveDeci(this.state.taskInfo.reward)}TRV</small></p>
           <p>
             Description of the problem: <br />
             {this.state.myData.desc}

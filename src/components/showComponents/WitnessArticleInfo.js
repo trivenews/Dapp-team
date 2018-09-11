@@ -15,7 +15,8 @@ class WitnessArticleInfo extends Component {
       myData: {
         desc: "",
         title: "",
-        url: ""
+        url: "",
+        image: ''
       },
       isresearcher: false,
       redirect: false
@@ -31,11 +32,13 @@ class WitnessArticleInfo extends Component {
 
       })
       .then(data => {
+        console.log(data.myData.image)
         this.setState({
           myData: {
             desc: data.myData.description,
             title: data.myData.title,
-            url: data.myData.url
+            url: data.myData.url,
+            image: data.myData.image
           }
         })
       })
@@ -67,6 +70,8 @@ class WitnessArticleInfo extends Component {
       <div>
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
+          <img src={`data:image/jpeg;base64,${this.state.myData.image}`} className='showImage' alt=""/>
+
           <p>
             Description of the problem: <br />
             {this.state.myData.desc}

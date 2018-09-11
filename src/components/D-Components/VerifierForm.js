@@ -27,7 +27,10 @@ class VerifierForm extends Component {
         score: ""
       },
       hasTask: false,
-      curTaskId: "",
+      curTaskId: {
+        id: '',
+        loaded: false
+      },
       disagree: false,
       loading: false,
       done: false
@@ -54,7 +57,7 @@ class VerifierForm extends Component {
 
       this.setState({ ipfsHash: hash });
 
-      this.props.trive.triveContract.challengeResearcher(this.state.curTaskId, this.state.ipfsHash, {from: this.props.account, gas: 554755})
+      this.props.trive.triveContract.challengeResearcher(this.state.curTaskId.id, this.state.ipfsHash, {from: this.props.account, gas: 554755})
       .then((result) => {
         this.setState({transactionHash: result.tx, loading: false, done: true})
       }).catch((error) => {
@@ -68,7 +71,10 @@ class VerifierForm extends Component {
       .then((result) => {
         console.log(result.c[0]);
         this.setState({
-          curTaskId: result.c[0],
+          curTaskId: {
+            id: result.c[0],
+            loaded: true
+          },
           researcherData: {
             taskID: result.c[0]
           }
@@ -78,6 +84,7 @@ class VerifierForm extends Component {
       })
     }
     checkIfVerifierHasATask = () => {
+      console.log(this.props.account)
       this.props.trive.triveContract.verifierBusy(this.props.account)
       .then((result) => {
         if (result === true) {
@@ -94,7 +101,7 @@ class VerifierForm extends Component {
     verifyResearch = (e) => {
       e.preventDefault();
       this.setState({loading: true})
-      this.props.trive.triveContract._verifyTask(this.state.curTaskId, {from: this.props.account})
+      this.props.trive.triveContract._verifyTask(this.state.curTaskId.id, {from: this.props.account})
       .then((result) => {
         console.log(result)
         //// TODO: add confirmation screen
@@ -125,7 +132,7 @@ class VerifierForm extends Component {
     render() {
       const { score, source, comments} = this.state.researcherData;
       const verifyButton = (<Button bsStyle="warning" onClick={this.verifyResearch}>Verify!</Button>);
-      const disagreeButton = (<Button bsStyle="warning" onClick={this.disagreeResearch}>Disagree!</Button>);
+      const disagreeButton = (<Button bsStyle="warning" onClick={this.disagreeResearch}>{!this.state.disagree ? 'Disagree!' : "I actually agree"}</Button>);
       const addButton = (<Button bsStyle="warning" onClick={this.addToResearch}>Add info</Button>);
       const formPage = (<Grid className="verify-container">
         <h3>Welcome Verifier, please submit a better research </h3>
@@ -204,7 +211,7 @@ class VerifierForm extends Component {
       return (
         <div >
           {this.state.loading && <Loader />}
-          {this.state.hasTask && !this.state.done && research}
+          {this.state.hasTask && this.state.curTaskId.loaded && !this.state.done && research}
           {this.state.hasTask && !this.state.done && this.state.disagree && formPage}
           {this.state.hasTask && !this.state.done && !this.state.disagree && verifyButton}
           {this.state.hasTask && !this.state.done && !this.state.disagree && addButton}
