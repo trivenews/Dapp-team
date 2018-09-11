@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 // import contract from 'truffle-contract';
 
+
 import web3 from '../../web3';
 import { setJSON } from '../../util/IPFS.js';
 import Loader from './Loader';
@@ -58,11 +59,12 @@ class Verify extends Component {
       this.setState((prevState) => ({
         myData: {
           ...prevState.myData,
-          image: Buffer(reader.result)
+          image: Buffer(reader.result).toString('base64')
         }
       }))
     }
   }
+  
 
   onSubmit = async (event) => {
     event.preventDefault();
@@ -97,13 +99,19 @@ class Verify extends Component {
   }; //onSubmit
 
   render() {
-    const { title, url, description} = this.state.myData
+    ///CHANCE added image to this.state.myData
+    const { title, url, description, image} = this.state.myData
 
+    //CHANCE this is the image base64
+    console.log("I'mm I workimg", image)
+  
+    
     return (
       <div>
         {this.state.loading && <Loader />}
 
         <Grid className="verify-container">
+          <img src={`data:image/jpeg;base64,${image}`} />
           <h3> Give Article information to verify and send to IPFS </h3>
           <br />
           <Form onSubmit={this.onSubmit} >
