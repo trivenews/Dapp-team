@@ -5,6 +5,10 @@ import contract from 'truffle-contract';
 import web3 from '../web3';
 import VotingContract from '../../build/contracts/Voting.json';
 
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+
+
 import ShowArticleInfo from "./showComponents/showArticleInfo";
 // import VotingContract from '../../build/contracts/Voting.json';
 //
@@ -13,8 +17,8 @@ import ShowArticleInfo from "./showComponents/showArticleInfo";
 // TODO: testing if I can give these vars as props
 // TODO: button will call function on contract artifacts
 
-const TriveDapp = contract(VotingContract);
-TriveDapp.setProvider(web3.currentProvider);
+// const TriveDapp = contract(VotingContract);
+// TriveDapp.setProvider(web3.currentProvider);
 
 class Register extends Component {
   constructor(props) {
@@ -22,96 +26,76 @@ class Register extends Component {
     this.state = {
       username: '',
       articleIds: [],
-      articles: []
+      articles: [],
+      triveBalance: '',
+      setAllowAmount: '',
+      AllowAmount: 0
     };
-    this.getTaskByOwner = this.getTaskByOwner.bind(this);
+    // this.getTaskByOwner = this.getTaskByOwner.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.getTaskInfo = this.getTaskInfo.bind(this);
-    this.becomeResearcher = this.becomeResearcher.bind(this);
+    this.checkBalance = this.checkBalance.bind(this);
+    this.handleSubmitAllow = this.handleSubmitAllow.bind(this);
+    this.handleChangeAllow = this.handleChangeAllow.bind(this);
+    // this.getTaskInfo = this.getTaskInfo.bind(this);
+    // this.becomeResearcher = this.becomeResearcher.bind(this);
   }
   handleChange(e) {
-    this.setState({ username: e.target.value });
+    this.setState({username: e.target.value});
   }
   handleSubmit(e) {
     e.preventDefault();
-    var TriveDappInstance;
-    // TODO: I should move getAccounts out of this function
-    web3.eth.getAccounts((error, accounts) => {
-      var account = accounts[0];
-      TriveDapp.deployed().then((instance) => {
-        TriveDappInstance = instance;
-        return TriveDappInstance.createUser(this.state.username, {from: account, gas: 6654755})
-      }).then((result) => {
-        console.log(result);
-        this.props.reloadFunc()
-        // TODO: I need to route from here
-        // return TriveDappInstance.findUserInfo.call(account)
-      }).then((result) => {
-        // return this.setState({ username: result.c[0] })
-      })
+    this.props.trive.triveContract.createUser(this.state.username, {from: this.props.account, gas: 6654755})
+    .then((result) => {
+      this.props.reloadFunc()
     })
     this.props.history.push('/dashboard/news');
   }
-  findArticleInfo(arr) {
-    console.log(arr);
-    let res = [];
-    arr.map(num => {
-      res.push(parseInt(num.toString()))
-    });
-    console.log(res);
-    this.setState({
-      articleIds: res
-    });
+  // findArticleInfo(arr) {
+  //   console.log(arr);
+  //   let res = [];
+  //   arr.map(num => {
+  //     res.push(parseInt(num.toString()))
+  //   });
+  //   console.log(res);
+  //   this.setState({
+  //     articleIds: res
+  //   });
+  //
+  //   res.forEach((num) => {
+  //     this.getTaskInfo(num);
+  //   });
+  // }
 
-    res.forEach((num) => {
-      this.getTaskInfo(num);
-    });
-  }
+  // getTaskInfo(articleId) {
+  //   this.props.triveDappInstance._getTaskInfo(articleId)
+  //   .then((result) => {
+  //     console.log(result)
+  //     var articles = [...this.state.articles];
+  //     articles.push(<ShowArticleInfo key={articleId} data={result} curAddr={this.props.curUserInfo.address}/>);
+  //
+  //     this.setState({
+  //       articles
+  //     });
+  //   }).catch((error) => {
+  //     console.log(error)
+  //   })
+  // }
 
-  getTaskInfo(articleId) {
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance._getTaskInfo(articleId)
-    }).then((result) => {
-      console.log(result)
-      var articles = [...this.state.articles];
-      articles.push(<ShowArticleInfo key={articleId} data={result} curAddr={this.props.curUserInfo.address}/>);
+  // getTaskByOwner() {
+  //   this.props.triveDappInstance._getTasksByOwner(this.props.noUserAddr || this.props.curUserInfo.address)
+  //   .then((result) => {
+  //     this.findArticleInfo(result);
+  //   }).catch((error) => {
+  //     console.log(error)
+  //   })
+  // }
 
-      this.setState({
-        articles
-      });
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
-
-  getTaskByOwner() {
-    const TriveDapp = this.props.myContract;
-    var TriveDappInstance;
-
-    web3.eth.getAccounts((error, accounts) => {
-      var account = accounts[0];
-      TriveDapp.deployed().then((instance) => {
-        TriveDappInstance = instance;
-        console.log(this.props.curUserInfo.addres)
-        return TriveDappInstance._getTasksByOwner(this.props.noUserAddr || this.props.curUserInfo.address, ({from: this.props.noUserAddr || this.props.curUserInfo.address}))
-      }).then((result) => {
-        this.findArticleInfo(result);
-      }).catch((error) => {
-        console.log(error)
-      })
-    })
-  }
   //become researcher function
-  becomeResearcher(e) {
+  becomeResearcher = (e) => {
     e.preventDefault();
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance.createResearcher({from: this.props.curUserInfo.address})
-    }).then((result) => {
+    this.props.trive.triveContract.createResearcher({from: this.props.account})
+    .then((result) => {
       console.log(result)
       this.props.reloadFunc()
     }).catch((error) => {
@@ -119,12 +103,64 @@ class Register extends Component {
     })
   }
 
+  becomeVerifier = (e) => {
+    e.preventDefault();
+    this.props.trive.triveContract.createVerifier({from: this.props.account})
+    .then((result) => {
+      console.log(result)
+      this.props.reloadFunc()
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
+  checkBalance() {
+    this.props.trive.coinContract.balanceOf(this.props.account, {from: this.props.account, gas: 6654755})
+    .then((result) => {
+     console.log(result)
+     let results = result.c[0].toString();
+     let len = results.length;
+     let res = results.substring(0, len-4) + "." + results.substring(len-4);
+     this.setState({triveBalance: res})
+    }).catch((error) => {
+     console.log(error);
+    })
+
+    this.props.trive.coinContract.allowance(this.props.account, this.props.trive.triveContract.address, {from: this.props.account, gas: 6654755})
+    .then((result) => {
+     console.log(result)
+     let results = result.c[0].toString();
+     let len = results.length;
+     let res = results.substring(0, len-4) + "." + results.substring(len-4);
+     this.setState({AllowAmount: res})
+    }).catch((error) => {
+     console.log(error);
+    })
+  }
+
+  handleChangeAllow(e) {
+    this.setState({ setAllowAmount: e.target.value });
+  }
+  handleSubmitAllow(e) {
+    e.preventDefault();
+
+    this.props.trive.coinContract.approve(this.props.trive.triveContract.address, this.state.setAllowAmount * 10 ** 18, {from: this.props.account, gas: 6654755})
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
 
   componentDidMount() {
-    this.getTaskByOwner()
+    // this.getTaskByOwner()
+    if (this.props.trive.isloaded){this.checkBalance()};
   }
 
   render () {
+
     const gridHeight = {
       'min-height': "100vh",
       'heigt': "auto",
@@ -132,8 +168,9 @@ class Register extends Component {
     };
 
     const { isUser, name, address, reputation, rank, readyTime} = this.props.curUserInfo;
-    const { username, articles, articleIds } = this.state;
+    const { username, articles, articleIds, AllowAmount, setAllowAmount } = this.state;
     const checkForResearcher = (<Button bsStyle="warning" onClick={this.becomeResearcher}>Become A Researcher!</Button>);
+    const checkForVerifier = (<Button bsStyle="warning" onClick={this.becomeVerifier}>Become A Verifier!</Button>);
 
     const registerForm = (
       <Form inline>
@@ -152,13 +189,14 @@ class Register extends Component {
         </FormGroup>
         <br />
         <br />
-        <Button bsStyle="primary" onClick={this.handleSubmit}>Register</Button>
+        <Button bsStyle="primary" onClick={this.handleSubmit}>Submit</Button>
       </Form>
     );
 
     const userInfo = (
       <div>
-        <h1>{name}'s info {!this.props.isResearcher && checkForResearcher}</h1>
+        <h1>{name}</h1>
+        {this.props.curUserInfo.rank < 2 && checkForResearcher} {this.props.curUserInfo.rank < 3 && checkForVerifier}
         <Table bordered responsive>
 
           <tbody>
@@ -174,15 +212,35 @@ class Register extends Component {
               <td>Rank</td>
               <td>{rank}</td>
             </tr>
-
-
-
+            <tr>
+              <td>TRV Balance</td>
+              <td>{this.state.triveBalance}</td>
+            </tr>
+            <tr>
+              <td>Allowence Balance</td>
+              <td>{AllowAmount}</td>
+            </tr>
             <tr>
               <td>Ready time</td>
               <td>{new Date(readyTime * 1000).toString()}</td>
             </tr>
           </tbody>
       </Table>
+      <Form inline>
+        <FormGroup controlId="formInlineName">
+        <br/>
+        <h3 className="text-center">Allow the contract to send trive</h3>
+        <FormControl
+          type="number"
+          value={setAllowAmount}
+          placeholder="Enter amount"
+          onChange={this.handleChangeAllow}
+        />
+        </FormGroup>
+        <br />
+        <br />
+        <Button bsStyle="success" onClick={this.handleSubmitAllow}>Register</Button>
+      </Form>
       </div>
     );
 
@@ -217,4 +275,23 @@ class Register extends Component {
     );
   }
 }
-export default withRouter(Register);
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+
+  // instantiateTriveContract,
+  // storeWeb3Account,
+  // currentUserInformation
+}, dispatch);
+
+const mapStateToProps = (state) => {
+	return ({
+    curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.contracts
+  //activeAccount: state.web3.activeAccount
+})
+};
+
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Register));
+// export default Register;

@@ -1,14 +1,15 @@
 import React, {Component} from "react";
 import contract from 'truffle-contract';
 import web3 from '../../web3';
-import ResearchedNewsInfo from "../showComponents/ResearchedNewsInfo";
-
 import { withRouter } from 'react-router-dom';
 
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 
-class VerifyNews extends Component {
+import WitnessArticleInfo from "../showComponents/WitnessArticleInfo";
+
+
+class WitnessNews extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -16,19 +17,17 @@ class VerifyNews extends Component {
       articles: []
     }
     this.getTaskByState = this.getTaskByState.bind(this);
-    this.findArticleInfo = this.findArticleInfo.bind(this);
   }
 
   getTaskInfo(articleId) {
     this.props.trive.triveContract.tasks(articleId)
     .then((result) => {
-      console.log(result, "HIHIHIHIHIHIHIHIHIHIHIHIIHIHIHIIHIHIHIHI")
-      var articles = [...this.state.articles];
-      articles.push(<ResearchedNewsInfo myContract={this.props.myContract} articleId={articleId} key={articleId} data={result} curAddr={this.props.curAddr}/>);
+    var articles = [...this.state.articles];
+    articles.push(<WitnessArticleInfo articleId={articleId} key={articleId} data={result}/>);
 
-      this.setState({
-        articles
-      });
+    this.setState({
+      articles
+    });
     }).catch((error) => {
       console.log(error)
     })
@@ -39,7 +38,6 @@ class VerifyNews extends Component {
     arr.map(num => {
       res.push(parseInt(num.toString()))
     });
-    // console.log(res);
     this.setState({
       articleIds: res
     });
@@ -50,8 +48,9 @@ class VerifyNews extends Component {
   }
 
   getTaskByState() {
-    this.props.trive.triveContract._getTasksByState(2, 2)
+    this.props.trive.triveContract._getTasksByState(4, 4)
     .then((result) => {
+      // console.log(result)
       this.findArticleInfo(result);
     }).catch((error) => {
       console.log(error)
@@ -64,7 +63,7 @@ class VerifyNews extends Component {
   render() {
     return (
       <div>
-        <h1>Verify NEWS</h1>
+        <h1>Witness NEWS</h1>
         <hr />
         {this.state.articles}
       </div>
@@ -88,4 +87,4 @@ const mapStateToProps = (state) => {
 })
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(VerifyNews));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WitnessNews));

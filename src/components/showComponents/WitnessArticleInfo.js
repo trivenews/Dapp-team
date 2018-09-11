@@ -3,14 +3,12 @@ import {Jumbotron, Label, Media, Button} from "react-bootstrap";
 import contract from 'truffle-contract';
 import web3 from '../../web3';
 import VotingContract from '../../../build/contracts/Voting.json';
-import { Redirect } from 'react-router-dom';
-
-import { withRouter } from 'react-router-dom';
+import { Redirect, withRouter, Link } from 'react-router-dom';
 
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 
-class ShowArticleInfo extends Component {
+class WitnessArticleInfo extends Component {
   constructor(props) {
     super(props);
     this.state ={
@@ -23,11 +21,8 @@ class ShowArticleInfo extends Component {
       isresearcher: false,
       redirect: false
     }
-    this.fetchIPFS = this.fetchIPFS.bind(this);
-    this.researchArticle = this.researchArticle.bind(this);
-    this.renderRedirect = this.renderRedirect.bind(this);
   }
-  fetchIPFS() {
+  fetchIPFS = () => {
     fetch(`https://gateway.ipfs.io/ipfs/${this.props.data[0]}`)
       .then(resp => {
         if (!resp.ok) {
@@ -50,32 +45,18 @@ class ShowArticleInfo extends Component {
       .catch(err => console.log(`error: ${err}`))
   };
 
-  researchArticle(e) {
-    e.preventDefault();
-    this.props.trive.triveContract._acceptTask(this.props.articleId, {from: this.props.account})
-    .then((result) => {
-      console.log(result)
-      this.setState({
-        redirect: true
-      })
-
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
-
-  renderRedirect() {
-    if (this.state.redirect) {
-      return <Redirect to='/dashboard/researcher' />
-    }
-  }
-  convertToTriveDeci = (num) => {
-    let result = num.toString()
-    let len = result.length;
-    let res = result.substring(0, len-4) + "." + result.substring(len-2);
-    console.log('hi')
-    return res
-  }
+  // renderRedirect() {
+  //   if (this.state.redirect) {
+  //     return <Redirect to='/dashboard/researcher' />
+  //   }
+  // }
+  // convertToTriveDeci = (num) => {
+  //   let result = num.toString()
+  //   let len = result.length;
+  //   let res = result.substring(0, len-4) + "." + result.substring(len-2);
+  //   console.log('hi')
+  //   return res
+  // }
 
   componentDidMount(){
     this.fetchIPFS();
@@ -87,17 +68,15 @@ class ShowArticleInfo extends Component {
 
     return (
       <div>
-        {this.renderRedirect()}
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
           <img src={`data:image/jpeg;base64,${this.state.myData.image}`} className='showImage' alt=""/>
-          <p><small>Status: {data[3].c[0]} | Reward: {this.convertToTriveDeci(data[2].c[0])}TRV | Hash: {data[0]}</small></p>
+
           <p>
             Description of the problem: <br />
             {this.state.myData.desc}
           </p>
-          {this.props.curUserInfo.rank >= 2 && <Button bsStyle="warning" onClick={this.researchArticle}>Research This Article!</Button>}<Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
-          {(data[1].length > 0)  && <p><small> ResearcherHash: {data[1]}</small></p>}
+          {this.props.curUserInfo.rank >= 1 && <Button bsStyle="warning" ><Link to={`/dashboard/witness/${this.props.articleId}`} >Witness This Article!</Link></Button>}<Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
         </Jumbotron>
       </div>
     );
@@ -118,4 +97,4 @@ const mapStateToProps = (state) => {
   //activeAccount: state.web3.activeAccount
 })
 };
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ShowArticleInfo));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WitnessArticleInfo));

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import web3 from '../../web3';
 import { setJSON, getJSON } from '../../util/IPFS.js'
 import storehash from '../../storehash';
-import ResearcherArticleInfo from "../showComponents/researcherArticleInfo";
+import VerifierArticleInfo from "../showComponents/VerifierArticleInfo";
 import Loader from './Loader';
 
 import {bindActionCreators} from 'redux';
@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 
-class ResearcherForm extends Component {
+class VerifierForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,24 +31,15 @@ class ResearcherForm extends Component {
         id: '',
         loaded: false
       },
-      done: false,
-      loading: false
+      disagree: false,
+      loading: false,
+      done: false
     }
-    this.checkIfResearcherHasATask = this.checkIfResearcherHasATask.bind(this);
-    this.getCurrentTask = this.getCurrentTask.bind(this);
+    // this.checkIfResearcherHasATask = this.checkIfResearcherHasATask.bind(this);
+    // this.getCurrentTask = this.getCurrentTask.bind(this);
   }
-   //handle capture file event if we want to add a file upload to the page
 
-    captureFile =(event) => {
-        event.stopPropagation()
-        event.preventDefault()
-        const file = event.target.files[0]
-        let reader = new window.FileReader()
-        reader.readAsArrayBuffer(file)
-        reader.onloadend = () => this.convertToBuffer(reader)
-      };
-
-      handleMyData = (e) => {
+    handleMyData = (e) => {
       const { name, value } = e.target;
       this.setState((prevState) => ({
           researcherData: {
@@ -58,54 +49,25 @@ class ResearcherForm extends Component {
       }));
     }
 
-
-    convertToBuffer = async(reader) => {
-      //file is converted to a buffer to prepare for uploading to IPFS
-        const buffer = await Buffer.from(reader.result);
-      //set this buffer -using es6 syntax
-        this.setState({buffer});
-    };
-
-
-
     onSubmit = async (event) => {
       event.preventDefault();
       this.setState({loading: true});
-      // const TriveDapp = this.props.myContract;
-      // this.setState({ethAddress: TriveDapp});
-      // var TriveDappInstance;
-      //bring in user's metamask account address
-      // const accounts = await web3.eth.getAccounts();
-
-      console.log('Sending from Metamask account: ' + this.props.account);
-      //obtain contract address from storehash.js
-      // const ethAddress= await storehash.options.address;
-      // this.setState({ethAddress});
 
       const hash = await setJSON({ researcherData: this.state.researcherData });
-      console.log('this is my hash', hash);
 
-      //save document to IPFS,return its hash#, and set hash# to state
-      //https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#add
+      this.setState({ ipfsHash: hash });
 
-        this.setState({ ipfsHash: hash });
-
-        // call Ethereum contract method "sendHash" and .send IPFS hash to etheruem contract
-        //return the transaction hash from the ethereum contract
-        //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
-
-        this.props.trive.triveContract._submitTask(this.state.curTaskId.id, this.state.ipfsHash, this.state.researcherData.score, {from: this.props.account, gas: 254755})
-        .then((result) => {
-          console.log(result.tx);
-          this.setState({transactionHash: result.tx, loading: false, done: true})
-        }).catch((error) => {
-          this.setState({loading: false})
-          console.log(error);
-        })
+      this.props.trive.triveContract.challengeResearcher(this.state.curTaskId.id, this.state.ipfsHash, {from: this.props.account, gas: 554755})
+      .then((result) => {
+        this.setState({transactionHash: result.tx, loading: false, done: true})
+      }).catch((error) => {
+        this.setState({loading: false})
+        console.log(error);
+      })
     }; //onSubmit
 
-    getCurrentTask() {
-      this.props.trive.triveContract.researcherToTask(this.props.account)
+    getCurrentTask = () => {
+      this.props.trive.triveContract.verifierToTask(this.props.account)
       .then((result) => {
         console.log(result.c[0]);
         this.setState({
@@ -121,8 +83,9 @@ class ResearcherForm extends Component {
         console.log(error)
       })
     }
-    checkIfResearcherHasATask() {
-      this.props.trive.triveContract.researcherBusy(this.props.account)
+    checkIfVerifierHasATask = () => {
+      console.log(this.props.account)
+      this.props.trive.triveContract.verifierBusy(this.props.account)
       .then((result) => {
         if (result === true) {
           this.setState({hasTask: true})
@@ -135,15 +98,44 @@ class ResearcherForm extends Component {
         console.log(error)
       })
     }
+    verifyResearch = (e) => {
+      e.preventDefault();
+      this.setState({loading: true})
+      this.props.trive.triveContract._verifyTask(this.state.curTaskId.id, {from: this.props.account})
+      .then((result) => {
+        console.log(result)
+        //// TODO: add confirmation screen
+        this.setState({
+          transactionHash: result.tx,
+          loading: false
+        })
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+    disagreeResearch = (e) => {
+      e.preventDefault();
+      console.log("I DISAGREE!!!!")
+      this.setState({
+        disagree: !this.state.disagree
+      })
+    }
+    addToResearch = (e) => {
+      e.preventDefault();
+      console.log("I WANT TO ADD SOMETHING")
+    }
 
     componentDidMount() {
-      if (this.props.trive.isloaded){this.checkIfResearcherHasATask()};
+      if (this.props.trive.isloaded){this.checkIfVerifierHasATask()};
     }
 
     render() {
-      const { score, source, comments} = this.state.researcherData
+      const { score, source, comments} = this.state.researcherData;
+      const verifyButton = (<Button bsStyle="warning" onClick={this.verifyResearch}>Verify!</Button>);
+      const disagreeButton = (<Button bsStyle="warning" onClick={this.disagreeResearch}>{!this.state.disagree ? 'Disagree!' : "I actually agree"}</Button>);
+      const addButton = (<Button bsStyle="warning" onClick={this.addToResearch}>Add info</Button>);
       const formPage = (<Grid className="verify-container">
-        <h3>Welcome Researcher, please submit your story facts for review </h3>
+        <h3>Welcome Verifier, please submit a better research </h3>
         <br />
 
         <Form onSubmit={this.onSubmit} >
@@ -194,15 +186,11 @@ class ResearcherForm extends Component {
 
         </Form>
         <hr />
-        <ResearcherArticleInfo
-          articleId={this.state.curTaskId}
-          myContract={this.props.myContract}
-          score={this.state.score}
-          researcherData={this.state.researcherData}
-        />
-        <hr/>
 
       </Grid>);
+      const research = (<VerifierArticleInfo
+        articleId={this.state.curTaskId}
+      />);
       const table = (<Table bordered responsive>
         <thead>
           <tr>
@@ -213,22 +201,21 @@ class ResearcherForm extends Component {
 
         <tbody>
           <tr>
-            <td>IPFS Hash # stored on Eth Contract</td>
-            <td>{this.state.ipfsHash}</td>
-          </tr>
-
-          <tr>
             <td>Tx Hash # </td>
             <td>{this.state.transactionHash}</td>
           </tr>
         </tbody>
     </Table>);
-      const findJob = (<h1>FIND A JOB</h1>);
+      const findJob = (<h1>FIND A JOB TO VERIFY</h1>);
 
       return (
         <div >
           {this.state.loading && <Loader />}
-          {this.state.hasTask && this.state.curTaskId.loaded && !this.state.done && formPage}
+          {this.state.hasTask && this.state.curTaskId.loaded && !this.state.done && research}
+          {this.state.hasTask && !this.state.done && this.state.disagree && formPage}
+          {this.state.hasTask && !this.state.done && !this.state.disagree && verifyButton}
+          {this.state.hasTask && !this.state.done && !this.state.disagree && addButton}
+          {this.state.hasTask && !this.state.done && disagreeButton}
           {this.state.hasTask && table}
           {!this.state.hasTask && findJob}
 
@@ -253,4 +240,4 @@ const mapStateToProps = (state) => {
 })
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResearcherForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(VerifierForm));

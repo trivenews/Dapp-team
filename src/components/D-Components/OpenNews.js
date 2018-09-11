@@ -1,6 +1,11 @@
 import React, {Component} from "react";
 import contract from 'truffle-contract';
 import web3 from '../../web3';
+import { withRouter } from 'react-router-dom';
+
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+
 import ShowArticleInfo from "../showComponents/showArticleInfo";
 
 
@@ -12,23 +17,17 @@ class OpenNews extends Component {
       articles: []
     }
     this.getTaskByState = this.getTaskByState.bind(this);
-    this.findArticleInfo = this.findArticleInfo.bind(this);
   }
 
   getTaskInfo(articleId) {
-    const TriveDapp = this.props.myContract;
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance._getTaskInfo(articleId)
-    }).then((result) => {
-      console.log(result)
-      var articles = [...this.state.articles];
-      articles.push(<ShowArticleInfo isResearcher={this.props.isResearcher} myContract={this.props.myContract} articleId={articleId} key={articleId} data={result} curAddr={this.props.curAddr}/>);
+    this.props.trive.triveContract.tasks(articleId)
+    .then((result) => {
+    var articles = [...this.state.articles];
+    articles.push(<ShowArticleInfo isResearcher={this.props.isResearcher} myContract={this.props.myContract} articleId={articleId} key={articleId} data={result} curAddr={this.props.curAddr}/>);
 
-      this.setState({
-        articles
-      });
+    this.setState({
+      articles
+    });
     }).catch((error) => {
       console.log(error)
     })
@@ -39,7 +38,6 @@ class OpenNews extends Component {
     arr.map(num => {
       res.push(parseInt(num.toString()))
     });
-    console.log(res);
     this.setState({
       articleIds: res
     });
@@ -50,12 +48,8 @@ class OpenNews extends Component {
   }
 
   getTaskByState() {
-    const TriveDapp = this.props.myContract;
-    var TriveDappInstance;
-    TriveDapp.deployed().then((instance) => {
-      TriveDappInstance = instance;
-      return TriveDappInstance._getTasksByState(0, 0)
-    }).then((result) => {
+    this.props.trive.triveContract._getTasksByState(0, 0)
+    .then((result) => {
       this.findArticleInfo(result);
     }).catch((error) => {
       console.log(error)
@@ -63,7 +57,7 @@ class OpenNews extends Component {
   }
 
   componentDidMount() {
-    this.getTaskByState();
+    if (this.props.trive.isloaded){this.getTaskByState()};
   }
   render() {
     return (
@@ -76,4 +70,20 @@ class OpenNews extends Component {
   }
 }
 
-export default OpenNews;
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+
+  // instantiateTriveContract,
+  // storeWeb3Account,
+  // currentUserInformation
+}, dispatch);
+
+const mapStateToProps = (state) => {
+	return ({
+    curUserInfo: state.currentUserInfo.curUserInfo,
+    account: state.trive.account,
+    trive: state.trive.contracts
+  //activeAccount: state.web3.activeAccount
+})
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OpenNews));

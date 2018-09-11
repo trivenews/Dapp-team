@@ -45,6 +45,11 @@
   padding-bottom: 5em;
   width: 100%;
 }
+.showImage {
+  max-width: 100%;
+  max-height: 20em;
+}
+
 .nav-div {
   margin-bottom: 3em;
 }
