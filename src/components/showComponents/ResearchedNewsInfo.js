@@ -48,7 +48,8 @@ class ResearchedNewsInfo extends Component {
             title: data.myData.title,
             url: data.myData.url,
             image: data.myData.image
-          }
+          },
+          zoomInActive: false
         })
       })
       .catch(err => console.log(`error: ${err}`))
@@ -100,6 +101,9 @@ class ResearchedNewsInfo extends Component {
     console.log('hi')
     return res
   }
+  zoomInFunc = () => {
+    this.setState({zoomInActive: !this.state.zoomInActive})
+  }
 
   componentDidMount(){
     this.fetchIPFSOne();
@@ -107,23 +111,42 @@ class ResearchedNewsInfo extends Component {
   }
   render() {
     const { data } = this.props;
+    const style = {
+      'text-align': 'left',
+      'border-bottom': '0.5px solid #fff'
+    }
+    const zoomIn = (<Jumbotron onClick={this.zoomInFunc}>
+      <h1>{this.state.myData.title}</h1>
+      <img src={this.state.myData.image} className='showImage' alt=""/>
+      <p><small>Status: {data[3].c[0]} | Reward: {this.convertToTriveDeci(data[2].c[0])}TRV </small></p>
+      <p>
+        Description of the problem: <br />
+        {this.state.myData.desc}
+      </p>
+      <p>Source: <br /> {this.state.researcherData.source}</p>
+      <p>Comments: <br /> {this.state.researcherData.comments}</p>
+      <p>Score: <br /> {this.state.researcherData.score}%</p>
+      {(data[3].c[0] === 2) && this.props.curUserInfo.rank >= 3 && <Button bsStyle="success" onClick={this.verifyArticle}>Accept verify</Button>}
+    </Jumbotron>);
 
+    const listItem = (<Media style={style} className='article-intro' onClick={this.zoomInFunc}>
+      <Media.Left>
+        <img width={64} height={64} src={this.state.myData.image} alt="thumbnail" />
+      </Media.Left>
+      <Media.Body>
+        <Media.Heading>{this.state.myData.title}</Media.Heading>
+        <p>
+          Description of the problem: <br />
+          {this.state.myData.desc}
+        </p>
+        <p>Score: <br /> {this.state.researcherData.score}%</p>
+      </Media.Body>
+    </Media>)
     return (
       <div>
         {this.renderRedirect()}
-        <Jumbotron>
-          <h1>{this.state.myData.title}</h1>
-          <img src={this.state.myData.image} className='showImage' alt=""/>
-          <p><small>Status: {data[3].c[0]} | Reward: {this.convertToTriveDeci(data[2].c[0])}TRV </small></p>
-          <p>
-            Description of the problem: <br />
-            {this.state.myData.desc}
-          </p>
-          <p>Source: <br /> {this.state.researcherData.source}</p>
-          <p>Comments: <br /> {this.state.researcherData.comments}</p>
-          <p>Score: <br /> {this.state.researcherData.score}%</p>
-          {(data[3].c[0] === 2) && this.props.curUserInfo.rank >= 3 && <Button bsStyle="success" onClick={this.verifyArticle}>Accept verify</Button>}
-        </Jumbotron>
+        {this.state.zoomInActive && zoomIn}
+        {!this.state.zoomInActive && listItem}
       </div>
     );
   }
