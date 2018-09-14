@@ -27,7 +27,8 @@ class VerifiedArticleDisplay extends Component {
         source: '',
         comments: '',
         score: ''
-      }
+      },
+      zoomInActive: false
     }
     // this.fetchIPFS = this.fetchIPFS.bind(this);
     // this.getTaskInfo = this.getTaskInfo.bind(this);
@@ -91,36 +92,57 @@ class VerifiedArticleDisplay extends Component {
       console.log(error)
     })
   };
-
-  convertToTriveDeci = (num) => {
-    let result = num.toString()
-    let len = result.length;
-    let res = result.substring(0, len-4) + "." + result.substring(len-2);
-
-    return res
+  // not necessary
+  // convertToTriveDeci = (num) => {
+  //   let result = num.toString()
+  //   let len = result.length;
+  //   let res = result.substring(0, len-4) + "." + result.substring(len-2);
+  //
+  //   return res
+  // }
+  zoomInFunc = () => {
+    this.setState({zoomInActive: !this.state.zoomInActive})
   }
-
   componentDidMount() {
     this.getTaskInfo();
   }
 
   render() {
+    const style = {
+      'text-align': 'left',
+      'border-bottom': '0.5px solid #fff'
+    }
+    const styleJum = {
+      'text-align': 'left',
 
+    }
+    const zoomIn = (<Jumbotron style={styleJum} onClick={this.zoomInFunc}>
+      <h1>{this.state.taskData.title}</h1>
+      <img src={this.state.taskData.image} className='showImage' alt=""/>
+      <p>
+        Description of the problem: <br />
+        {this.state.taskData.desc}
+      </p>
+      <p>Source: <br /> {this.state.researcherData.source}</p>
+      <p>Comments: <br /> {this.state.researcherData.comments}</p>
+      <p>Score: <br /> {this.state.researcherData.score}% <Button bsStyle="primary" href={this.state.taskData.url} target="_blank">Link to the article</Button></p>
+    </Jumbotron>);
+    const listItem = (<Media style={style} className='article-intro' onClick={this.zoomInFunc}>
+      <Media.Left>
+        <img width={64} height={64} src={this.state.taskData.image} alt="thumbnail" />
+      </Media.Left>
+      <Media.Body>
+        <Media.Heading>{this.state.taskData.title}</Media.Heading>
+        <p>
+          Description of the problem: <br />
+          {this.state.taskData.desc}
+        </p>
+      </Media.Body>
+    </Media>)
     return (
       <div>
-        <Jumbotron>
-          <h1>{this.state.taskData.title}</h1>
-          <img src={this.state.taskData.image} className='showImage' alt=""/>
-
-          <p><small>Reward: {this.convertToTriveDeci(this.state.taskInfo.reward)}TRV</small></p>
-          <p>
-            Description of the problem: <br />
-            {this.state.taskData.desc}
-          </p>
-          <p>Source: <br /> {this.state.researcherData.source}</p>
-          <p>Comments: <br /> {this.state.researcherData.comments}</p>
-          <p>Score: <br /> {this.state.researcherData.score}%</p>
-        </Jumbotron>
+        {this.state.zoomInActive && zoomIn}
+        {!this.state.zoomInActive && listItem}
       </div>
     );
   }
