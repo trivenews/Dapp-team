@@ -59,7 +59,7 @@ class Verify extends Component {
       this.setState((prevState) => ({
         myData: {
           ...prevState.myData,
-          image: Buffer(reader.result).toString('base64')
+          image: `data:image/jpeg;base64,${Buffer(reader.result).toString('base64')}`
         }
       }))
     }
@@ -112,7 +112,7 @@ class Verify extends Component {
 
         <Grid className="verify-container">
           <h3> Give Article information to verify and send to IPFS </h3>
-          <img src={`data:image/jpeg;base64,${image}`}  className='showImage'/>
+          <img src={image}  className='showImage'/>
           <br />
           <Form onSubmit={this.onSubmit} >
 

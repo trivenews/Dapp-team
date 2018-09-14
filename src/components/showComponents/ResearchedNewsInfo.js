@@ -113,7 +113,7 @@ class ResearchedNewsInfo extends Component {
         {this.renderRedirect()}
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
-          <img src={`data:image/jpeg;base64,${this.state.myData.image}`} className='showImage' alt=""/>
+          <img src={this.state.myData.image} className='showImage' alt=""/>
           <p><small>Status: {data[3].c[0]} | Reward: {this.convertToTriveDeci(data[2].c[0])}TRV </small></p>
           <p>
             Description of the problem: <br />
