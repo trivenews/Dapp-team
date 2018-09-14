@@ -4,6 +4,8 @@ import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormCon
 import contract from 'truffle-contract';
 import web3 from '../web3';
 import VotingContract from '../../build/contracts/Voting.json';
+import {storeWeb3Account, instantiateTriveContract, currentUserInformation} from   '../actions';
+
 
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
@@ -47,7 +49,8 @@ class Register extends Component {
     e.preventDefault();
     this.props.trive.triveContract.createUser(this.state.username, {from: this.props.account, gas: 6654755})
     .then((result) => {
-      this.props.reloadFunc()
+      this.props.currentUserInformation();
+
     })
     this.props.history.push('/dashboard/news');
   }
@@ -97,7 +100,8 @@ class Register extends Component {
     this.props.trive.triveContract.createResearcher({from: this.props.account})
     .then((result) => {
       console.log(result)
-      this.props.reloadFunc()
+      this.props.currentUserInformation();
+
     }).catch((error) => {
       console.log(error)
     })
@@ -108,7 +112,8 @@ class Register extends Component {
     this.props.trive.triveContract.createVerifier({from: this.props.account})
     .then((result) => {
       console.log(result)
-      this.props.reloadFunc()
+      this.props.currentUserInformation();
+
     }).catch((error) => {
       console.log(error)
     })
@@ -280,7 +285,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
   // instantiateTriveContract,
   // storeWeb3Account,
-  // currentUserInformation
+  currentUserInformation,
 }, dispatch);
 
 const mapStateToProps = (state) => {

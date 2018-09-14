@@ -154,7 +154,7 @@ class WitnessArticle extends Component {
               Original task
               <Jumbotron>
                 <h1>{title}</h1>
-                <img src={`data:image/jpeg;base64,${this.state.myData.image}`} className='showImage' alt=""/>
+                <img src={this.state.myData.image} className='showImage' alt=""/>
 
                 <p>
                   Description of the problem: <br />

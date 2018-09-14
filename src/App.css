@@ -149,6 +149,7 @@ input[type="file"] {
   line-height: 30px;
 }
 
+
 .loader {
   color: #999999;
   font-size: 120px;
@@ -165,6 +166,16 @@ input[type="file"] {
   -webkit-animation: load6 1.7s infinite ease, round 1.7s infinite ease;
   animation: load6 1.7s infinite ease, round 1.7s infinite ease;
 }
+
+/* ----------- for showing articles--------- */
+.article-intro:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+
+}
+
+
+
 @-webkit-keyframes load6 {
   0% {
     box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;

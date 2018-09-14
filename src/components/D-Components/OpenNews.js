@@ -60,11 +60,14 @@ class OpenNews extends Component {
     if (this.props.trive.isloaded){this.getTaskByState()};
   }
   render() {
+
     return (
       <div>
         <h1>Open NEWS</h1>
         <hr />
-        {this.state.articles}
+        <div >
+          {this.state.articles}
+        </div>
       </div>
     )
   }

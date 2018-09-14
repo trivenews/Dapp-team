@@ -70,7 +70,7 @@ class WitnessArticleInfo extends Component {
       <div>
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
-          <img src={`data:image/jpeg;base64,${this.state.myData.image}`} className='showImage' alt=""/>
+          <img src={this.state.myData.image} className='showImage' alt=""/>
 
           <p>
             Description of the problem: <br />

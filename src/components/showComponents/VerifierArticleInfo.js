@@ -110,7 +110,7 @@ class VerifierArticleInfo extends Component {
       <div>
         <Jumbotron>
           <h1>{this.state.taskData.title}</h1>
-          <img src={`data:image/jpeg;base64,${this.state.taskData.image}`} className='showImage' alt=""/>
+          <img src={this.state.taskData.image} className='showImage' alt=""/>
 
           <p><small>Reward: {this.convertToTriveDeci(this.state.taskInfo.reward)}TRV</small></p>
           <p>
