@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import contract from 'truffle-contract';
-import VotingContract from '../../build/contracts/Voting.json';
-import CoinContract from '../../build/contracts/TriveCoin.json';
+import VotingContract from '../../build/contracts/Challenge.json';
+import CoinContract from '../../build/contracts/Token.json';
 import Web3File from '../web3';
 
 export const WEB3_CONNECTED = 'WEB3_CONNECTED';
