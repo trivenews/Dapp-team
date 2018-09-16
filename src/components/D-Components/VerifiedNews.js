@@ -2,8 +2,6 @@ import React, {Component} from "react";
 import contract from 'truffle-contract';
 import web3 from '../../web3';
 import VerifiedArticleDisplay from "../showComponents/VerifiedArticleDisplay";
-import {Button, Form, FormGroup, FormControl} from "react-bootstrap";
-
 
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
@@ -14,25 +12,10 @@ class News extends Component {
     super(props)
     this.state = {
       articleIds: [],
-      articles: [],
-      searchURL: ''
+      articles: []
     }
     this.getTaskByState = this.getTaskByState.bind(this);
     this.findArticleInfo = this.findArticleInfo.bind(this);
-  }
-
-
-  handleChange = (e) => {
-    this.setState({searchURL: e.target.value});
-  }
-  handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(this.state.searchURL)
-    this.props.trive.triveContract.urlToTask(web3.utils.keccak256(this.state.searchURL))
-    .then((result) => {
-      console.log(result)
-
-    })
   }
 
   getTaskInfo(articleId) {
@@ -82,17 +65,6 @@ class News extends Component {
     return (
       <div>
         <h1>All Verified NEWS</h1>
-        <Form inline>
-          <FormGroup >
-          <FormControl
-            type="text"
-            value={this.state.searchURL}
-            placeholder="Insert your url"
-            onChange={this.handleChange}
-          />
-          </FormGroup>
-          <Button bsStyle="primary" onClick={this.handleSubmit}>Submit</Button>
-        </Form>
         <hr />
         {this.state.articles}
       </div>

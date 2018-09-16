@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import './UserTask.sol';
 
-contract Challenge is UserTask {
+contract ChallengeResearcher is UserTask {
 
   using SafeMath for uint256;
 
@@ -29,11 +29,6 @@ contract Challenge is UserTask {
 
     //token transfer functions
     //called if researcher is winner
-    // please put your token address inside the braces while testing
-    constructor (address tokenAddress) {
-        tokenContract = TokenInterface(tokenAddress);
-    }
-
     function _researcherWins(uint _taskId) internal {
         address researcherAddress = taskToResearcher[_taskId];
 
@@ -46,9 +41,9 @@ contract Challenge is UserTask {
         users[researcherId].reputation = users[researcherId].reputation.add(4);
 
         //punish challenger //creates an underflow at the moment
-        address challengerAddress = challengeToChallenger[taskIdToChallengeId[_taskId]];
-        uint challengerId = findUserId[challengerAddress];
-        users[challengerId].reputation = users[challengerId].reputation.sub(4);
+        // address challengerAddress = challengeToChallenger[taskIdToChallengeId[_taskId]];
+        // uint challengerId = findUserId[challengerAddress];
+        // users[challengerId].reputation = users[challengerId].reputation.sub(4);
     }
     // called if challenger is winner
      function _challengerWins(uint _taskId) internal {
@@ -64,9 +59,9 @@ contract Challenge is UserTask {
         users[challengerId].reputation = users[challengerId].reputation.add(4);
 
         //punish researcher //creates an underflow at the moment
-        address researcherAddress = taskToResearcher[_taskId];
-        uint researcherId = findUserId[researcherAddress];
-        users[researcherId].reputation = users[researcherId].reputation.sub(2);
+        // address researcherAddress = taskToResearcher[_taskId];
+        // uint researcherId = findUserId[researcherAddress];
+        // users[researcherId].reputation = users[researcherId].reputation.sub(2);
     }
 
     //later only verifier modifier

@@ -1,4 +1,4 @@
-/* pragma solidity ^0.4.24;
+pragma solidity ^0.4.24;
 
 // This is an RBAC contract
 contract Roles {
@@ -30,4 +30,4 @@ contract Roles {
   //   // check the reputation score that the person has and assign role
   //   _;
   // }
-} */
+}
