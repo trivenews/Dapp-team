@@ -122,22 +122,14 @@ class Register extends Component {
   checkBalance() {
     this.props.trive.coinContract.balanceOf(this.props.account, {from: this.props.account, gas: 6654755})
     .then((result) => {
-     console.log(result)
-     let results = result.c[0].toString();
-     let len = results.length;
-     let res = results.substring(0, len-4) + "." + results.substring(len-4);
-     this.setState({triveBalance: res})
+     this.setState({triveBalance: web3.utils.toBN(result).toString()})
     }).catch((error) => {
      console.log(error);
     })
 
     this.props.trive.coinContract.allowance(this.props.account, this.props.trive.triveContract.address, {from: this.props.account, gas: 6654755})
     .then((result) => {
-     console.log(result)
-     let results = result.c[0].toString();
-     let len = results.length;
-     let res = results.substring(0, len-4) + "." + results.substring(len-4);
-     this.setState({AllowAmount: res})
+     this.setState({AllowAmount: web3.utils.toBN(result).toString()})
     }).catch((error) => {
      console.log(error);
     })
@@ -149,14 +141,15 @@ class Register extends Component {
   handleSubmitAllow(e) {
     e.preventDefault();
 
-    this.props.trive.coinContract.approve(this.props.trive.triveContract.address, this.state.setAllowAmount * 10 ** 18, {from: this.props.account, gas: 6654755})
+    this.props.trive.coinContract.approve(this.props.trive.triveContract.address, this.state.setAllowAmount * 10 ** 8, {from: this.props.account, gas: 6654755})
     .then((res) => {
-      console.log(res)
+      this.checkBalance()
     })
     .catch((error) => {
       console.log(error)
     })
   }
+  //// TODO: add coma when displaying trive balance (8 decimals)
 
 
   componentDidMount() {

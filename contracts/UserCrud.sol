@@ -2,19 +2,12 @@
 
 pragma solidity ^0.4.24;
 
-import 'openzeppelin-solidity/contracts/math/SafeMath.sol';
-/* import './Reputation.sol'; */
+import './SafeMath.sol';
 // UserTask token contract
 contract TokenInterface{
-    function totalSupply() public constant returns (uint);
-    function balanceOf(address tokenOwner) public constant returns (uint balance);
-    function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
-    function transfer(address to, uint tokens) public returns (bool success);
-    function approve(address spender, uint tokens) public returns (bool success);
     function transferFrom(address from, address to, uint tokens) public returns (bool success);
-
-    event Transfer(address indexed from, address indexed to, uint tokens);
-    event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
+    function allowance(address _owner, address _spender) constant returns (uint256);
+    function transfer(address _to, uint256 _amount) returns (bool success);
 }
 
 contract UserCreation {
@@ -44,10 +37,7 @@ contract UserCreation {
 
     TokenInterface public tokenContract;
 
-    // please put your token address inside the braces while testing
-    constructor() {
-        tokenContract = TokenInterface(0x288d6875ae8da04afc5943b7c19db62092a33389);
-    }
+
     function createUser(string _name) public {
         //check if owner already has an account
         require(ownerUserCount[msg.sender] == 0);
