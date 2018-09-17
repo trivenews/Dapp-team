@@ -62,10 +62,12 @@ class Register extends Component {
     // this.becomeResearcher = this.becomeResearcher.bind(this);
   }
   handleChange(e) {
+    console.log(e.target.value)
     this.setState({ username: e.target.value });
   }
   handleSubmit(e) {
     e.preventDefault();
+    console.log(this.state.username)
     this.props.trive.triveContract
       .createUser(this.state.username, {
         from: this.props.account,
@@ -73,8 +75,11 @@ class Register extends Component {
       })
       .then(result => {
         this.props.currentUserInformation();
-      });
-    this.props.history.push("/dashboard/news");
+
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
   // findArticleInfo(arr) {
   //   console.log(arr);
@@ -129,6 +134,7 @@ class Register extends Component {
         console.log(error);
       });
   };
+
 
   becomeVerifier = e => {
     e.preventDefault();
@@ -190,6 +196,8 @@ class Register extends Component {
   componentDidMount() {
     // this.getTaskByOwner()
     if (this.props.trive.isloaded) {
+
+      console.log(this.props.trive.isloaded)
       this.checkBalance();
     }
   }
@@ -234,7 +242,7 @@ class Register extends Component {
           <br />
           <h1 className="text-center">Welcome to trive.news</h1>
           <h3 className="text-center">
-            Current ethereum addres: {this.props.noUserAddr}
+            Current ethereum addres: {this.props.account}
           </h3>
           <h3 className="text-center">
             Please enter a username to get started
@@ -301,7 +309,7 @@ class Register extends Component {
           <br />
           <br />
           <Button bsStyle="success" onClick={this.handleSubmitAllow}>
-            Register
+            Allow
           </Button>
         </Form>
       </div>

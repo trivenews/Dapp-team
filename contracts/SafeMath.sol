@@ -37,10 +37,12 @@ library SafeMath {
   * @dev Subtracts two numbers, throws on overflow (i.e. if subtrahend is greater than minuend).
   */
   function sub(uint256 _a, uint256 _b) internal pure returns (uint256) {
-    if (_b <= _a) {
+    if (_b > _a) {
       return 0;
+    } else {
+      uint256 c = _a - _b;
+      return c;
     }
-    return _a - _b;
   }
 
   /**
