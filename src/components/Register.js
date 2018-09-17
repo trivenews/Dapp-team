@@ -1,15 +1,34 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route, Link, withRouter} from 'react-router-dom';
-import {Grid, Row, Col, Button, Form, FormGroup, ControlLabel, Checkbox, FormControl, Table} from "react-bootstrap";
-import contract from 'truffle-contract';
-import web3 from '../web3';
-import VotingContract from '../../build/contracts/Voting.json';
-import {storeWeb3Account, instantiateTriveContract, currentUserInformation} from   '../actions';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  withRouter
+} from "react-router-dom";
+import {
+  Grid,
+  Row,
+  Col,
+  Button,
+  Form,
+  FormGroup,
+  ControlLabel,
+  Checkbox,
+  FormControl,
+  Table
+} from "react-bootstrap";
+import contract from "truffle-contract";
+import web3 from "../web3";
+import VotingContract from "../../build/contracts/Voting.json";
+import {
+  storeWeb3Account,
+  instantiateTriveContract,
+  currentUserInformation
+} from "../actions";
 
-
-import {bindActionCreators} from 'redux';
-import { connect } from 'react-redux';
-
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
 import ShowArticleInfo from "./showComponents/showArticleInfo";
 // import VotingContract from '../../build/contracts/Voting.json';
@@ -26,11 +45,11 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      username: "",
       articleIds: [],
       articles: [],
-      triveBalance: '',
-      setAllowAmount: '',
+      triveBalance: "",
+      setAllowAmount: "",
       AllowAmount: 0
     };
     // this.getTaskByOwner = this.getTaskByOwner.bind(this);
@@ -43,16 +62,19 @@ class Register extends Component {
     // this.becomeResearcher = this.becomeResearcher.bind(this);
   }
   handleChange(e) {
-    this.setState({username: e.target.value});
+    this.setState({ username: e.target.value });
   }
   handleSubmit(e) {
     e.preventDefault();
-    this.props.trive.triveContract.createUser(this.state.username, {from: this.props.account, gas: 6654755})
-    .then((result) => {
-      this.props.currentUserInformation();
-
-    })
-    this.props.history.push('/dashboard/news');
+    this.props.trive.triveContract
+      .createUser(this.state.username, {
+        from: this.props.account,
+        gas: 6654755
+      })
+      .then(result => {
+        this.props.currentUserInformation();
+      });
+    this.props.history.push("/dashboard/news");
   }
   // findArticleInfo(arr) {
   //   console.log(arr);
@@ -95,52 +117,53 @@ class Register extends Component {
   // }
 
   //become researcher function
-  becomeResearcher = (e) => {
+  becomeResearcher = e => {
     e.preventDefault();
-    this.props.trive.triveContract.createResearcher({from: this.props.account})
-    .then((result) => {
-      console.log(result)
-      this.props.currentUserInformation();
+    this.props.trive.triveContract
+      .createResearcher({ from: this.props.account })
+      .then(result => {
+        console.log(result);
+        this.props.currentUserInformation();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
-
-  becomeVerifier = (e) => {
+  becomeVerifier = e => {
     e.preventDefault();
-    this.props.trive.triveContract.createVerifier({from: this.props.account})
-    .then((result) => {
-      console.log(result)
-      this.props.currentUserInformation();
-
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
+    this.props.trive.triveContract
+      .createVerifier({ from: this.props.account })
+      .then(result => {
+        console.log(result);
+        this.props.currentUserInformation();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   checkBalance() {
-    this.props.trive.coinContract.balanceOf(this.props.account, {from: this.props.account, gas: 6654755})
-    .then((result) => {
-     console.log(result)
-     let results = result.c[0].toString();
-     let len = results.length;
-     let res = results.substring(0, len-4) + "." + results.substring(len-4);
-     this.setState({triveBalance: res})
-    }).catch((error) => {
-     console.log(error);
-    })
+    this.props.trive.coinContract
+      .balanceOf(this.props.account, { from: this.props.account, gas: 6654755 })
+      .then(result => {
+        this.setState({ triveBalance: web3.utils.toBN(result).toString() });
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
-    this.props.trive.coinContract.allowance(this.props.account, this.props.trive.triveContract.address, {from: this.props.account, gas: 6654755})
-    .then((result) => {
-     console.log(result)
-     let results = result.c[0].toString();
-     let len = results.length;
-     let res = results.substring(0, len-4) + "." + results.substring(len-4);
-     this.setState({AllowAmount: res})
-    }).catch((error) => {
-     console.log(error);
-    })
+    this.props.trive.coinContract
+      .allowance(this.props.account, this.props.trive.triveContract.address, {
+        from: this.props.account,
+        gas: 6654755
+      })
+      .then(result => {
+        this.setState({ AllowAmount: web3.utils.toBN(result).toString() });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   handleChangeAllow(e) {
@@ -149,61 +172,94 @@ class Register extends Component {
   handleSubmitAllow(e) {
     e.preventDefault();
 
-    this.props.trive.coinContract.approve(this.props.trive.triveContract.address, this.state.setAllowAmount * 10 ** 18, {from: this.props.account, gas: 6654755})
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+    this.props.trive.coinContract
+      .approve(
+        this.props.trive.triveContract.address,
+        this.state.setAllowAmount * 10 ** 8,
+        { from: this.props.account, gas: 6654755 }
+      )
+      .then(res => {
+        this.checkBalance();
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
-
+  //// TODO: add coma when displaying trive balance (8 decimals)
 
   componentDidMount() {
     // this.getTaskByOwner()
-    if (this.props.trive.isloaded){this.checkBalance()};
+    if (this.props.trive.isloaded) {
+      this.checkBalance();
+    }
   }
 
-  render () {
-
+  render() {
     const gridHeight = {
-      'min-height': "100vh",
-      'heigt': "auto",
+      "min-height": "100vh",
+      heigt: "auto",
       "min-width": "100%"
     };
 
-    const { isUser, name, address, reputation, rank, readyTime} = this.props.curUserInfo;
-    const { username, articles, articleIds, AllowAmount, setAllowAmount } = this.state;
-    const checkForResearcher = (<Button bsStyle="warning" onClick={this.becomeResearcher}>Become A Researcher!</Button>);
-    const checkForVerifier = (<Button bsStyle="warning" onClick={this.becomeVerifier}>Become A Verifier!</Button>);
+    const {
+      isUser,
+      name,
+      address,
+      reputation,
+      rank,
+      readyTime
+    } = this.props.curUserInfo;
+    const {
+      username,
+      articles,
+      articleIds,
+      AllowAmount,
+      setAllowAmount
+    } = this.state;
+    const checkForResearcher = (
+      <Button bsStyle="warning" onClick={this.becomeResearcher}>
+        Become A Researcher!
+      </Button>
+    );
+    const checkForVerifier = (
+      <Button bsStyle="warning" onClick={this.becomeVerifier}>
+        Become A Verifier!
+      </Button>
+    );
 
     const registerForm = (
       <Form inline>
         <FormGroup controlId="formInlineName">
-        {' '}
-        <br/>
-        <h1 className="text-center">Welcome to trive.news</h1>
-        <h3 className="text-center">Current ethereum addres: {this.props.noUserAddr}</h3>
-        <h3 className="text-center">Please enter a username to get started</h3>
-        <FormControl
-          type="text"
-          value={username}
-          placeholder="Enter text"
-          onChange={this.handleChange}
-        />
+          {" "}
+          <br />
+          <h1 className="text-center">Welcome to trive.news</h1>
+          <h3 className="text-center">
+            Current ethereum addres: {this.props.noUserAddr}
+          </h3>
+          <h3 className="text-center">
+            Please enter a username to get started
+          </h3>
+          <FormControl
+            type="text"
+            value={username}
+            placeholder="Enter text"
+            onChange={this.handleChange}
+          />
         </FormGroup>
         <br />
         <br />
-        <Button bsStyle="primary" onClick={this.handleSubmit}>Submit</Button>
+        <Button bsStyle="primary" onClick={this.handleSubmit}>
+          Submit
+        </Button>
       </Form>
     );
 
     const userInfo = (
       <div>
         <h1>{name}</h1>
-        {this.props.curUserInfo.rank < 2 && checkForResearcher} {this.props.curUserInfo.rank < 3 && checkForVerifier}
+        {this.props.curUserInfo.rank < 2 && checkForResearcher}{" "}
+        {this.props.curUserInfo.rank < 3 && checkForVerifier}
         <Table bordered responsive>
-
           <tbody>
             <tr>
               <th>My address</th>
@@ -230,50 +286,51 @@ class Register extends Component {
               <td>{new Date(readyTime * 1000).toString()}</td>
             </tr>
           </tbody>
-      </Table>
-      <Form inline>
-        <FormGroup controlId="formInlineName">
-        <br/>
-        <h3 className="text-center">Allow the contract to send trive</h3>
-        <FormControl
-          type="number"
-          value={setAllowAmount}
-          placeholder="Enter amount"
-          onChange={this.handleChangeAllow}
-        />
-        </FormGroup>
-        <br />
-        <br />
-        <Button bsStyle="success" onClick={this.handleSubmitAllow}>Register</Button>
-      </Form>
+        </Table>
+        <Form inline>
+          <FormGroup controlId="formInlineName">
+            <br />
+            <h3 className="text-center">Allow the contract to send trive</h3>
+            <FormControl
+              type="number"
+              value={setAllowAmount}
+              placeholder="Enter amount"
+              onChange={this.handleChangeAllow}
+            />
+          </FormGroup>
+          <br />
+          <br />
+          <Button bsStyle="success" onClick={this.handleSubmitAllow}>
+            Register
+          </Button>
+        </Form>
       </div>
     );
-
 
     return (
       <div>
         <div className="dashboard-div">
-          <img src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png" className="App-logo-d" alt="logo" />
+          <img
+            src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png"
+            className="App-logo-d"
+            alt="logo"
+          />
         </div>
         <div>
           <Grid style={gridHeight}>
-          <Row className="show-grid">
-          <Col md={2}>
-          </Col>
-          <Col md={8} className="text-center">
-
-            {!isUser && registerForm}
-            {isUser && userInfo}
-
-          </Col>
-          <Col md={2}>
-            </Col>
-          </Row>
-          <Row className="show-grid">
-            <Col md={12} className="text-center">
-              {articles}
-            </Col>
-          </Row>
+            <Row className="show-grid">
+              <Col md={2} />
+              <Col md={8} className="text-center">
+                {!isUser && registerForm}
+                {isUser && userInfo}
+              </Col>
+              <Col md={2} />
+            </Row>
+            <Row className="show-grid">
+              <Col md={12} className="text-center">
+                {articles}
+              </Col>
+            </Row>
           </Grid>
         </div>
       </div>
@@ -281,22 +338,29 @@ class Register extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      // instantiateTriveContract,
+      // storeWeb3Account,
+      currentUserInformation
+    },
+    dispatch
+  );
 
-  // instantiateTriveContract,
-  // storeWeb3Account,
-  currentUserInformation,
-}, dispatch);
-
-const mapStateToProps = (state) => {
-	return ({
+const mapStateToProps = state => {
+  return {
     curUserInfo: state.currentUserInfo.curUserInfo,
     account: state.trive.account,
     trive: state.trive.contracts
-  //activeAccount: state.web3.activeAccount
-})
+    //activeAccount: state.web3.activeAccount
+  };
 };
 
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Register));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Register)
+);
 // export default Register;
