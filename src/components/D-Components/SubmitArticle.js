@@ -45,6 +45,7 @@ class Verify extends Component {
   };
 
   handleMyDataReward = e => {
+    console.log(e.target.value)
     this.setState({ reward: e.target.value });
   };
 
@@ -80,13 +81,15 @@ class Verify extends Component {
     //https://github.com/ipfs/interface-ipfs-core/blob/master/SPEC/FILES.md#add
 
     this.setState({ ipfsHash: hash });
+    const hashedUrl = web3.utils.keccak256(url);
     console.log(hash);
 
     // call Ethereum contract method "createTask" and send info to etheruem contract
     //return the transaction hash from the ethereum contract
     //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
+    console.log(this.state.ipfsHash, hashedUrl, this.state.reward * 10 ** 8, "is what we are sending")
     this.props.trive.triveContract
-      .createTask(this.state.ipfsHash, url, this.state.reward * 10 ** 18, {
+      .createTask(this.state.ipfsHash, hashedUrl, this.state.reward * 10 ** 8, {
         from: this.props.account,
         gas: 6654755
       })

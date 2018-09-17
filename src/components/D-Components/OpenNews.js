@@ -22,6 +22,7 @@ class OpenNews extends Component {
   getTaskInfo(articleId) {
     this.props.trive.triveContract.tasks(articleId)
     .then((result) => {
+    console.log(result)
     var articles = [...this.state.articles];
     articles.push(<ShowArticleInfo isResearcher={this.props.isResearcher} myContract={this.props.myContract} articleId={articleId} key={articleId} data={result} curAddr={this.props.curAddr}/>);
 

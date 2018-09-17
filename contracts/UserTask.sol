@@ -183,7 +183,7 @@ contract UserTask is UserCreation {
     }
     return result;
   }
-  function getTaskByUrl(uint url) external view returns (uint) {
+  /* function getTaskByUrl(uint url) external view returns (uint) {
     return urlToTask[url];
-  }
+  } */
 }

@@ -38,7 +38,6 @@ class ShowArticleInfo extends Component {
 
       })
       .then(data => {
-        console.log(data.myData.image)
         this.setState({
           myData: {
             desc: data.myData.description,

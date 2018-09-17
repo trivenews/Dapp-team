@@ -26,8 +26,9 @@ class News extends Component {
   handleSubmit = e => {
     e.preventDefault();
     console.log(this.state.searchURL);
+    const hashedUrl = web3.utils.keccak256(this.state.searchURL)
     this.props.trive.triveContract
-      .urlToTask(web3.utils.keccak256(this.state.searchURL))
+      .urlToTask(hashedUrl)
       .then(result => {
         console.log(result);
       });
