@@ -4,6 +4,8 @@ import contract from 'truffle-contract';
 import web3 from '../../web3';
 import VotingContract from '../../../build/contracts/Voting.json';
 import { Redirect, withRouter, Link } from 'react-router-dom';
+import Loader from '../D-Components/Loader';
+
 
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
@@ -32,7 +34,9 @@ class WitnessArticle extends Component {
         task: '',
         research: '',
         verifier: ''
-      }
+      },
+      loading: false,
+      redirect: false
     }
   }
 
@@ -129,16 +133,26 @@ class WitnessArticle extends Component {
   }
 
   vote = (pref) => {
+    this.setState({loading: true})
     this.props.trive.triveContract.witnessChallenge(this.props.match.params.id, pref, {from: this.props.account, gas: 6654755})
     .then(res => {
       console.log(res);
+      this.setState({
+        loading: false,
+        redirect: true
+      })
     })
     .catch(err => {
       console.log(err);
+      this.setState({loading: false})
     })
   }
 
-
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/dashboard/witness' />
+    }
+  }
   componentDidMount() {
     if (this.props.trive.isloaded){this.getTaskInfo()};
   }
@@ -148,6 +162,8 @@ class WitnessArticle extends Component {
     const { sources, comments, score } = this.state.researcherData;
     return (
       <div>
+        {this.renderRedirect()}
+        {this.state.loading && <Loader />}
         <Grid className="dash-row">
           <Row className="show-grid">
             <Col sm={12} >
@@ -175,7 +191,7 @@ class WitnessArticle extends Component {
                 {this.props.curUserInfo.rank >= 1 && <Button bsStyle="danger" onClick={() => this.vote(false)} >Vote for this research</Button>}
               </Jumbotron>
             </Col>
-            <Col sm={6}  className="dash-content">
+            <Col sm={6}  >
               <h1>RIGHT RESEARCH OF ARTICLE {this.props.match.params.id}</h1>
               <Jumbotron>
                 <p>Comments:  {this.state.verifierData.comments}</p>

@@ -19,7 +19,8 @@ class WitnessArticleInfo extends Component {
         image: ''
       },
       isresearcher: false,
-      redirect: false
+      redirect: false,
+      zoomInActive: false
     }
   }
   fetchIPFS = () => {
@@ -57,27 +58,46 @@ class WitnessArticleInfo extends Component {
   //   console.log('hi')
   //   return res
   // }
+  zoomInFunc = () => {
+    this.setState({zoomInActive: !this.state.zoomInActive})
+  }
 
   componentDidMount(){
     this.fetchIPFS();
   }
   render() {
     const { data } = this.props;
-    // const checkResearcher = checkIfUserIsResearcher()
-    // const researchButton = (<Button bsStyle="primary">Reseach this article</Button>);
+    const style = {
+      'text-align': 'left',
+      'border-bottom': '0.5px solid #fff'
+    }
+    const zoomIn = (<Jumbotron onClick={this.zoomInFunc}>
+      <h1>{this.state.myData.title}</h1>
+      <img src={this.state.myData.image} className='showImage' alt=""/>
+
+      <p>
+        Description of the problem: <br />
+        {this.state.myData.desc}
+      </p>
+      {this.props.curUserInfo.rank >= 1 && <Button bsStyle="warning" ><Link to={`/dashboard/witness/${this.props.articleId}`} >Witness This Article!</Link></Button>}<Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
+    </Jumbotron>)
+    const listItem = (<Media style={style} className='article-intro' onClick={this.zoomInFunc}>
+      <Media.Left>
+        <img width={64} height={64} src={this.state.myData.image} alt="thumbnail" />
+      </Media.Left>
+      <Media.Body>
+        <Media.Heading>{this.state.myData.title}</Media.Heading>
+        <p>
+          Description of the problem: <br />
+          {this.state.myData.desc}
+        </p>
+      </Media.Body>
+    </Media>)
 
     return (
       <div>
-        <Jumbotron>
-          <h1>{this.state.myData.title}</h1>
-          <img src={this.state.myData.image} className='showImage' alt=""/>
-
-          <p>
-            Description of the problem: <br />
-            {this.state.myData.desc}
-          </p>
-          {this.props.curUserInfo.rank >= 1 && <Button bsStyle="warning" ><Link to={`/dashboard/witness/${this.props.articleId}`} >Witness This Article!</Link></Button>}<Button bsStyle="primary" href={this.state.myData.url} target="_blank">Link to the article</Button>
-        </Jumbotron>
+        {this.state.zoomInActive && zoomIn}
+        {!this.state.zoomInActive && listItem}
       </div>
     );
   }

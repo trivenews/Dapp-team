@@ -184,10 +184,12 @@ class ResearcherForm extends Component {
               <Radio inline value={75} name="score" onChange={this.handleMyData}>75%</Radio>
               <Radio inline value={100} name="score" onChange={this.handleMyData}>100%</Radio>
             </FormGroup>
+            <br />
+            <br />
             <Button
              bsStyle="primary"
              type="submit">
-             Send your documents for review
+             Send
             </Button>
 
             <br />

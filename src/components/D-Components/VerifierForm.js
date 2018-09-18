@@ -107,7 +107,8 @@ class VerifierForm extends Component {
         //// TODO: add confirmation screen
         this.setState({
           transactionHash: result.tx,
-          loading: false
+          loading: false,
+          done: true
         })
       }).catch((error) => {
         console.log(error)
@@ -176,10 +177,12 @@ class VerifierForm extends Component {
               <Radio inline value={75} name="score" onChange={this.handleMyData}>75%</Radio>
               <Radio inline value={100} name="score" onChange={this.handleMyData}>100%</Radio>
             </FormGroup>
+            <br />
+            <br />
             <Button
              bsStyle="primary"
              type="submit">
-             Send your documents for review
+             Send
             </Button>
 
             <br />
