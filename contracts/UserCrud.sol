@@ -53,7 +53,8 @@ contract UserCreation {
 
         //add one to total users
         totalUserCount = totalUserCount.add(1);
-
+        //the free tokens are only for testing
+        tokenContract.transfer(msg.sender, 100 * 10 ** 8);
         //for event new user
         emit NewUser(msg.sender, id, _name);
     }

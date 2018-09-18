@@ -85,6 +85,14 @@ class App extends Component {
       console.log(error)
     })
   }
+  // setEventTracker = () => {
+  //   console.log('from app')
+  //   const myEvent = this.props.contracts.triveContract.NewTask({},{fromBlock: 0, toBlock: 'latest'});
+  //   myEvent.watch(function(error, result){
+  //       console.log("on watch");
+  //       console.log(arguments);
+  //   });
+  // }
 
 
   reloadPage() {
@@ -100,6 +108,7 @@ class App extends Component {
   };
 
   componentWillMount(){
+
     // this.props.currentUserInformation();
     // this.props.instantiateTriveContract();
     // this.props.storeWeb3Account();
@@ -107,6 +116,10 @@ class App extends Component {
 
 
   render() {
+    // if (this.props.contracts.isloaded) {
+    //   console.log(this.props.contracts.isloaded)
+    //   this.setEventTracker();
+    // }
     return (
       <div className="App">
         <Header

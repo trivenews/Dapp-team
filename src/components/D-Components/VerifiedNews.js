@@ -14,7 +14,8 @@ class News extends Component {
     this.state = {
       articleIds: [],
       articles: [],
-      searchURL: ""
+      searchURL: "",
+      byUrl: false
     };
     this.getTaskByState = this.getTaskByState.bind(this);
     this.findArticleInfo = this.findArticleInfo.bind(this);
@@ -25,12 +26,13 @@ class News extends Component {
   };
   handleSubmit = e => {
     e.preventDefault();
-    console.log(this.state.searchURL);
+    this.setState({byUrl: true})
     const hashedUrl = web3.utils.keccak256(this.state.searchURL)
     this.props.trive.triveContract
       .urlToTask(hashedUrl)
       .then(result => {
-        console.log(result);
+        // console.log(result.c[0])
+        this.getTaskInfo(result.c[0]);
       });
   };
 
@@ -40,7 +42,7 @@ class News extends Component {
       .then(result => {
         console.log(result);
         var articles = [...this.state.articles];
-        articles.push(
+        articles.unshift(
           <VerifiedArticleDisplay articleId={articleId} key={articleId} />
         );
 
@@ -79,6 +81,10 @@ class News extends Component {
         console.log(error);
       });
   }
+  newNews = () => {
+    this.setState({byUrl: false})
+    this.getTaskByState();
+  }
 
   componentDidMount() {
     if (this.props.trive.isloaded) {
@@ -104,6 +110,9 @@ class News extends Component {
         </Form>
         <hr />
         {this.state.articles}
+        <Button bsStyle="primary" onClick={this.newNews}>
+          Refresh
+        </Button>
       </div>
     );
   }
