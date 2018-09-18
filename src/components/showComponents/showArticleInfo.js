@@ -9,6 +9,8 @@ import { withRouter } from 'react-router-dom';
 
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
+import Loader from "../D-Components/Loader";
+
 
 class ShowArticleInfo extends Component {
   constructor(props) {
@@ -22,7 +24,8 @@ class ShowArticleInfo extends Component {
       },
       isresearcher: false,
       redirect: false,
-      zoomInActive: false
+      zoomInActive: false,
+      loading: false
     }
     this.fetchIPFS = this.fetchIPFS.bind(this);
     this.researchArticle = this.researchArticle.bind(this);
@@ -52,10 +55,13 @@ class ShowArticleInfo extends Component {
 
   researchArticle(e) {
     e.preventDefault();
+    console.log('CLICK!')
+    this.setState({loading: true})
     this.props.trive.triveContract._acceptTask(this.props.articleId, {from: this.props.account})
     .then((result) => {
       console.log(result)
       this.setState({
+        loading: false,
         redirect: true
       })
 
@@ -69,13 +75,7 @@ class ShowArticleInfo extends Component {
       return <Redirect to='/dashboard/researcher' />
     }
   }
-  convertToTriveDeci = (num) => {
-    let result = num.toString()
-    let len = result.length;
-    let res = result.substring(0, len-4) + "." + result.substring(len-2);
-    console.log('hi')
-    return res
-  }
+
   zoomInFunc = () => {
     this.setState({zoomInActive: !this.state.zoomInActive})
   }
@@ -94,7 +94,7 @@ class ShowArticleInfo extends Component {
     const zoomIn = (<Jumbotron onClick={this.zoomInFunc}>
       <h1>{this.state.myData.title}</h1>
       <img src={this.state.myData.image} className='showImage' alt=""/>
-      <p><small>Status: {data[3].c[0]} | Reward: {this.convertToTriveDeci(data[2].c[0])}TRV | Hash: {data[0]}</small></p>
+      <p><small>Status: {data[3].c[0]} | Reward: {web3.utils.toBN(data[2].c[0]).toString()}TRV | Hash: {data[0]}</small></p>
       <p>
         Description of the problem: <br />
         {this.state.myData.desc}
@@ -119,6 +119,7 @@ class ShowArticleInfo extends Component {
         {this.renderRedirect()}
         {this.state.zoomInActive && zoomIn}
         {!this.state.zoomInActive && listItem}
+        {this.state.loading && <Loader />}
 
       </div>
     );
