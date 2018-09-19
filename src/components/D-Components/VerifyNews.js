@@ -20,9 +20,11 @@ class VerifyNews extends Component {
   }
 
   getTaskInfo(articleId) {
-    this.props.trive.triveContract.tasks(articleId)
+    this.props.trive.triveContract.methods
+    .tasks(articleId)
+    .call()
     .then((result) => {
-      console.log(result, "HIHIHIHIHIHIHIHIHIHIHIHIIHIHIHIIHIHIHIHI")
+      console.log(result)
       var articles = [...this.state.articles];
       articles.push(<ResearchedNewsInfo myContract={this.props.myContract} articleId={articleId} key={articleId} data={result} curAddr={this.props.curAddr}/>);
 
@@ -50,7 +52,9 @@ class VerifyNews extends Component {
   }
 
   getTaskByState() {
-    this.props.trive.triveContract._getTasksByState(2, 2)
+    this.props.trive.triveContract.methods
+    ._getTasksByState(2, 2)
+    .call()
     .then((result) => {
       this.findArticleInfo(result);
     }).catch((error) => {

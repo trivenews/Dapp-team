@@ -51,14 +51,15 @@ class ResearcherArticleInfo extends Component {
 
   getTaskInfo() {
     console.log(this.props.articleId)
-    this.props.trive.triveContract.tasks(this.props.articleId.id)
-
+    this.props.trive.triveContract.methods
+    .tasks(this.props.articleId.id)
+    .call()
     .then((result) => {
       console.log(result)
       this.setState({
         taskInfo: {
           ipfsHash: result[0],
-          reward: result[2].c[0]
+          reward: result[2]
         }
       })
       this.fetchIPFS();
@@ -66,13 +67,7 @@ class ResearcherArticleInfo extends Component {
       console.log(error)
     })
   }
-  convertToTriveDeci = (num) => {
-    let result = num.toString()
-    let len = result.length;
-    let res = result.substring(0, len-4) + "." + result.substring(len-2);
-    console.log('hi')
-    return res
-  }
+
 
   componentDidMount(){
     if (this.props.articleId.loaded){this.getTaskInfo()};
@@ -87,7 +82,7 @@ class ResearcherArticleInfo extends Component {
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
           <img src={this.state.myData.image} className='showImage' alt=""/>
-          <p><small>Reward: {this.convertToTriveDeci(this.state.taskInfo.reward)}TRV</small></p>
+          <p><small>Reward: {web3.utils.toBN(this.state.taskInfo.reward).toString()}TRV</small></p>
           <p>
             Description of the problem: <br />
             {this.state.myData.desc}

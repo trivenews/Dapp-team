@@ -76,7 +76,9 @@ class VerifiedArticleDisplay extends Component {
   };
 
   getTaskInfo = () => {
-    this.props.trive.triveContract.tasks(this.props.articleId)
+    this.props.trive.triveContract.methods
+    .tasks(this.props.articleId)
+    .call()
     .then((result) => {
       // console.log(result)
       this.setState({
@@ -92,14 +94,7 @@ class VerifiedArticleDisplay extends Component {
       console.log(error)
     })
   };
-  // not necessary
-  // convertToTriveDeci = (num) => {
-  //   let result = num.toString()
-  //   let len = result.length;
-  //   let res = result.substring(0, len-4) + "." + result.substring(len-2);
-  //
-  //   return res
-  // }
+
   zoomInFunc = () => {
     this.setState({zoomInActive: !this.state.zoomInActive})
   }

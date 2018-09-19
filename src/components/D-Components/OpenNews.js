@@ -20,7 +20,9 @@ class OpenNews extends Component {
   }
 
   getTaskInfo(articleId) {
-    this.props.trive.triveContract.tasks(articleId)
+    this.props.trive.triveContract.methods
+    .tasks(articleId)
+    .call()
     .then((result) => {
     console.log(result)
     var articles = [...this.state.articles];
@@ -49,7 +51,9 @@ class OpenNews extends Component {
   }
 
   getTaskByState() {
-    this.props.trive.triveContract._getTasksByState(0, 0)
+    this.props.trive.triveContract.methods
+    ._getTasksByState(0, 0)
+    .call()
     .then((result) => {
       this.findArticleInfo(result);
     }).catch((error) => {

@@ -28,8 +28,9 @@ class News extends Component {
     e.preventDefault();
     this.setState({byUrl: true})
     const hashedUrl = web3.utils.keccak256(this.state.searchURL)
-    this.props.trive.triveContract
+    this.props.trive.triveContract.methods
       .urlToTask(hashedUrl)
+      .call()
       .then(result => {
         // console.log(result.c[0])
         this.getTaskInfo(result.c[0]);
@@ -37,8 +38,9 @@ class News extends Component {
   };
 
   getTaskInfo(articleId) {
-    this.props.trive.triveContract
+    this.props.trive.triveContract.methods
       .tasks(articleId)
+      .call()
       .then(result => {
         console.log(result);
         var articles = [...this.state.articles];
@@ -71,8 +73,9 @@ class News extends Component {
   }
 
   getTaskByState() {
-    this.props.trive.triveContract
+    this.props.trive.triveContract.methods
       ._getTasksByState(5, 5)
+      .call()
       .then(result => {
         console.log(result);
         this.findArticleInfo(result);

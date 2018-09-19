@@ -75,7 +75,9 @@ class VerifierArticleInfo extends Component {
   };
 
   getTaskInfo = () => {
-    this.props.trive.triveContract.tasks(this.props.articleId.id)
+    this.props.trive.triveContract.methods
+    .tasks(this.props.articleId.id)
+    .call()
     .then((result) => {
       // console.log(result)
       this.setState({

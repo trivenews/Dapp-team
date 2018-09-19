@@ -57,7 +57,9 @@ class ShowArticleInfo extends Component {
     e.preventDefault();
     console.log('CLICK!')
     this.setState({loading: true})
-    this.props.trive.triveContract._acceptTask(this.props.articleId, {from: this.props.account})
+    this.props.trive.triveContract.methods
+    ._acceptTask(this.props.articleId)
+    .send({from: this.props.account})
     .then((result) => {
       console.log(result)
       this.setState({

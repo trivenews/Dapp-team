@@ -67,15 +67,12 @@ class Register extends Component {
   }
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state.username)
-    this.props.trive.triveContract
-      .createUser(this.state.username, {
-        from: this.props.account,
-        gas: 6654755
-      })
+    this.props.trive.triveContract.methods
+      .createUser(this.state.username)
+      .send({ from: this.props.account })
       .then(result => {
-        this.props.currentUserInformation();
-
+        console.log(result)
+        // this.props.currentUserInformation();
       })
       .catch(err => {
         console.log(err);
@@ -124,8 +121,9 @@ class Register extends Component {
   //become researcher function
   becomeResearcher = e => {
     e.preventDefault();
-    this.props.trive.triveContract
-      .createResearcher({ from: this.props.account })
+    this.props.trive.triveContract.methods
+      .createResearcher()
+      .send({ from: this.props.account })
       .then(result => {
         console.log(result);
         this.props.currentUserInformation();
@@ -138,8 +136,9 @@ class Register extends Component {
 
   becomeVerifier = e => {
     e.preventDefault();
-    this.props.trive.triveContract
-      .createVerifier({ from: this.props.account })
+    this.props.trive.triveContract.methods
+      .createVerifier()
+      .send({ from: this.props.account })
       .then(result => {
         console.log(result);
         this.props.currentUserInformation();
@@ -150,8 +149,9 @@ class Register extends Component {
   };
 
   checkBalance() {
-    this.props.trive.coinContract
-      .balanceOf(this.props.account, { from: this.props.account, gas: 6654755 })
+    this.props.trive.coinContract.methods
+      .balanceOf(this.props.account)
+      .call({ from: this.props.account, gas: 6654755 })
       .then(result => {
         this.setState({ triveBalance: web3.utils.toBN(result).toString() });
       })
@@ -159,8 +159,9 @@ class Register extends Component {
         console.log(error);
       });
 
-    this.props.trive.coinContract
-      .allowance(this.props.account, this.props.trive.triveContract.address, {
+    this.props.trive.coinContract.methods
+      .allowance(this.props.account, this.props.trive.triveContract.address)
+      .call({
         from: this.props.account,
         gas: 6654755
       })
@@ -178,12 +179,12 @@ class Register extends Component {
   handleSubmitAllow(e) {
     e.preventDefault();
 
-    this.props.trive.coinContract
+    this.props.trive.coinContract.methods
       .approve(
         this.props.trive.triveContract.address,
-        this.state.setAllowAmount * 10 ** 8,
-        { from: this.props.account, gas: 6654755 }
+        this.state.setAllowAmount * 10 ** 8
       )
+      .send({ from: this.props.account, gas: 6654755 })
       .then(res => {
         this.checkBalance();
       })
@@ -196,8 +197,6 @@ class Register extends Component {
   componentDidMount() {
     // this.getTaskByOwner()
     if (this.props.trive.isloaded) {
-
-      console.log(this.props.trive.isloaded)
       this.checkBalance();
     }
   }

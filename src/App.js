@@ -102,25 +102,26 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.currentUserInformation();
-    this.props.instantiateTriveContract();
-    this.props.storeWeb3Account();
+    // this.props.currentUserInformation();
+    // this.props.instantiateTriveContract();
+    // this.props.storeWeb3Account();
+
   };
 
   componentWillMount(){
 
     // this.props.currentUserInformation();
-    // this.props.instantiateTriveContract();
-    // this.props.storeWeb3Account();
+    this.props.instantiateTriveContract();
+    this.props.storeWeb3Account();
   }
 
 
   render() {
-    // if (this.props.contracts.isloaded) {
-    //   console.log(this.props.contracts.isloaded)
-    //   this.setEventTracker();
-    // }
+    if (this.props.contracts.isloaded && !this.props.curUserInfo.isUser) {
+      this.props.currentUserInformation();
+    }
     return (
+
       <div className="App">
         <Header
           myContract={this.state.myContract}

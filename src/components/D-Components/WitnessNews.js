@@ -20,7 +20,9 @@ class WitnessNews extends Component {
   }
 
   getTaskInfo(articleId) {
-    this.props.trive.triveContract.tasks(articleId)
+    this.props.trive.triveContract.methods
+    .tasks(articleId)
+    .call()
     .then((result) => {
     var articles = [...this.state.articles];
     articles.push(<WitnessArticleInfo articleId={articleId} key={articleId} data={result}/>);
@@ -48,7 +50,9 @@ class WitnessNews extends Component {
   }
 
   getTaskByState() {
-    this.props.trive.triveContract._getTasksByState(4, 4)
+    this.props.trive.triveContract.methods
+    ._getTasksByState(4, 4)
+    .call()
     .then((result) => {
       // console.log(result)
       this.findArticleInfo(result);

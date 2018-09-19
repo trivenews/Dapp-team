@@ -78,7 +78,9 @@ class ResearchedNewsInfo extends Component {
 
   verifyArticle(e) {
     e.preventDefault();
-    this.props.trive.triveContract._acceptVerifyTask(this.props.articleId, {from: this.props.account})
+    this.props.trive.triveContract.methods
+    ._acceptVerifyTask(this.props.articleId)
+    .send({from: this.props.account})
     .then((result) => {
       console.log(result)
       this.setState({

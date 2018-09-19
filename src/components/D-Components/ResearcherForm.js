@@ -94,7 +94,9 @@ class ResearcherForm extends Component {
         //return the transaction hash from the ethereum contract
         //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
 
-        this.props.trive.triveContract._submitTask(this.state.curTaskId.id, this.state.ipfsHash, this.state.researcherData.score, {from: this.props.account, gas: 254755})
+        this.props.trive.triveContract.methods
+        ._submitTask(this.state.curTaskId.id, this.state.ipfsHash, this.state.researcherData.score)
+        .send({from: this.props.account, gas: 254755})
         .then((result) => {
           console.log(result.tx);
           this.setState({transactionHash: result.tx, loading: false, done: true})
@@ -105,7 +107,9 @@ class ResearcherForm extends Component {
     }; //onSubmit
 
     getCurrentTask() {
-      this.props.trive.triveContract.researcherToTask(this.props.account)
+      this.props.trive.triveContract.methods
+      .researcherToTask(this.props.account)
+      .call()
       .then((result) => {
         console.log(result.c[0]);
         this.setState({
@@ -122,7 +126,9 @@ class ResearcherForm extends Component {
       })
     }
     checkIfResearcherHasATask() {
-      this.props.trive.triveContract.researcherBusy(this.props.account)
+      this.props.trive.triveContract.methods
+      .researcherBusy(this.props.account)
+      .call()
       .then((result) => {
         if (result === true) {
           this.setState({hasTask: true})
