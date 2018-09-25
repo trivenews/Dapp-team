@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import {Jumbotron, Label, Media, Button} from "react-bootstrap";
-import contract from 'truffle-contract';
-import web3 from '../../web3';
-import { Redirect, withRouter, Link } from 'react-router-dom';
+import {Jumbotron, Media, Button} from "react-bootstrap";
+// import contract from 'truffle-contract';
+// import web3 from '../../web3';
+import { withRouter, Link } from 'react-router-dom';
 
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
@@ -65,7 +65,7 @@ class WitnessArticleInfo extends Component {
     this.fetchIPFS();
   }
   render() {
-    const { data } = this.props;
+    // const { data } = this.props;
     const style = {
       'text-align': 'left',
       'border-bottom': '0.5px solid #fff'

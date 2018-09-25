@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+import { Switch, Route, Link} from 'react-router-dom';
 import {Grid, Row, Col, Button, ButtonGroup, DropdownButton, MenuItem} from "react-bootstrap";
 import SubmitArticle from "./D-Components/SubmitArticle";
 import News from "./D-Components/VerifiedNews";

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, withRouter} from 'react-router-dom';
+import { Switch, Route, withRouter} from 'react-router-dom';
 
-import contract from 'truffle-contract';
-import web3 from './web3';
+// import contract from 'truffle-contract';
+// import web3 from './web3';
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 import {storeWeb3Account, instantiateTriveContract, currentUserInformation} from   './actions';
@@ -17,7 +17,7 @@ import Register from "./components/Register";
 import getCurrentProvider from './util/getCurrentProvider'
 
 import './App.css';
-import { throws } from 'assert';
+// import { throws } from 'assert';
 
 
 class App extends Component {

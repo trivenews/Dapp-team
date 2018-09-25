@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import {Jumbotron, Label, Media, Button} from "react-bootstrap";
-import contract from 'truffle-contract';
+import {Jumbotron, Media, Button} from "react-bootstrap";
+// import contract from 'truffle-contract';
 import web3 from '../../web3';
 import { Redirect } from 'react-router-dom';
 

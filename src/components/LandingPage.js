@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Grid, Row, Col, Image} from "react-bootstrap";
-import {Link} from "react-router-dom";
+// import {Link} from "react-router-dom";
 
 class landingPage extends Component {
 

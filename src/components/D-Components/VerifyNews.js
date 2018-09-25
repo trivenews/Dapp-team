@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import contract from 'truffle-contract';
-import web3 from '../../web3';
+// import contract from 'truffle-contract';
+// import web3 from '../../web3';
 import ResearchedNewsInfo from "../showComponents/ResearchedNewsInfo";
 
 import { withRouter } from 'react-router-dom';

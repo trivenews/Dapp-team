@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import contract from "truffle-contract";
+// import contract from "truffle-contract";
 import web3 from "../../web3";
 import VerifiedArticleDisplay from "../showComponents/VerifiedArticleDisplay";
 import { Button, Form, FormGroup, FormControl } from "react-bootstrap";

@@ -1,8 +1,8 @@
 import {Table, Grid, Button, Form, Radio, FormGroup } from 'react-bootstrap';
 import React, { Component } from 'react';
-import web3 from '../../web3';
-import { setJSON, getJSON } from '../../util/IPFS.js'
-import storehash from '../../storehash';
+// import web3 from '../../web3';
+import { setJSON } from '../../util/IPFS.js'
+// import storehash from '../../storehash';
 import VerifierArticleInfo from "../showComponents/VerifierArticleInfo";
 import Loader from './Loader';
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Table, Grid, Button, Form } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
-import { bindActionCreators } from "redux";
+// import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 // import contract from 'truffle-contract';
 
@@ -118,7 +118,7 @@ class Verify extends Component {
 
         <Grid className="verify-container">
           <h3> Give Article information to verify and send to IPFS </h3>
-          <img src={image} className="showImage" />
+          <img src={image} alt='' className="showImage" />
           <br />
           <Form onSubmit={this.onSubmit}>
             <br />

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import {Jumbotron, Label, Media, Button} from "react-bootstrap";
-import contract from 'truffle-contract';
-import web3 from '../../web3';
+import {Jumbotron } from "react-bootstrap";
+// import contract from 'truffle-contract';
+// import web3 from '../../web3';
 
-import {bindActionCreators} from 'redux';
+// import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
@@ -72,7 +72,7 @@ class ResearcherArticleInfo extends Component {
     if (this.props.articleId.loaded){this.getTaskInfo()};
   }
   render() {
-    const { data } = this.props;
+    // const { data } = this.props;
     // const checkResearcher = checkIfUserIsResearcher()
     // const researchButton = (<Button bsStyle="primary">Reseach this article</Button>);
 

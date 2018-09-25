@@ -1,9 +1,5 @@
 import React, { Component } from "react";
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
   withRouter
 } from "react-router-dom";
 import {
@@ -13,13 +9,11 @@ import {
   Button,
   Form,
   FormGroup,
-  ControlLabel,
-  Checkbox,
   FormControl,
   Table
 } from "react-bootstrap";
-import contract from "truffle-contract";
-import web3 from "../web3";
+// import contract from "truffle-contract";
+// import web3 from "../web3";
 import {
   storeWeb3Account,
   instantiateTriveContract,
@@ -29,7 +23,7 @@ import {
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import ShowArticleInfo from "./showComponents/showArticleInfo";
+// import ShowArticleInfo from "./showComponents/showArticleInfo";
 // import VotingContract from '../../build/contracts/Voting.json';
 //
 // const TriveDapp = contract(VotingContract);
