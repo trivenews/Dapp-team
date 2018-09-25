@@ -33,7 +33,6 @@ class App extends Component {
         rank: ""
       },
       noUserAddr: "",
-      myContract: TriveDapp,
       triveDappInstance: '',
       triveCoinInstance: '',
       isResearcher: false,
