@@ -20,7 +20,6 @@ import {
 } from "react-bootstrap";
 import contract from "truffle-contract";
 import web3 from "../web3";
-import VotingContract from "../../build/contracts/Voting.json";
 import {
   storeWeb3Account,
   instantiateTriveContract,

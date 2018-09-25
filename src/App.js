@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Switch, Route, Link, withRouter} from 'react-r
 
 import contract from 'truffle-contract';
 import web3 from './web3';
-import VotingContract from '../build/contracts/Voting.json';
-import CoinContract from '../build/contracts/TriveCoin.json';
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 import {storeWeb3Account, instantiateTriveContract, currentUserInformation} from   './actions';
@@ -21,10 +19,6 @@ import getCurrentProvider from './util/getCurrentProvider'
 import './App.css';
 import { throws } from 'assert';
 
-const TriveDapp = contract(VotingContract);
-TriveDapp.setProvider(web3.currentProvider);
-const TriveCoin = contract(CoinContract);
-TriveCoin.setProvider(web3.currentProvider);
 
 class App extends Component {
   constructor() {
@@ -66,25 +60,7 @@ class App extends Component {
   //   });
   // }
 
-  // checkIfUserIsResearcher() {
-  //   this.state.triveDappInstance.checkIfUserIsVerifier(this.state.curUserInfo.address)
-  //   .then((result) => {
-  //     this.setState({
-  //       isResearcher: result
-  //     })
-  //   }).catch((error) => {
-  //     console.log(error)
-  //   })
-  // }
 
-  checkbalance() {
-    this.state.triveCoinInstance.balanceOf(this.state.noUserAddr || this.state.curUserInfo.addres, {from: this.state.noUserAddr || this.state.curUserInfo.addres})
-    .then((result) => {
-      console.log(this.state.noUserAddr, " has this much trive tokens: ", result)
-    }).catch((error) => {
-      console.log(error)
-    })
-  }
   // setEventTracker = () => {
   //   console.log('from app')
   //   const myEvent = this.props.contracts.triveContract.NewTask({},{fromBlock: 0, toBlock: 'latest'});
