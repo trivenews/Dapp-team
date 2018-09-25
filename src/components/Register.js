@@ -151,9 +151,9 @@ class Register extends Component {
   checkBalance() {
     this.props.trive.coinContract.methods
       .balanceOf(this.props.account)
-      .call({ from: this.props.account, gas: 6654755 })
+      .call({ from: this.props.account})
       .then(result => {
-        this.setState({ triveBalance: web3.utils.toBN(result).toString() });
+        this.setState({ triveBalance: result / 10 ** 8 });
       })
       .catch(error => {
         console.log(error);
@@ -166,7 +166,7 @@ class Register extends Component {
         gas: 6654755
       })
       .then(result => {
-        this.setState({ AllowAmount: web3.utils.toBN(result).toString() });
+        this.setState({ AllowAmount: result / 10 ** 8 });
       })
       .catch(error => {
         console.log(error);

@@ -98,8 +98,8 @@ class ResearcherForm extends Component {
         ._submitTask(this.state.curTaskId.id, this.state.ipfsHash, this.state.researcherData.score)
         .send({from: this.props.account, gas: 254755})
         .then((result) => {
-          console.log(result.tx);
-          this.setState({transactionHash: result.tx, loading: false, done: true})
+          console.log(result);
+          this.setState({transactionHash: result, loading: false, done: true})
         }).catch((error) => {
           this.setState({loading: false})
           console.log(error);
@@ -111,14 +111,14 @@ class ResearcherForm extends Component {
       .researcherToTask(this.props.account)
       .call()
       .then((result) => {
-        console.log(result.c[0]);
+        console.log(result);
         this.setState({
           curTaskId: {
-            id: result.c[0],
+            id: result,
             loaded: true
           },
           researcherData: {
-            taskID: result.c[0]
+            taskID: result
           }
         })
       }).catch((error) => {

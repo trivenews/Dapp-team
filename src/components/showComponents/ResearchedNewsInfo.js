@@ -97,11 +97,8 @@ class ResearchedNewsInfo extends Component {
     }
   }
   convertToTriveDeci = (num) => {
-    let result = num.toString()
-    let len = result.length;
-    let res = result.substring(0, len-4) + "." + result.substring(len-2);
-    console.log('hi')
-    return res
+    let result = num / 10 ** 8;
+    return result
   }
   zoomInFunc = () => {
     this.setState({zoomInActive: !this.state.zoomInActive})
@@ -120,7 +117,7 @@ class ResearchedNewsInfo extends Component {
     const zoomIn = (<Jumbotron onClick={this.zoomInFunc}>
       <h1>{this.state.myData.title}</h1>
       <img src={this.state.myData.image} className='showImage' alt=""/>
-      <p><small>Status: {data[3].c[0]} | Reward: {this.convertToTriveDeci(data[2].c[0])}TRV </small></p>
+      <p><small>Status: {data[3]} | Reward: {this.convertToTriveDeci(data[2])}TRV </small></p>
       <p>
         Description of the problem: <br />
         {this.state.myData.desc}
@@ -128,7 +125,7 @@ class ResearchedNewsInfo extends Component {
       <p>Source: <br /> {this.state.researcherData.source}</p>
       <p>Comments: <br /> {this.state.researcherData.comments}</p>
       <p>Score: <br /> {this.state.researcherData.score}%</p>
-      {(data[3].c[0] === 2) && this.props.curUserInfo.rank >= 3 && <Button bsStyle="success" onClick={this.verifyArticle}>Accept verify</Button>}
+      {(data[3] == 2) && this.props.curUserInfo.rank >= 3 && <Button bsStyle="success" onClick={this.verifyArticle}>Accept verify</Button>}
     </Jumbotron>);
 
     const listItem = (<Media style={style} className='article-intro' onClick={this.zoomInFunc}>

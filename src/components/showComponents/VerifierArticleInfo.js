@@ -84,7 +84,7 @@ class VerifierArticleInfo extends Component {
         taskInfo: {
           ipfsTaskHash: result[0],
           ipfsResearchHash: result[1],
-          reward: result[2].c[0]
+          reward: result[2]
         }
       })
       this.fetchTaskIPFS();
@@ -95,11 +95,8 @@ class VerifierArticleInfo extends Component {
   };
 
   convertToTriveDeci = (num) => {
-    let result = num.toString()
-    let len = result.length;
-    let res = result.substring(0, len-4) + "." + result.substring(len-2);
-
-    return res
+    let result = num / 10 ** 8;
+    return result
   }
 
   componentDidMount() {

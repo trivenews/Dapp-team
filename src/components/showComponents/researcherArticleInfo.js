@@ -82,7 +82,7 @@ class ResearcherArticleInfo extends Component {
         <Jumbotron>
           <h1>{this.state.myData.title}</h1>
           <img src={this.state.myData.image} className='showImage' alt=""/>
-          <p><small>Reward: {web3.utils.toBN(this.state.taskInfo.reward).toString()}TRV</small></p>
+          <p><small>Reward: {this.state.taskInfo.reward / 10 ** 8}TRV</small></p>
           <p>
             Description of the problem: <br />
             {this.state.myData.desc}

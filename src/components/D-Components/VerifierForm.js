@@ -57,7 +57,9 @@ class VerifierForm extends Component {
 
       this.setState({ ipfsHash: hash });
 
-      this.props.trive.triveContract.challengeResearcher(this.state.curTaskId.id, this.state.ipfsHash, {from: this.props.account, gas: 554755})
+      this.props.trive.triveContract.methods
+      .challengeResearcher(this.state.curTaskId.id, this.state.ipfsHash)
+      .send({from: this.props.account, gas: 554755})
       .then((result) => {
         this.setState({transactionHash: result.tx, loading: false, done: true})
       }).catch((error) => {
@@ -67,16 +69,18 @@ class VerifierForm extends Component {
     }; //onSubmit
 
     getCurrentTask = () => {
-      this.props.trive.triveContract.verifierToTask(this.props.account)
+      this.props.trive.triveContract.methods
+      .verifierToTask(this.props.account)
+      .call({from: this.props.account})
       .then((result) => {
-        console.log(result.c[0]);
+        console.log(result);
         this.setState({
           curTaskId: {
-            id: result.c[0],
+            id: result,
             loaded: true
           },
           researcherData: {
-            taskID: result.c[0]
+            taskID: result
           }
         })
       }).catch((error) => {
@@ -85,7 +89,9 @@ class VerifierForm extends Component {
     }
     checkIfVerifierHasATask = () => {
       console.log(this.props.account)
-      this.props.trive.triveContract.verifierBusy(this.props.account)
+      this.props.trive.triveContract.methods
+      .verifierBusy(this.props.account)
+      .call({from: this.props.account})
       .then((result) => {
         if (result === true) {
           this.setState({hasTask: true})
@@ -101,12 +107,14 @@ class VerifierForm extends Component {
     verifyResearch = (e) => {
       e.preventDefault();
       this.setState({loading: true})
-      this.props.trive.triveContract._verifyTask(this.state.curTaskId.id, {from: this.props.account})
+      this.props.trive.triveContract.methods
+      ._verifyTask(this.state.curTaskId.id)
+      .send({from: this.props.account})
       .then((result) => {
         console.log(result)
         //// TODO: add confirmation screen
         this.setState({
-          transactionHash: result.tx,
+          transactionHash: result,
           loading: false,
           done: true
         })

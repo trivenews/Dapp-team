@@ -80,12 +80,12 @@ class VerifiedArticleDisplay extends Component {
     .tasks(this.props.articleId)
     .call()
     .then((result) => {
-      // console.log(result)
+      console.log(result)
       this.setState({
         taskInfo: {
           ipfsTaskHash: result[0],
           ipfsResearchHash: result[1],
-          reward: result[2].c[0]
+          reward: result[2]
         }
       })
       this.fetchTaskIPFS();

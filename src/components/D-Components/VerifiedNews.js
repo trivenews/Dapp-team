@@ -113,9 +113,9 @@ class News extends Component {
         </Form>
         <hr />
         {this.state.articles}
-        <Button bsStyle="primary" onClick={this.newNews}>
+        {/* <Button bsStyle="primary" onClick={this.newNews}>
           Refresh
-        </Button>
+        </Button> */}
       </div>
     );
   }
