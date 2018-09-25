@@ -89,7 +89,7 @@ class Verify extends Component {
     //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
     console.log(this.state.ipfsHash, hashedUrl, this.state.reward * 10 ** 8, "is what we are sending")
     this.props.trive.triveContract.methods
-      .createTask(`${this.state.ipfsHash}`, hashedUrl, this.state.reward * 10 ** 8)
+      .createTask(this.state.ipfsHash, hashedUrl, this.state.reward * 10 ** 8)
       .send({
         from: this.props.account,
         gas: 6654755

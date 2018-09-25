@@ -96,7 +96,7 @@ class ShowArticleInfo extends Component {
     const zoomIn = (<Jumbotron onClick={this.zoomInFunc}>
       <h1>{this.state.myData.title}</h1>
       <img src={this.state.myData.image} className='showImage' alt=""/>
-      <p><small>Status: {data[3].c[0]} | Reward: {web3.utils.toBN(data[2].c[0]).toString()}TRV | Hash: {data[0]}</small></p>
+      <p><small>Status: {data[3]} | Reward: {web3.utils.toBN(data[2]).toString()}TRV | Hash: {data[0]}</small></p>
       <p>
         Description of the problem: <br />
         {this.state.myData.desc}

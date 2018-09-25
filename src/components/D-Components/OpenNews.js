@@ -55,6 +55,7 @@ class OpenNews extends Component {
     ._getTasksByState(0, 0)
     .call()
     .then((result) => {
+      console.log(result)
       this.findArticleInfo(result);
     }).catch((error) => {
       console.log(error)
