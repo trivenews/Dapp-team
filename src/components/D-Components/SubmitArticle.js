@@ -58,9 +58,7 @@ class Verify extends Component {
       this.setState(prevState => ({
         myData: {
           ...prevState.myData,
-          image: `data:image/jpeg;base64,${Buffer(reader.result).toString(
-            "base64"
-          )}`
+          image: `data:image/jpeg;base64,${Buffer(reader.result).toString("base64")}`
         }
       }));
     };
@@ -82,20 +80,18 @@ class Verify extends Component {
 
     this.setState({ ipfsHash: hash });
     const hashedUrl = web3.utils.keccak256(url);
-    console.log(hash);
 
     // call Ethereum contract method "createTask" and send info to etheruem contract
     //return the transaction hash from the ethereum contract
     //see, this https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send
-    console.log(this.state.ipfsHash, hashedUrl, this.state.reward * 10 ** 8, "is what we are sending")
+    console.log(`${this.state.ipfsHash} is in een string`, hashedUrl, this.state.reward * 10 ** 8, "is what we are sending")
     this.props.trive.triveContract.methods
-      .createTask(this.state.ipfsHash, hashedUrl, this.state.reward * 10 ** 8)
+      .createTask(`${this.state.ipfsHash}`, hashedUrl, this.state.reward * 10 ** 8)
       .send({
-        from: this.props.account,
-        gas: 6654755
+        from: this.props.account
       })
       .then(result => {
-        console.log(result.tx);
+        console.log(result);
         this.setState({ transactionHash: result.tx, loading: false });
       })
       .catch(error => {
