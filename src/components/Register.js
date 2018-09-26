@@ -153,10 +153,9 @@ class Register extends Component {
       });
 
     this.props.trive.coinContract.methods
-      .allowance(this.props.account, this.props.trive.triveContract.address)
+      .allowance(this.props.account, this.props.trive.triveContract._address)
       .call({
-        from: this.props.account,
-        gas: 6654755
+        from: this.props.account
       })
       .then(result => {
         this.setState({ AllowAmount: result / 10 ** 8 });
@@ -174,10 +173,10 @@ class Register extends Component {
 
     this.props.trive.coinContract.methods
       .approve(
-        this.props.trive.triveContract.address,
+        this.props.trive.triveContract._address,
         this.state.setAllowAmount * 10 ** 8
       )
-      .send({ from: this.props.account, gas: 6654755 })
+      .send({ from: this.props.account})
       .then(res => {
         this.checkBalance();
       })
