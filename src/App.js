@@ -37,6 +37,7 @@ class App extends Component {
       triveCoinInstance: '',
       isResearcher: false,
       currentProvider: getCurrentProvider,
+      network: ''
 
     }
     // this.checkIfUserIsResearcher = this.checkIfUserIsResearcher.bind(this);
@@ -83,30 +84,10 @@ class App extends Component {
     // this.props.storeWeb3Account();
 
   };
-  checkWeb3 = () => {
-    // Web3.currentProvider.then(netId => {
-    //   switch (netId) {
-    //     case 1:
-    //       console.log('This is mainnet')
-    //       break
-    //     case 2:
-    //       console.log('This is the deprecated Morden test network.')
-    //       break
-    //     case 3:
-    //       console.log('This is the ropsten test network.')
-    //       break
-    //     default:
-    //       console.log('This is an unknown network.')
-    //   }
-    // })
-    return async () => {
-      console.log("Ik werk nog dieper")
-      // let soort = await Web3.eth.getAccounts()
-      // console.log(soort);
-      const accounts = await Web3.eth.getAccounts();
-      // account = accounts[0]
-      console.log("my accounts", accounts);
-    };
+  checkWeb3 = async () => {
+    let soort = await Web3.eth.net.getId();
+    this.setState({network: soort})
+    console.log(soort)
   }
 
   componentWillMount(){
@@ -124,15 +105,25 @@ class App extends Component {
     if (this.props.contracts.isloaded && !this.props.curUserInfo.isUser) {
       this.props.currentUserInformation();
     }
+    var divStyle = {
+      marginTop: '5em',
+      // minHeight: 'em',
+      color: "red"
+    };
+    const changeNetwork = (<div style={divStyle}>
+      <h1>Please change to ropsten network to use this app.</h1>
+    </div>)
     return (
 
       <div className="App">
+        
         <Header
           myContract={this.state.myContract}
           curUserInfo={this.props.curUserInfo}
         />
+        {this.state.network !== 3 && changeNetwork}
         <Switch>
-
+          
           <Route exact path='/dashboard/:sel/:id' component={(props) => (<Dashboard
             myContract={this.state.myContract}
             curAddr={this.state.curUserInfo.address}
