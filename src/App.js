@@ -95,9 +95,7 @@ class App extends Component {
     // this.props.currentUserInformation();
     this.props.instantiateTriveContract();
     this.props.storeWeb3Account();
-    setInterval(() => {
-      this.checkWeb3();
-    }, 3000);
+    
   }
 
 
@@ -105,9 +103,11 @@ class App extends Component {
     if (this.props.contracts.isloaded && !this.props.curUserInfo.isUser) {
       this.props.currentUserInformation();
     }
+    if (this.props.contracts.isloaded && this.state.network !== 3) {
+      this.checkWeb3();
+    }
     var divStyle = {
       marginTop: '5em',
-      // minHeight: 'em',
       color: "red"
     };
     const changeNetwork = (<div style={divStyle}>

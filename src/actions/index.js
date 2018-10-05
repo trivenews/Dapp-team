@@ -1090,8 +1090,8 @@ export function instantiateTriveContract() {
     // const coinContract = await Web3File.eth.Contract(ABIToken, 0x3421ba3049363aa7d0788c70717cd0dfa4345656);
 
     // dispatch
-	  dappContract = new Web3File.eth.Contract(ABIDapp, '0x5c82eeb189053f3d606797f148af7370a360883e');
-	  coinContract = new Web3File.eth.Contract(ABIToken, '0x7fa631634568ce8385bbfc75102f9e6232ef04a3');
+    dappContract = new Web3File.eth.Contract(ABIDapp, '0x1711d999c9a430635ace5fd1580bb323ff2e2b8b');
+    coinContract = new Web3File.eth.Contract(ABIToken, '0x64316029e38383af4d2708666c2ec7c5dbf91735');
     dispatch({
       type: TRIVE_CONTRACT_INSTANTIATED,
       payload: {

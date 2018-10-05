@@ -56,6 +56,7 @@ class VerifyNews extends Component {
     ._getTasksByState(2, 2)
     .call()
     .then((result) => {
+      console.log(result)
       this.findArticleInfo(result);
     }).catch((error) => {
       console.log(error)

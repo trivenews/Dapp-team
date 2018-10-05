@@ -19,7 +19,7 @@ import {
   instantiateTriveContract,
   currentUserInformation
 } from "../actions";
-
+import Loader from "./D-Components/Loader";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
@@ -43,7 +43,8 @@ class Register extends Component {
       articles: [],
       triveBalance: "",
       setAllowAmount: "",
-      AllowAmount: 0
+      AllowAmount: 0,
+      loading: false
     };
     // this.getTaskByOwner = this.getTaskByOwner.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -60,14 +61,18 @@ class Register extends Component {
   }
   handleSubmit(e) {
     e.preventDefault();
+    this.setState({ loading: true })
     this.props.trive.triveContract.methods
       .createUser(this.state.username)
       .send({ from: this.props.account })
       .then(result => {
         console.log(result)
-        // this.props.currentUserInformation();
+        this.setState({ loading: false })
+        this.props.currentUserInformation();
+        this.checkBalance();
       })
       .catch(err => {
+        this.setState({ loading: false })
         console.log(err);
       })
   }
@@ -114,30 +119,36 @@ class Register extends Component {
   //become researcher function
   becomeResearcher = e => {
     e.preventDefault();
+    this.setState({loading: true})
     this.props.trive.triveContract.methods
       .createResearcher()
       .send({ from: this.props.account })
       .then(result => {
         console.log(result);
         this.props.currentUserInformation();
+        this.setState({ loading: false })
       })
       .catch(error => {
         console.log(error);
+        this.setState({ loading: false })
       });
   };
 
 
   becomeVerifier = e => {
     e.preventDefault();
+    this.setState({ loading: true })
     this.props.trive.triveContract.methods
       .createVerifier()
       .send({ from: this.props.account })
       .then(result => {
         console.log(result);
         this.props.currentUserInformation();
+        this.setState({ loading: false })
       })
       .catch(error => {
         console.log(error);
+        this.setState({ loading: false })
       });
   };
 
@@ -170,7 +181,7 @@ class Register extends Component {
   }
   handleSubmitAllow(e) {
     e.preventDefault();
-
+    this.setState({ loading: true })
     this.props.trive.coinContract.methods
       .approve(
         this.props.trive.triveContract._address,
@@ -178,9 +189,11 @@ class Register extends Component {
       )
       .send({ from: this.props.account})
       .then(res => {
+        this.setState({ loading: false })
         this.checkBalance();
       })
       .catch(error => {
+        this.setState({ loading: false })
         console.log(error);
       });
   }
@@ -308,6 +321,7 @@ class Register extends Component {
 
     return (
       <div>
+      {this.state.loading && <Loader />}
         <div className="dashboard-div">
           <img
             src="https://trive.news/wp-content/uploads/2018/03/trive-logo-icon.png"

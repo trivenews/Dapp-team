@@ -61,7 +61,7 @@ class VerifierForm extends Component {
       .challengeResearcher(this.state.curTaskId.id, this.state.ipfsHash)
       .send({from: this.props.account, gas: 554755})
       .then((result) => {
-        this.setState({transactionHash: result.tx, loading: false, done: true})
+        this.setState({ transactionHash: result.transactionHash, loading: false, done: true})
       }).catch((error) => {
         this.setState({loading: false})
         console.log(error);
