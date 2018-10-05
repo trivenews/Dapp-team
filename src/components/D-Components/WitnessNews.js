@@ -54,8 +54,7 @@ class WitnessNews extends Component {
     ._getTasksByState(4, 4)
     .call()
     .then((result) => {
-      // console.log(result)
-      this.findArticleInfo(result);
+      if (result[0] !== '0') { this.findArticleInfo(result);}
     }).catch((error) => {
       console.log(error)
     })
