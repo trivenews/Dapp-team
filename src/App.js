@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route, withRouter} from 'react-router-dom';
 
 // import contract from 'truffle-contract';
-// import web3 from './web3';
+import Web3 from './web3';
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 import {storeWeb3Account, instantiateTriveContract, currentUserInformation} from   './actions';
@@ -76,18 +76,47 @@ class App extends Component {
     this.props.storeWeb3Account();
   }
 
+
   componentDidMount() {
     // this.props.currentUserInformation();
     // this.props.instantiateTriveContract();
     // this.props.storeWeb3Account();
 
   };
+  checkWeb3 = () => {
+    // Web3.currentProvider.then(netId => {
+    //   switch (netId) {
+    //     case 1:
+    //       console.log('This is mainnet')
+    //       break
+    //     case 2:
+    //       console.log('This is the deprecated Morden test network.')
+    //       break
+    //     case 3:
+    //       console.log('This is the ropsten test network.')
+    //       break
+    //     default:
+    //       console.log('This is an unknown network.')
+    //   }
+    // })
+    return async () => {
+      console.log("Ik werk nog dieper")
+      // let soort = await Web3.eth.getAccounts()
+      // console.log(soort);
+      const accounts = await Web3.eth.getAccounts();
+      // account = accounts[0]
+      console.log("my accounts", accounts);
+    };
+  }
 
   componentWillMount(){
 
     // this.props.currentUserInformation();
     this.props.instantiateTriveContract();
     this.props.storeWeb3Account();
+    setInterval(() => {
+      this.checkWeb3();
+    }, 3000);
   }
 
 
