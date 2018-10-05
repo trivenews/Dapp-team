@@ -80,10 +80,16 @@ class WitnessArticle extends Component {
   };
 
   getChallengeId = () => {
-    this.props.trive.triveContract.taskIdToChallengeId(this.props.match.params.id)
+    this.props.trive.triveContract.methods
+    .taskIdToChallengeId(this.props.match.params.id)
+    .call()
     .then(res => {
-      this.props.trive.triveContract.challenges(res.c[0])
+      console.log(res)
+      this.props.trive.triveContract.methods
+      .challenges(res)
+      .call()
       .then(res => {
+        console.log(res[1])
         this.fetchIPFSVerifier(res[1]);
       })
       .catch(err => {
@@ -104,6 +110,7 @@ class WitnessArticle extends Component {
         return resp.json();
       })
       .then(data => {
+        console.log(data)
         this.setState({
           verifierData: {
             sources: data.researcherData.source,
@@ -115,8 +122,11 @@ class WitnessArticle extends Component {
       .catch(err => console.log(`error: ${err}`))
   };
   getTaskInfo = () => {
-    this.props.trive.triveContract.tasks(this.props.match.params.id)
+    this.props.trive.triveContract.methods
+    .tasks(this.props.match.params.id)
+    .call()
     .then((result) => {
+      console.log(result)
       this.setState({
         ipfshashes: {
           task: result[0],
@@ -133,7 +143,11 @@ class WitnessArticle extends Component {
 
   vote = (pref) => {
     this.setState({loading: true})
-    this.props.trive.triveContract.witnessChallenge(this.props.match.params.id, pref, {from: this.props.account, gas: 6654755})
+    this.props.trive.triveContract.methods
+    .witnessChallenge(this.props.match.params.id, pref)
+      .send({
+         from: this.props.account
+      })
     .then(res => {
       console.log(res);
       this.setState({

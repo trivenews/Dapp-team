@@ -119,6 +119,7 @@ class VerifierForm extends Component {
           done: true
         })
       }).catch((error) => {
+        this.setState({loading: false})
         console.log(error)
       })
     }
@@ -131,7 +132,7 @@ class VerifierForm extends Component {
     }
     addToResearch = (e) => {
       e.preventDefault();
-      console.log("I WANT TO ADD SOMETHING")
+      alert('This function will be added in future versions')
     }
 
     componentDidMount() {
