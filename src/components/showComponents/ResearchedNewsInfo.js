@@ -3,6 +3,7 @@ import {Jumbotron, Media, Button} from "react-bootstrap";
 // import contract from 'truffle-contract';
 // import web3 from '../../web3';
 import { Redirect } from 'react-router-dom';
+import Loader from "../D-Components/Loader";
 
 import { withRouter } from 'react-router-dom';
 
@@ -24,7 +25,8 @@ class ResearchedNewsInfo extends Component {
         comments: '',
         score: ""
       },
-      redirect: false
+      redirect: false,
+      loading: false
     }
     this.fetchIPFSOne = this.fetchIPFSOne.bind(this);
     this.fetchIPFSTwo = this.fetchIPFSTwo.bind(this);
@@ -77,16 +79,19 @@ class ResearchedNewsInfo extends Component {
 
   verifyArticle(e) {
     e.preventDefault();
+    this.setState({ loading: true })
     this.props.trive.triveContract.methods
     ._acceptVerifyTask(this.props.articleId)
     .send({from: this.props.account})
     .then((result) => {
       console.log(result)
       this.setState({
-        redirect: true
+        redirect: true,
+        loading: false
       })
     }).catch((error) => {
       console.log(error)
+      this.setState({loading: false})
     })
   }
 
@@ -142,6 +147,7 @@ class ResearchedNewsInfo extends Component {
     </Media>)
     return (
       <div>
+        {this.state.loading && <Loader />}
         {this.renderRedirect()}
         {this.state.zoomInActive && zoomIn}
         {!this.state.zoomInActive && listItem}

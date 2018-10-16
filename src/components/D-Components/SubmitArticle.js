@@ -97,6 +97,7 @@ class Verify extends Component {
       .catch(error => {
         // TODO: make an error screen if user didn't approve contract to send tokens
         this.setState({ loading: false });
+        alert('Please allow the contract to send trive tokens. You can do this on the user info page.')
         console.log(error);
       });
   }; //onSubmit

@@ -99,7 +99,7 @@ class ResearcherForm extends Component {
         .send({from: this.props.account, gas: 254755})
         .then((result) => {
           console.log(result);
-          this.setState({transactionHash: result, loading: false, done: true})
+          this.setState({ transactionHash: result.transactionHash, loading: false, done: true})
         }).catch((error) => {
           this.setState({loading: false})
           console.log(error);

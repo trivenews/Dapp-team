@@ -61,7 +61,7 @@ class VerifierForm extends Component {
       .challengeResearcher(this.state.curTaskId.id, this.state.ipfsHash)
       .send({from: this.props.account, gas: 554755})
       .then((result) => {
-        this.setState({transactionHash: result.tx, loading: false, done: true})
+        this.setState({ transactionHash: result.transactionHash, loading: false, done: true})
       }).catch((error) => {
         this.setState({loading: false})
         console.log(error);
@@ -119,6 +119,7 @@ class VerifierForm extends Component {
           done: true
         })
       }).catch((error) => {
+        this.setState({loading: false})
         console.log(error)
       })
     }
@@ -131,7 +132,7 @@ class VerifierForm extends Component {
     }
     addToResearch = (e) => {
       e.preventDefault();
-      console.log("I WANT TO ADD SOMETHING")
+      alert('This function will be added in future versions')
     }
 
     componentDidMount() {

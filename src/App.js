@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route, withRouter} from 'react-router-dom';
 
 // import contract from 'truffle-contract';
-// import web3 from './web3';
+import Web3 from './web3';
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 import {storeWeb3Account, instantiateTriveContract, currentUserInformation} from   './actions';
@@ -37,6 +37,7 @@ class App extends Component {
       triveCoinInstance: '',
       isResearcher: false,
       currentProvider: getCurrentProvider,
+      network: ''
 
     }
     // this.checkIfUserIsResearcher = this.checkIfUserIsResearcher.bind(this);
@@ -76,18 +77,25 @@ class App extends Component {
     this.props.storeWeb3Account();
   }
 
+
   componentDidMount() {
     // this.props.currentUserInformation();
     // this.props.instantiateTriveContract();
     // this.props.storeWeb3Account();
 
   };
+  checkWeb3 = async () => {
+    let soort = await Web3.eth.net.getId();
+    this.setState({network: soort})
+    console.log(soort)
+  }
 
   componentWillMount(){
 
     // this.props.currentUserInformation();
     this.props.instantiateTriveContract();
     this.props.storeWeb3Account();
+    
   }
 
 
@@ -95,15 +103,27 @@ class App extends Component {
     if (this.props.contracts.isloaded && !this.props.curUserInfo.isUser) {
       this.props.currentUserInformation();
     }
+    if (this.props.contracts.isloaded && this.state.network !== 3) {
+      this.checkWeb3();
+    }
+    var divStyle = {
+      marginTop: '5em',
+      color: "red"
+    };
+    const changeNetwork = (<div style={divStyle}>
+      <h1>Please change to ropsten network to use this app.</h1>
+    </div>)
     return (
 
       <div className="App">
+        
         <Header
           myContract={this.state.myContract}
           curUserInfo={this.props.curUserInfo}
         />
+        {this.state.network !== 3 && changeNetwork}
         <Switch>
-
+          
           <Route exact path='/dashboard/:sel/:id' component={(props) => (<Dashboard
             myContract={this.state.myContract}
             curAddr={this.state.curUserInfo.address}

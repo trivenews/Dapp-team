@@ -32,8 +32,13 @@ class News extends Component {
       .urlToTask(hashedUrl)
       .call()
       .then(result => {
-        // console.log(result.c[0])
-        this.getTaskInfo(result.c[0]);
+        console.log(result)
+        if (result === '0') {
+          console.log('oepsie')
+        } else {
+          this.getTaskInfo(result);
+        }
+        
       });
   };
 
